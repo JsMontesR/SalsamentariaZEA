@@ -45,42 +45,6 @@
                                 <div class="notification-title"> Notificaciones</div>
                                 <div class="notification-list">
                                     <div class="list-group">
-                                        <a href="#" class="list-group-item list-group-item-action active">
-                                            <div class="notification-info">
-                                                <div class="notification-list-user-img"><img
-                                                        src="assets/images/avatar-2.jpg" alt=""
-                                                        class="user-avatar-md rounded-circle"></div>
-                                                <div class="notification-list-user-block"><span
-                                                        class="notification-list-user-name">Jeremy Rakestraw</span>accepted
-                                                    your invitation to join the team.
-                                                    <div class="notification-date">2 min ago</div>
-                                                </div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="list-group-item list-group-item-action">
-                                            <div class="notification-info">
-                                                <div class="notification-list-user-img"><img
-                                                        src="assets/images/avatar-3.jpg" alt=""
-                                                        class="user-avatar-md rounded-circle"></div>
-                                                <div class="notification-list-user-block"><span
-                                                        class="notification-list-user-name">John Abraham </span>is now
-                                                    following you
-                                                    <div class="notification-date">2 days ago</div>
-                                                </div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="list-group-item list-group-item-action">
-                                            <div class="notification-info">
-                                                <div class="notification-list-user-img"><img
-                                                        src="assets/images/avatar-4.jpg" alt=""
-                                                        class="user-avatar-md rounded-circle"></div>
-                                                <div class="notification-list-user-block"><span
-                                                        class="notification-list-user-name">Monaan Pechi</span> is
-                                                    watching your main repository
-                                                    <div class="notification-date">2 min ago</div>
-                                                </div>
-                                            </div>
-                                        </a>
                                         <a href="#" class="list-group-item list-group-item-action">
                                             <div class="notification-info">
                                                 <div class="notification-list-user-img"><img
@@ -146,36 +110,6 @@
                         <li class="nav-divider">
                             Menu
                         </li>
-                        <li class="nav-item ">
-                            <a class="nav-link active" href="#" data-toggle="collapse" aria-expanded="false"
-                               data-target="#submenu-1" aria-controls="submenu-1"><i
-                                    class="fa fa-fw fa-user-circle"></i>Gestión del negocio<span
-                                    class="badge badge-success">6</span></a>
-                            <div id="submenu-1" class="collapse submenu" style="">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">Clientes</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">Movimientos</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                               data-target="#submenu-2" aria-controls="submenu-2"><i class="fa fa-fw fa-rocket"></i>Inventario</a>
-                            <div id="submenu-2" class="collapse submenu" style="">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/cards.html">Entradas a inventario</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/general.html">Productos</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
                                data-target="#submenu-3" aria-controls="submenu-3"><i class="fas fa-fw fa-chart-pie"></i>Facturación</a>
@@ -187,185 +121,50 @@
                                 </ul>
                             </div>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                               data-target="#submenu-2" aria-controls="submenu-2"><i class="fa fa-fw fa-archive"></i>Inventario</a>
+                            <div id="submenu-2" class="collapse submenu" style="">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="pages/cards.html">Entradas a inventario</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="pages/general.html">Productos</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link active" href="#" data-toggle="collapse" aria-expanded="false"
+                               data-target="#submenu-1" aria-controls="submenu-1"><i
+                                    class="fa fa-fw fa-cogs"></i>Gestión del negocio<span
+                                    class="badge badge-success">6</span></a>
+                            <div id="submenu-1" class="collapse submenu" style="">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Clientes</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Empleados</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Nómina</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">Movimientos</a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </li>
                         <li class="nav-item ">
                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                               data-target="#submenu-4" aria-controls="submenu-4"><i class="fab fa-fw fa-wpforms"></i>Forms</a>
+                               data-target="#submenu-4" aria-controls="submenu-4"><i class="fab fa-fw fa-wpforms"></i>Reportes</a>
                             <div id="submenu-4" class="collapse submenu" style="">
                                 <ul class="nav flex-column">
                                     <li class="nav-item">
-                                        <a class="nav-link" href="pages/form-elements.html">Form Elements</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/form-validation.html">Parsely Validations</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/multiselect.html">Multiselect</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/datepicker.html">Date Picker</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/bootstrap-select.html">Bootstrap Select</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                               data-target="#submenu-5" aria-controls="submenu-5"><i class="fas fa-fw fa-table"></i>Tables</a>
-                            <div id="submenu-5" class="collapse submenu" style="">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/general-table.html">General Tables</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/data-tables.html">Data Tables</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="nav-divider">
-                            Features
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                               data-target="#submenu-6" aria-controls="submenu-6"><i class="fas fa-fw fa-file"></i>
-                                Pages </a>
-                            <div id="submenu-6" class="collapse submenu" style="">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/blank-page.html">Blank Page</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/blank-page-header.html">Blank Page Header</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/login.html">Login</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/404-page.html">404 page</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/sign-up.html">Sign up Page</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/forgot-password.html">Forgot Password</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/pricing.html">Pricing Tables</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/timeline.html">Timeline</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/calendar.html">Calendar</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/sortable-nestable-lists.html">Sortable/Nestable
-                                            List</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/widgets.html">Widgets</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/media-object.html">Media Objects</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/cropper-image.html">Cropper</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/color-picker.html">Color Picker</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                               data-target="#submenu-7" aria-controls="submenu-7"><i class="fas fa-fw fa-inbox"></i>Apps
-                                <span class="badge badge-secondary">New</span></a>
-                            <div id="submenu-7" class="collapse submenu" style="">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/inbox.html">Inbox</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/email-details.html">Email Detail</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/email-compose.html">Email Compose</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/message-chat.html">Message Chat</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                               data-target="#submenu-8" aria-controls="submenu-8"><i class="fas fa-fw fa-columns"></i>Icons</a>
-                            <div id="submenu-8" class="collapse submenu" style="">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/icon-fontawesome.html">FontAwesome Icons</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/icon-material.html">Material Icons</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/icon-simple-lineicon.html">Simpleline Icon</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/icon-themify.html">Themify Icon</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/icon-flag.html">Flag Icons</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/icon-weather.html">Weather Icon</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                               data-target="#submenu-9" aria-controls="submenu-9"><i
-                                    class="fas fa-fw fa-map-marker-alt"></i>Maps</a>
-                            <div id="submenu-9" class="collapse submenu" style="">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/map-google.html">Google Maps</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages/map-vector.html">Vector Maps</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                               data-target="#submenu-10" aria-controls="submenu-10"><i class="fas fa-f fa-folder"></i>Menu
-                                Level</a>
-                            <div id="submenu-10" class="collapse submenu" style="">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">Level 1</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                                           data-target="#submenu-11" aria-controls="submenu-11">Level 2</a>
-                                        <div id="submenu-11" class="collapse submenu" style="">
-                                            <ul class="nav flex-column">
-                                                <li class="nav-item">
-                                                    <a class="nav-link" href="#">Level 1</a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a class="nav-link" href="#">Level 2</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">Level 3</a>
+                                        <a class="nav-link" href="pages/bootstrap-select.html">Reportes de ventas</a>
                                     </li>
                                 </ul>
                             </div>
