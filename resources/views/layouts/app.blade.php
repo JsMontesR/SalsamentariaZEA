@@ -42,7 +42,7 @@
                                 class="indicator"></span></a>
                         <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
                             <li>
-                                <div class="notification-title"> Notification</div>
+                                <div class="notification-title"> Notificaciones</div>
                                 <div class="notification-list">
                                     <div class="list-group">
                                         <a href="#" class="list-group-item list-group-item-action active">
