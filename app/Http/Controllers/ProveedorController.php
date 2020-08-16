@@ -24,14 +24,14 @@ class ProveedorController extends Controller
      */
     public function index()
     {
-        $provedores = $usuarios = DB::table('proveedors')->select(
+        $proveedores = DB::table('proveedors')->select(
             DB::raw('id as Id'),
             DB::raw('nombre as "Nombre"'),
             DB::raw('telefono as "Telefono"'),
             DB::raw('direccion as "Direccion"'),
             DB::raw('created_at as "Fecha de creación"'))->get();
 
-        return view("proveedores", compact("provedores"));
+        return view("proveedores", compact("proveedores"));
     }
 
     /**

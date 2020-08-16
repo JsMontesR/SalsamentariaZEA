@@ -95,7 +95,7 @@
                                 <i class="fa fa-address-card fa-fw fa-sm text-dark"></i>
                             </div>
                         </div>
-                        <a class="card-footer text-dark bg-success-light clearfix small z-1" href="#">
+                        <a class="card-footer text-dark bg-success-light clearfix small z-1" href="{{route('proveedores')}}">
                             <span class="float-left">Ver proveedores</span>
                             <span class="float-right">
                   <em class="fas fa-angle-right"></em>

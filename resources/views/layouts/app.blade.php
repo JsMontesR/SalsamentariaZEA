@@ -15,6 +15,7 @@
           href="{{ asset('assets/vendor/fonts/material-design-iconic-font/css/materialdesignicons.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/charts/c3charts/c3.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/fonts/flag-icon-css/flag-icon.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/libs/css/footable.bootstrap.min.css') }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
@@ -146,7 +147,7 @@
                                         <a class="nav-link" href="#">Clientes</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="#">Proveedores</a>
+                                        <a class="nav-link" href="{{route('proveedores')}}">Proveedores</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="#">Empleados</a>
@@ -177,17 +178,8 @@
             </nav>
         </div>
     </div>
-    <!-- ============================================================== -->
-    <!-- end left sidebar -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- wrapper  -->
-    <!-- ============================================================== -->
     <div class="dashboard-wrapper">
         @yield('content')
-        <!-- ============================================================== -->
-        <!-- footer -->
-        <!-- ============================================================== -->
         <div class="footer">
             <div class="container-fluid">
                 <div class="row">
@@ -230,6 +222,7 @@
 <script src="{{ asset('assets/vendor/charts/c3charts/d3-5.4.0.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/charts/c3charts/C3chartjs.js') }}"></script>
 <script src="{{ asset('assets/libs/js/dashboard-ecommerce.js') }}"></script>
+<script src="{{ asset('assets/libs/js/footable.min.js') }}"></script>
 </body>
 
 ---
