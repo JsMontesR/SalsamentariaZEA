@@ -20,6 +20,9 @@ Route::get('/inicio', 'HomeController@index')->name('home');
 Route::get('/index', 'HomeController@index')->name('home');
 Route::get('/home', 'HomeController@index')->name('home');
 
-Auth::routes();
+Route::get('/proveedores','ProveedoresController@index')->name('proveedores')->middleware('auth');
+Route::get('/storeProvedores','ProveedorController@store')->name('proveedores.store')->middleware('auth');
+
+
 
 

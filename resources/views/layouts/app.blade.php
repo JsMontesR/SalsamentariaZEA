@@ -146,6 +146,9 @@
                                         <a class="nav-link" href="#">Clientes</a>
                                     </li>
                                     <li class="nav-item">
+                                        <a class="nav-link" href="#">Proveedores</a>
+                                    </li>
+                                    <li class="nav-item">
                                         <a class="nav-link" href="#">Empleados</a>
                                     </li>
                                     <li class="nav-item">
