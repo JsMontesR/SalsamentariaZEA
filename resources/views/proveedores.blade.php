@@ -13,7 +13,7 @@
                 <h3 class="m-0 font-weight-bold text-primary text-center">Detalle del proveedor</h3>
             </div>
             <div class="card-body">
-                <form id="form1" name="form1" method="POST">
+                <form id="form" name="form" method="POST">
                     @csrf
                     <div class="form-group row">
                         <label class="col-md-4 col-form-label text-md-left">Id:</label>
@@ -70,20 +70,18 @@
 
                         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 py-2">
                             <input id="registrar" type="button" value="Registrar"
-                                   class="btn btn-primary container-fluid"
-                                   onclick="registrarProveedor()"/>
+                                   class="btn btn-primary container-fluid"/>
                         </div>
                         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 py-2">
-                            <input type="button" value="Limpiar" class="btn btn-secondary container-fluid"
-                                   onclick="limpiarCampos()"/>
+                            <input id="limpiar" type="button" value="Limpiar"
+                                   class="btn btn-secondary container-fluid"/>
                         </div>
                         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 py-2">
-                            <input type="button" value="Modificar" class="btn btn-warning container-fluid"
-                                   onclick="modificarCliente()"/>
+                            <input id="modificar" type="button" value="Modificar"
+                                   class="btn btn-warning container-fluid"/>
                         </div>
                         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 py-2">
-                            <input type="button" value="Eliminar" class="btn btn-danger container-fluid"
-                                   onclick="eliminarCliente()"/>
+                            <input id="eliminar" type="button" value="Eliminar" class="btn btn-danger container-fluid"/>
                         </div>
 
                     </div>
@@ -96,14 +94,13 @@
             </div>
             <div class="card-body">
                 @if(!$proveedores->isEmpty())
-                    <table id="example" class="table table-striped table-bordered dt-responsive nowrap"
-                           style="width:100%" cellspacing="0" data-page-length='5'>
+                    <table id="recurso" class="table table-striped table-bordered dt-responsive nowrap"
+                           style="width:100%" cellspacing="0" data-page-length='5' data-name="recursos">
                         <thead>
                         <tr>
                             @foreach ($proveedores->get(0) as $key => $value)
                                 <th>{{$key}}</th>
                             @endforeach
-                            <th>Seleccionar</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -112,12 +109,6 @@
                                 @foreach ($registro as $key => $value)
                                     <td>{{ $value }}</td>
                                 @endforeach
-                                <td align="center">
-                                    <a id="{{$registro->Id}}" class="btn btn-secondary text-white" href="#page-top">
-                                        <em class="fas fa-angle-up"></em>
-                                        Ver
-                                    </a>
-                                </td>
                             </tr>
                         @endforeach
                         </tbody>
@@ -128,6 +119,44 @@
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function () {
+            var table = $('#recurso').DataTable(options);
+            $('#recurso tbody').on('click', 'tr', function () {
+                document.getElementById('registrar').disabled = true;
+                var data = table.row(this).data();
+                document.getElementById('id').value = data[0];
+                document.getElementById('nombre').value = data[1];
+                document.getElementById('telefono').value = data[2];
+                document.getElementById('direccion').value = data[3];
+            });
 
-    {{--    <script src="{{asset('public/assets/libs/js/proveedores.js')}}"--}}
+            $("#registrar").click(function () {
+                document.form.action = "{{ route('proveedores.crear') }}";
+                document.form.submit();
+            });
+
+            $("#limpiar").click(function () {
+                document.getElementById('id').value = "";
+                document.getElementById('nombre').value = "";
+                document.getElementById('telefono').value = "";
+                document.getElementById('direccion').value = "";
+                document.getElementById('registrar').disabled = false;
+            });
+
+            $("#modificar").click(function () {
+                document.form.action = "{{ route('proveedores.actualizar') }}";
+                document.form.submit();
+            });
+
+            $("#eliminar").click(function () {
+                if (confirm("¿Está seguro que desea eliminar el proveedor seleccionado?")) {
+                    var url = "{{ route('proveedores.borrar', ':id') }}";
+                    document.form.action = url.replace(':id', document.getElementById('id').value);
+                    document.form.submit();
+                }
+            });
+        });
+    </script>
 @endsection
+

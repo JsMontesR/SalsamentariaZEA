@@ -12,6 +12,15 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/fonts/flag-icon-css/flag-icon.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/datatables/css/dataTables.bootstrap4.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/datatables/css/responsive.bootstrap4.min.css') }}">
+    <script src="{{ asset('assets/vendor/jquery/jquery-3.5.1.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/datatables/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/datatables/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/datatables/js/responsive.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.js') }}"></script>
+    <script src="{{ asset('assets/vendor/slimscroll/jquery.slimscroll.js') }}"></script>
+    <script src="{{ asset('assets/libs/js/main-js.js') }}"></script>
+    <script src="{{ asset('assets/libs/js/spanish.js') }}"></script>
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 </head>
@@ -186,23 +195,8 @@
         </div>
     </div>
 </div>
-
-
-<script src="{{ asset('assets/vendor/jquery/jquery-3.5.1.min.js') }}"></script>
-<script src="{{ asset('assets/vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('assets/vendor/datatables/js/dataTables.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('assets/vendor/datatables/js/dataTables.responsive.min.js') }}"></script>
-<script src="{{ asset('assets/vendor/datatables/js/responsive.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.js') }}"></script>
-<script src="{{ asset('assets/vendor/slimscroll/jquery.slimscroll.js') }}"></script>
-<script src="{{ asset('assets/libs/js/main-js.js') }}"></script>
-<script src="{{ asset('assets/vendor/jquery/') }}"></script>
-<script>
-    $(document).ready(function() {
-        $('#example').DataTable();
-    } );
-</script>
 </body>
+
 
 {{--<body>--}}
 {{--    <div id="app">--}}

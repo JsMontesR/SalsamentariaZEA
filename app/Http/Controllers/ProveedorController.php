@@ -43,52 +43,36 @@ class ProveedorController extends Controller
     public function store(Request $request)
     {
         $request->validate($this->validationRules);
-        return Proveedor::create($request->all());
-        //return back()->with('success', 'Proveedor registrado registrada');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param \App\Proveedor $proveedor
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Proveedor $proveedor)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Proveedor $proveedor
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Proveedor $proveedor)
-    {
-        //
+        Proveedor::create($request->all());
+        return back()->with('success', 'Proveedor registrado');
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Proveedor $proveedor
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Proveedor $proveedor)
+    public function update(Request $request)
     {
-        //
+        $request->validate($this->validationRules);
+        $request->validate($this->validationIdRule);
+        $proveedor = Proveedor::findOrFail($request->id);
+        $proveedor->update($request->all());
+        $proveedor->save();
+        return back()->with('success', 'Proveedor actualizado');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Proveedor $proveedor
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Proveedor $proveedor)
+    public function destroy(Request $request)
     {
-        //
+        $request->validate($this->validationIdRule);
+        Proveedor::findOrFail($request->id)->delete();
+        return back()->with('success', 'Proveedor eliminado');
     }
 }
