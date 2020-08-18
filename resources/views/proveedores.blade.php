@@ -4,10 +4,11 @@
         <h1 class="m-0 font-weight-bold text-primary text-center">Proveedores</h1>
     </div>
     <br>
-    @if(session()->has('success'))
-        <div class="alert alert-success" role="alert">{{session('success')}}</div>
-    @endif
+
     <div class="container-fluid">
+        @if(session()->has('success'))
+            <div class="alert alert-success" role="alert">{{session('success')}} <i class="fas fa-fw fa-check-circle"></i></div>
+        @endif
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <h3 class="m-0 font-weight-bold text-primary text-center">Detalle del proveedor</h3>
@@ -123,6 +124,14 @@
         $(document).ready(function () {
             var table = $('#recurso').DataTable(options);
             $('#recurso tbody').on('click', 'tr', function () {
+
+                if ($(this).hasClass('selected')) {
+                    $(this).removeClass('selected');
+                } else {
+                    table.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                }
+
                 document.getElementById('registrar').disabled = true;
                 var data = table.row(this).data();
                 document.getElementById('id').value = data[0];
@@ -150,11 +159,20 @@
             });
 
             $("#eliminar").click(function () {
-                if (confirm("¿Está seguro que desea eliminar el proveedor seleccionado?")) {
-                    var url = "{{ route('proveedores.borrar', ':id') }}";
-                    document.form.action = url.replace(':id', document.getElementById('id').value);
-                    document.form.submit();
-                }
+                swal({
+                    title: "¿Estas seguro?",
+                    text: "¡Una vez borrado no será posible recuperarlo!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            var url = "{{ route('proveedores.borrar', ':id') }}";
+                            document.form.action = url.replace(':id', document.getElementById('id').value);
+                            document.form.submit();
+                        }
+                    });
             });
         });
     </script>
