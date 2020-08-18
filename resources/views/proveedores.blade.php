@@ -75,7 +75,7 @@
                         </div>
                         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 py-2">
                             <input id="limpiar" type="button" value="Limpiar"
-                                   class="btn btn-secondary container-fluid"/>
+                                   class="btn btn-light text-dark container-fluid"/>
                         </div>
                         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 py-2">
                             <input id="modificar" type="button" value="Modificar"
@@ -95,7 +95,7 @@
             </div>
             <div class="card-body">
                 @if(!$proveedores->isEmpty())
-                    <table id="recurso" class="table table-striped table-bordered dt-responsive nowrap"
+                    <table id="recurso" class="table table-bordered dt-responsive nowrap table-hover"
                            style="width:100%" cellspacing="0" data-page-length='5' data-name="recursos">
                         <thead>
                         <tr>
@@ -106,7 +106,7 @@
                         </thead>
                         <tbody>
                         @foreach($proveedores as $registro)
-                            <tr>
+                            <tr class="row-hover">
                                 @foreach ($registro as $key => $value)
                                     <td>{{ $value }}</td>
                                 @endforeach
@@ -126,8 +126,10 @@
             $('#recurso tbody').on('click', 'tr', function () {
 
                 if ($(this).hasClass('selected')) {
+                    console.log("1");
                     $(this).removeClass('selected');
                 } else {
+                    console.log("2");
                     table.$('tr.selected').removeClass('selected');
                     $(this).addClass('selected');
                 }
@@ -163,8 +165,8 @@
                     title: "¿Estas seguro?",
                     text: "¡Una vez borrado no será posible recuperarlo!",
                     icon: "warning",
-                    buttons: true,
                     dangerMode: true,
+                    buttons: ["Cancelar","Borrar"]
                 })
                     .then((willDelete) => {
                         if (willDelete) {

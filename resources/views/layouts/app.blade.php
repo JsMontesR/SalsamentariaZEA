@@ -21,7 +21,7 @@
     <script src="{{ asset('assets/vendor/slimscroll/jquery.slimscroll.js') }}"></script>
     <script src="{{ asset('assets/libs/js/main-js.js') }}"></script>
     <script src="{{ asset('assets/libs/js/spanish.js') }}"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="{{ asset('assets/libs/js/sweetalert.min.js') }}"></script>
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 </head>
