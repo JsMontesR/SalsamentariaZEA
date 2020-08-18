@@ -124,16 +124,6 @@
         $(document).ready(function () {
             var table = $('#recurso').DataTable(options);
             $('#recurso tbody').on('click', 'tr', function () {
-
-                if ($(this).hasClass('selected')) {
-                    console.log("1");
-                    $(this).removeClass('selected');
-                } else {
-                    console.log("2");
-                    table.$('tr.selected').removeClass('selected');
-                    $(this).addClass('selected');
-                }
-
                 document.getElementById('registrar').disabled = true;
                 var data = table.row(this).data();
                 document.getElementById('id').value = data[0];
