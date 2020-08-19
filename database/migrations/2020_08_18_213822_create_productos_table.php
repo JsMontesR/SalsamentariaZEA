@@ -20,10 +20,10 @@ class CreateProductosTable extends Migration
             $table->unsignedBigInteger("preciounitario")->nullable();
             $table->unsignedBigInteger("utilidadunitaria")->nullable();
             $table->unsignedBigInteger("stockunitario")->nullable();
-            $table->float("costokilo")->nullable();
-            $table->float("preciokilo")->nullable();
-            $table->float("utilidadkilo")->nullable();
-            $table->float("stockkilo")->nullable();
+            $table->unsignedBigInteger("costokilo")->nullable();
+            $table->unsignedBigInteger("preciokilo")->nullable();
+            $table->unsignedBigInteger("utilidadkilo")->nullable();
+            $table->unsignedBigInteger("stockgramos")->nullable();
             $table->timestamps();
         });
     }
