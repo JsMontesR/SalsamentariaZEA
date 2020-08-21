@@ -23,6 +23,7 @@
     <script src="{{ asset('assets/libs/js/spanish.js') }}"></script>
     <script src="{{ asset('assets/libs/js/sweetalert.min.js') }}"></script>
 
+    <link rel="shortcut icon" href="favicon.png">
     <title>{{ config('app.name', 'Laravel') }}</title>
 </head>
 <body>
