@@ -16,35 +16,32 @@ class ProductoUnitarioController extends Controller
     public function index()
     {
         $productos = DB::table('productos')->select(
-            DB::raw('id as Id'),
-            DB::raw('nombre as "Nombre"'),
-            DB::raw('costounitario as "Costo unitario"'),
-            DB::raw('utilidadunitaria as "Utilidad unitaria"'),
-            DB::raw('preciounitario as "Precio unitario"'),
-            DB::raw('stockunitario as "Unidades en stock"'),
-            DB::raw('created_at as "Fecha de creación"'))->where("categoria","UNITARIO")->get();
+            DB::raw('productos.id as Id'),
+            DB::raw('productos.nombre as "Nombre"'),
+            DB::raw('productos.costounitario as "Costo unitario"'),
+            DB::raw('productos.utilidadunitaria as "Utilidad unitaria"'),
+            DB::raw('productos.preciounitario as "Precio unitario"'),
+            DB::raw('productos.stockunitario as "Unidades en stock"'),
+            DB::raw('producto_tipos.id as "Id de tipo"'),
+            DB::raw('producto_tipos.nombre as "Nombre del tipo"'),
+            DB::raw('productos.created_at as "Fecha de creación"'),
+            DB::raw('productos.updated_at as "Fecha de actualización"')
+        )
+            ->join("producto_tipos", "productos.producto_tipos_id", "=", "producto_tipos.id")
+            ->where("categoria", "UNITARIO")->get();
 
         $tipos = DB::table('producto_tipos')->select(
             DB::raw('id as Id'),
             DB::raw('nombre as "Nombre"'))->get();
 
-        return view("productos", compact("productos", "tipos"));
+        return view("productos_unitarios", compact("productos", "tipos"));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -53,32 +50,10 @@ class ProductoUnitarioController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Producto  $producto
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Producto $producto)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Producto  $producto
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Producto $producto)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Producto  $producto
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Producto $producto
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Producto $producto)
@@ -89,7 +64,7 @@ class ProductoUnitarioController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Producto  $producto
+     * @param \App\Producto $producto
      * @return \Illuminate\Http\Response
      */
     public function destroy(Producto $producto)

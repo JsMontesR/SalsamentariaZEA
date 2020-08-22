@@ -32,5 +32,11 @@ Route::post('/creartipoproducto','ProductoTipoController@store')->name('tipospro
 Route::post('/modificartipoproducto','ProductoTipoController@update')->name('tiposproductos.actualizar')->middleware('auth');
 Route::post('/borrartipoproducto','ProductoTipoController@destroy')->name('tiposproductos.borrar')->middleware('auth');
 
+// CRUD productos unitarios
+Route::get('/productosunitarios','ProductoUnitarioController@index')->name('productosunitarios')->middleware('auth');
+Route::post('/crearproductounitario','ProductoUnitarioController@store')->name('productosunitarios.crear')->middleware('auth');
+Route::post('/modificarproductounitario','ProductoUnitarioController@update')->name('productosunitarios.actualizar')->middleware('auth');
+Route::post('/borrarproductounitario','ProductoUnitarioController@destroy')->name('productosunitarios.borrar')->middleware('auth');
+
 
 

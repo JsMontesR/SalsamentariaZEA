@@ -16,6 +16,7 @@ class CreateProductosTable extends Migration
         Schema::create('productos', function (Blueprint $table) {
             $table->id();
             $table->string("nombre");
+            $table->string("categoria");
             $table->unsignedBigInteger("costounitario")->nullable();
             $table->unsignedBigInteger("preciounitario")->nullable();
             $table->unsignedBigInteger("utilidadunitaria")->nullable();

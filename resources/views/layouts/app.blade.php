@@ -132,7 +132,7 @@
                                         <a class="nav-link" href="pages/cards.html">Entradas a inventario</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="pages/general.html">Productos</a>
+                                        <a class="nav-link" href="{{route("productosunitarios")}}">Productos unitarios</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="{{route('tiposproductos')}}">Tipos de productos</a>

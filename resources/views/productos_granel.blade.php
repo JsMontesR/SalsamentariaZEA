@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <div class="card-header py-3">
-        <h1 class="m-0 font-weight-bold text-primary text-center">Proveedores</h1>
+        <h1 class="m-0 font-weight-bold text-primary text-center">Productos a granel</h1>
     </div>
     <br>
 
@@ -12,7 +12,7 @@
         @endif
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h3 class="m-0 font-weight-bold text-primary text-center">Detalle del proveedor</h3>
+                <h3 class="m-0 font-weight-bold text-primary text-center">Detalle del producto</h3>
             </div>
             <div class="card-body">
                 <form id="form" name="form" method="POST">
@@ -50,7 +50,7 @@
                                     class="form-control @error('producto_tipos_id') is-invalid @enderror"
                                     value="{{old('producto_tipos_id')}}" name="producto_tipos_id" required>
                                 @foreach($tipos as $tipo)
-                                    <option value="{{$tipo->id}}">{{$tipo->nombre}}</option>
+                                    <option value="{{$tipo->Id}}">{{$tipo->Nombre}}</option>
                                 @endforeach
                             </select>
                             @error('producto_tipos_id')
@@ -61,16 +61,49 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-md-4 col-form-label text-md-left">Clase de producto</label>
+                        <label class="col-md-4 col-form-label text-md-left">Costo:</label>
 
                         <div class="col-md-8">
-                            <select id="producto_clase" name="select"
-                                    class="form-control @error('producto_clase') is-invalid @enderror"
-                                    value="{{old('producto_clase')}}" name="producto_clase" required>
-                                <option value="UNITARIO">Se vende por unidades</option>
-                                <option value="GRANEL">A granel</option>
-                            </select>
-                            @error('producto_clase')
+                            <input id="costounitario" class="form-control @error('costounitario') is-invalid @enderror"
+                                   value="{{old('costounitario')}}" name="nombre" required autocomplete="costounitario">
+                            @error('costounitario')
+                            <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label text-md-left">Utilidad:</label>
+
+                        <div class="col-md-8">
+                            <input id="utilidadunitaria" class="form-control @error('utilidadunitaria') is-invalid @enderror"
+                                   value="{{old('utilidadunitaria')}}" name="nombre" required autocomplete="utilidadunitaria">
+                            @error('utilidadunitaria')
+                            <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label text-md-left">Precio:</label>
+                        <div class="col-md-8">
+                            <input id="preciounitario" class="form-control @error('preciounitario') is-invalid @enderror"
+                                   value="{{old('preciounitario')}}" name="nombre" required autocomplete="preciounitario">
+                            @error('preciounitario')
+                            <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label text-md-left">Unidades stock:</label>
+                        <div class="col-md-8">
+                            <input id="preciounitario" class="form-control @error('preciounitario') is-invalid @enderror"
+                                   value="{{old('preciounitario')}}" name="nombre" required autocomplete="preciounitario">
+                            @error('preciounitario')
                             <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
@@ -105,7 +138,7 @@
         </div>
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h3 class="m-0 font-weight-bold text-primary text-center">Proveedores registrados</h3>
+                <h3 class="m-0 font-weight-bold text-primary text-center">Productos unitarios registrados</h3>
             </div>
             <div class="card-body">
                 @if(!$productos->isEmpty())
@@ -129,29 +162,38 @@
                         </tbody>
                     </table>
                 @else
-                    <h3 align="center">No hay proveedores disponibles, intentelo más tarde</h3>
+                    <h3 align="center">No hay productos unitarios disponibles.</h3>
                 @endif
             </div>
         </div>
     </div>
     <script>
         $(document).ready(function () {
-            var table = $('#recurso').DataTable(options);
+            let conf = {
+                "columnDefs": [
+                    {
+                        "targets": [ 6 ],
+                        "visible": false,
+                        "searchable": false
+                    },
+                ],
+                options
+            }
+            let table = $('#recurso').DataTable(conf);
             $('#recurso tbody').on('click', 'tr', function () {
                 document.getElementById('registrar').disabled = true;
                 var data = table.row(this).data();
                 document.getElementById('id').value = data[0];
                 document.getElementById('nombre').value = data[1];
                 document.getElementById('costounitario').value = data[2];
-                document.getElementById('preciounitario').value = data[3];
                 document.getElementById('utilidadunitaria').value = data[3];
-                document.getElementById('costokilo').value = data[3];
-                document.getElementById('preciokilo').value = data[3];
-                document.getElementById('utilidadkilo').value = data[3];
+                document.getElementById('preciounitario').value = data[4];
+                document.getElementById('stockunitario').value = data[5];
+                document.getElementById('producto_tipos_id').value = data[6];
             });
 
             $("#registrar").click(function () {
-                document.form.action = "{{ route('proveedores.crear') }}";
+                document.form.action = "{{ route('productosunitarios.crear') }}";
                 document.form.submit();
             });
 
@@ -164,7 +206,7 @@
             });
 
             $("#modificar").click(function () {
-                document.form.action = "{{ route('proveedores.actualizar') }}";
+                document.form.action = "{{ route('productosunitarios.actualizar') }}";
                 document.form.submit();
             });
 
@@ -178,7 +220,7 @@
                 })
                     .then((willDelete) => {
                         if (willDelete) {
-                            var url = "{{ route('proveedores.borrar', ':id') }}";
+                            var url = "{{ route('productosunitarios.borrar', ':id') }}";
                             document.form.action = url.replace(':id', document.getElementById('id').value);
                             document.form.submit();
                         }
