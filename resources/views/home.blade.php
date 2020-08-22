@@ -71,6 +71,24 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-inline-block ">
+                                <h3 class="text-dark">Tipos de productos</h3>
+                            </div>
+                            <div class="float-right icon-circle-medium icon-box-lg  bg-success mt-1">
+                                <i class="fa fa-info-circle fa-fw fa-sm text-light"></i>
+                            </div>
+                        </div>
+                        <a class="card-footer text-light bg-success clearfix small z-1" href="{{route("tiposproductos")}}">
+                            <span class="float-left">Ver tipos de productos</span>
+                            <span class="float-right">
+                  <em class="fas fa-angle-right"></em>
+                </span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-inline-block ">
                                 <h3 class="text-dark">Clientes</h3>
                             </div>
                             <div class="float-right icon-circle-medium  icon-box-lg  bg-primary mt-1">

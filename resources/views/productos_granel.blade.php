@@ -7,7 +7,8 @@
 
     <div class="container-fluid">
         @if(session()->has('success'))
-            <div class="alert alert-success" role="alert">{{session('success')}} <i class="fas fa-fw fa-check-circle"></i></div>
+            <div class="alert alert-success" role="alert">{{session('success')}} <i
+                    class="fas fa-fw fa-check-circle"></i></div>
         @endif
         <div class="card shadow mb-4">
             <div class="card-header py-3">
@@ -42,14 +43,17 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-md-4 col-form-label text-md-left">Teléfono</label>
+                        <label class="col-md-4 col-form-label text-md-left">Tipo de producto</label>
 
                         <div class="col-md-8">
-                            <input id="telefono" type="number"
-                                   class="form-control @error('telefono') is-invalid @enderror"
-                                   value="{{old('telefono')}}" name="telefono" required
-                                   autocomplete="telefonoProveedor">
-                            @error('telefono')
+                            <select id="producto_tipos_id" name="select"
+                                    class="form-control @error('producto_tipos_id') is-invalid @enderror"
+                                    value="{{old('producto_tipos_id')}}" name="producto_tipos_id" required>
+                                @foreach($tipos as $tipo)
+                                    <option value="{{$tipo->id}}">{{$tipo->nombre}}</option>
+                                @endforeach
+                            </select>
+                            @error('producto_tipos_id')
                             <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
@@ -57,10 +61,20 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-md-4 col-form-label text-md-left">Dirección:</label>
+                        <label class="col-md-4 col-form-label text-md-left">Clase de producto</label>
+
                         <div class="col-md-8">
-                            <input id="direccion" class="form-control " name="direccion" value="{{old('direccion')}}"
-                                   required autocomplete="direccionProveedor">
+                            <select id="producto_clase" name="select"
+                                    class="form-control @error('producto_clase') is-invalid @enderror"
+                                    value="{{old('producto_clase')}}" name="producto_clase" required>
+                                <option value="UNITARIO">Se vende por unidades</option>
+                                <option value="GRANEL">A granel</option>
+                            </select>
+                            @error('producto_clase')
+                            <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                            @enderror
                         </div>
                     </div>
                 </form>
@@ -94,18 +108,18 @@
                 <h3 class="m-0 font-weight-bold text-primary text-center">Proveedores registrados</h3>
             </div>
             <div class="card-body">
-                @if(!$proveedores->isEmpty())
+                @if(!$productos->isEmpty())
                     <table id="recurso" class="table table-bordered dt-responsive nowrap table-hover"
                            style="width:100%" cellspacing="0" data-page-length='5' data-name="recursos">
                         <thead>
                         <tr>
-                            @foreach ($proveedores->get(0) as $key => $value)
+                            @foreach ($productos->get(0) as $key => $value)
                                 <th>{{$key}}</th>
                             @endforeach
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($proveedores as $registro)
+                        @foreach($productos as $registro)
                             <tr class="row-hover">
                                 @foreach ($registro as $key => $value)
                                     <td>{{ $value }}</td>
@@ -128,8 +142,12 @@
                 var data = table.row(this).data();
                 document.getElementById('id').value = data[0];
                 document.getElementById('nombre').value = data[1];
-                document.getElementById('telefono').value = data[2];
-                document.getElementById('direccion').value = data[3];
+                document.getElementById('costounitario').value = data[2];
+                document.getElementById('preciounitario').value = data[3];
+                document.getElementById('utilidadunitaria').value = data[3];
+                document.getElementById('costokilo').value = data[3];
+                document.getElementById('preciokilo').value = data[3];
+                document.getElementById('utilidadkilo').value = data[3];
             });
 
             $("#registrar").click(function () {
@@ -156,7 +174,7 @@
                     text: "¡Una vez borrado no será posible recuperarlo!",
                     icon: "warning",
                     dangerMode: true,
-                    buttons: ["Cancelar","Borrar"]
+                    buttons: ["Cancelar", "Borrar"]
                 })
                     .then((willDelete) => {
                         if (willDelete) {

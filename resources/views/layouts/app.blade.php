@@ -134,6 +134,9 @@
                                     <li class="nav-item">
                                         <a class="nav-link" href="pages/general.html">Productos</a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{route('tiposproductos')}}">Tipos de productos</a>
+                                    </li>
                                 </ul>
                             </div>
                         </li>
