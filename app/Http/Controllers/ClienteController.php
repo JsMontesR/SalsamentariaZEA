@@ -6,15 +6,17 @@ use App\Producto;
 use App\Proveedor;
 use Illuminate\Http\Request;
 use DB;
+use App\User;
 
 class ClienteController extends Controller
 {
     public $validationRules = [
         'name' => 'required',
-        'di' => 'nullable|email',
+        'di' => 'nullable',
         'cedula' => 'nullable|integer|min:0',
         'celular' => 'nullable|integer|min:0',
         'fijo' => 'nullable|integer|min:0',
+        'email' => 'nullable|email',
         'direccion' => 'nullable',
     ];
 
@@ -27,12 +29,13 @@ class ClienteController extends Controller
      */
     public function index()
     {
-        $productos = DB::table('users')->select(
+        $clientes = DB::table('users')->select(
             DB::raw('users.id as Id'),
-            DB::raw('users.nombre as "Nombre"'),
+            DB::raw('users.name as "Nombre"'),
             DB::raw('users.di as "Documento de identidad"'),
             DB::raw('users.celular as "Teléfono celular"'),
             DB::raw('users.fijo as "Teléfono fijo"'),
+            DB::raw('users.email as "Correo electrónico"'),
             DB::raw('users.direccion as "Dirección"'),
             DB::raw('rols.id as "Id de rol"'),
             DB::raw('rols.nombre as "Rol"'),
@@ -42,7 +45,7 @@ class ClienteController extends Controller
             ->join("rols", "users.rol_id", "=", "rols.id")
             ->where("rols.nombre", "cliente")->get();
 
-        return view("clientes", compact("productos", "tipos"));
+        return view("clientes", compact("clientes"));
     }
 
 
@@ -55,7 +58,7 @@ class ClienteController extends Controller
     public function store(Request $request)
     {
         $request->validate($this->validationRules);
-        User::create($request->all());
+        User::create($request->all() + ['rol_id' => 3]);
         return back()->with('success', 'Cliente registrado');
     }
 

@@ -151,13 +151,13 @@
                             <div id="submenu-1" class="collapse submenu" style="">
                                 <ul class="nav flex-column">
                                     <li class="nav-item">
-                                        <a class="nav-link" href="#">Clientes</a>
+                                        <a class="nav-link" href="{{route('clientes')}}">Clientes</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="{{route('proveedores')}}">Proveedores</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="#">Empleados</a>
+                                        <a class="nav-link" href="{{route('empleados')}}">Empleados</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="#">Nómina</a>

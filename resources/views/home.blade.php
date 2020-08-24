@@ -113,7 +113,7 @@
                                 <i class="fa fa-users fa-fw fa-sm text-light"></i>
                             </div>
                         </div>
-                        <a class="card-footer text-light bg-primary clearfix small z-1" href="#">
+                        <a class="card-footer text-light bg-primary clearfix small z-1" href="{{route('clientes')}}">
                             <span class="float-left">Ver clientes</span>
                             <span class="float-right">
                   <em class="fas fa-angle-right"></em>
