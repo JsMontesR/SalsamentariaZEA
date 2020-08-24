@@ -43,7 +43,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-md-4 col-form-label text-md-left">Tipo de producto</label>
+                        <label class="col-md-4 col-form-label text-md-left">Tipo de producto:</label>
 
                         <div class="col-md-8">
                             <select id="producto_tipos_id" name="producto_tipos_id"

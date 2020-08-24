@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->unsignedBigInteger('celular')->nullable();
             $table->unsignedBigInteger('fijo')->nullable();
             $table->string('direccion')->nullable();
-            $table->unsignedBigInteger('salario')->default(0);
+            $table->unsignedBigInteger('salario')->nullable()->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

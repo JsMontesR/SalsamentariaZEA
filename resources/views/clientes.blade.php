@@ -169,11 +169,6 @@
             let conf = {
                 "columnDefs": [
                     {
-                        targets: [7, 8],
-                        visible: false,
-                        searchable: false
-                    },
-                    {
                         targets: [2],
                         render: $.fn.dataTable.render.number('.', '.', 0,)
                     }

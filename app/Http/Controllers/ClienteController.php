@@ -7,6 +7,7 @@ use App\Proveedor;
 use Illuminate\Http\Request;
 use DB;
 use App\User;
+use Illuminate\Validation\ValidationException;
 
 class ClienteController extends Controller
 {
@@ -37,13 +38,10 @@ class ClienteController extends Controller
             DB::raw('users.fijo as "Teléfono fijo"'),
             DB::raw('users.email as "Correo electrónico"'),
             DB::raw('users.direccion as "Dirección"'),
-            DB::raw('rols.id as "Id de rol"'),
-            DB::raw('rols.nombre as "Rol"'),
             DB::raw('users.created_at as "Fecha de creación"'),
             DB::raw('users.updated_at as "Fecha de actualización"')
         )
-            ->join("rols", "users.rol_id", "=", "rols.id")
-            ->where("rols.nombre", "cliente")->get();
+            ->where("rol_id","=",3)->get();
 
         return view("clientes", compact("clientes"));
     }
@@ -58,6 +56,9 @@ class ClienteController extends Controller
     public function store(Request $request)
     {
         $request->validate($this->validationRules);
+        if ($request->email != null && DB::table('users')->where('email', '=', $request->email)->exists()) {
+            throw ValidationException::withMessages(['email' => 'El email ingresado ya está bajo uso de otra persona',]);
+        }
         User::create($request->all() + ['rol_id' => 3]);
         return back()->with('success', 'Cliente registrado');
     }
@@ -73,6 +74,9 @@ class ClienteController extends Controller
         $request->validate($this->validationIdRule);
         $request->validate($this->validationRules);
         $cliente = User::findOrFail($request->id);
+        if ($request->email != null && $cliente->email !=  $request->email && DB::table('users')->where('email', '=', $request->email)->exists()) {
+            throw ValidationException::withMessages(['email' => 'El email ingresado ya está bajo uso de otra persona',]);
+        }
         $cliente->update($request->all());
         $cliente->save();
         return back()->with('success', 'Cliente actualizado');

@@ -149,7 +149,7 @@
                                 <i class="fa fa-id-badge fa-fw fa-sm text-light"></i>
                             </div>
                         </div>
-                        <a class="card-footer text-light bg-dark clearfix small z-1" href="#">
+                        <a class="card-footer text-light bg-dark clearfix small z-1" href="{{route('empleados')}}">
                             <span class="float-left">Ver empleados</span>
                             <span class="float-right">
                   <em class="fas fa-angle-right"></em>
