@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <div class="card-header py-3">
-        <h1 class="m-0 font-weight-bold text-primary text-center">Proveedores</h1>
+        <h1 class="m-0 font-weight-bold text-primary text-center">Clientes</h1>
     </div>
     <br>
 
@@ -11,7 +11,7 @@
         @endif
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h3 class="m-0 font-weight-bold text-primary text-center">Detalle del proveedor</h3>
+                <h3 class="m-0 font-weight-bold text-primary text-center">Detalle del cliente</h3>
             </div>
             <div class="card-body">
                 <form id="form" name="form" method="POST">
@@ -32,9 +32,9 @@
                         <label class="col-md-4 col-form-label text-md-left">Nombre:</label>
 
                         <div class="col-md-8">
-                            <input id="nombre" class="form-control @error('nombre') is-invalid @enderror"
-                                   value="{{old('nombre')}}" name="nombre" required autocomplete="nombreProveedor">
-                            @error('nombre')
+                            <input id="name" class="form-control @error('name') is-invalid @enderror"
+                                   value="{{old('name')}}" name="name" required autocomplete="nameCliente">
+                            @error('name')
                             <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
@@ -42,14 +42,39 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-md-4 col-form-label text-md-left">Teléfono</label>
+                        <label class="col-md-4 col-form-label text-md-left">Documento de identidad:</label>
 
                         <div class="col-md-8">
-                            <input id="telefono" type="number"
-                                   class="form-control @error('telefono') is-invalid @enderror"
-                                   value="{{old('telefono')}}" name="telefono" required
-                                   autocomplete="telefonoProveedor">
-                            @error('telefono')
+                            <input id="di" type="number"
+                                   class="form-control @error('di') is-invalid @enderror"
+                                   value="{{old('di')}}" name="di">
+                            @error('di')
+                            <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label text-md-left">Teléfono celular:</label>
+                        <div class="col-md-8">
+                            <input id="celular" type="number"
+                                   class="form-control @error('celular') is-invalid @enderror"
+                                   value="{{old('celular')}}" name="celular">
+                            @error('celular')
+                            <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label text-md-left">Teléfono fijo:</label>
+                        <div class="col-md-8">
+                            <input id="fijo" type="number"
+                                   class="form-control @error('fijo') is-invalid @enderror"
+                                   value="{{old('fijo')}}" name="fijo">
+                            @error('fijo')
                             <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
@@ -59,8 +84,9 @@
                     <div class="form-group row">
                         <label class="col-md-4 col-form-label text-md-left">Dirección:</label>
                         <div class="col-md-8">
-                            <input id="direccion" class="form-control " name="direccion" value="{{old('direccion')}}"
-                                   required autocomplete="direccionProveedor">
+                            <input id="direccion"
+                                   class="form-control @error('direccion') is-invalid @enderror"
+                                   value="{{old('direccion')}}" name="direccion">
                             @error('direccion')
                             <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>

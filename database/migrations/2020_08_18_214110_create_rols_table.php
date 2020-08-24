@@ -19,10 +19,6 @@ class CreateRolsTable extends Migration
             $table->string("nombre")->unique();
             $table->timestamps();
         });
-
-        Rol::create(['nombre' => 'admin']);
-        Rol::create(['nombre' => 'empleado']);
-        Rol::create(['nombre' => 'cliente']);
     }
 
     /**
