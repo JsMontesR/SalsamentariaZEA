@@ -38,5 +38,11 @@ Route::post('/crearproductounitario','ProductoUnitarioController@store')->name('
 Route::post('/modificarproductounitario','ProductoUnitarioController@update')->name('productosunitarios.actualizar')->middleware('auth');
 Route::post('/borrarproductounitario','ProductoUnitarioController@destroy')->name('productosunitarios.borrar')->middleware('auth');
 
+// CRUD productos granel
+Route::get('/productosgranel','ProductoGranelController@index')->name('productosgranel')->middleware('auth');
+Route::post('/crearproductogranel','ProductoGranelController@store')->name('productosgranel.crear')->middleware('auth');
+Route::post('/modificarproductogranel','ProductoGranelController@update')->name('productosgranel.actualizar')->middleware('auth');
+Route::post('/borrarproductogranel','ProductoGranelController@destroy')->name('productosgranel.borrar')->middleware('auth');
+
 
 

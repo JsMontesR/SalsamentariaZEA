@@ -102,7 +102,7 @@
     <div class="nav-left-sidebar sidebar-dark">
         <div class="menu-list">
             <nav class="navbar navbar-expand-lg navbar-light">
-                <a class="d-xl-none d-lg-none" href="#">Dashboard</a>
+                <a class="d-xl-none d-lg-none" href="{{route('home')}}}">Tablero de control</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -110,7 +110,7 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav flex-column">
                         <li class="nav-divider">
-                            Menu
+                            Tablero de control
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
@@ -133,6 +133,9 @@
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="{{route("productosunitarios")}}">Productos unitarios</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{route("productosgranel")}}">Productos a granel</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="{{route('tiposproductos')}}">Tipos de productos</a>

@@ -34,7 +34,7 @@
 
                         <div class="col-md-8">
                             <input id="nombre" class="form-control @error('nombre') is-invalid @enderror"
-                                   value="{{old('nombre')}}" name="nombre" required autocomplete="nombreProveedor">
+                                   value="{{old('nombre')}}" name="nombre" required autocomplete="nombre">
                             @error('nombre')
                             <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
@@ -46,7 +46,7 @@
                         <label class="col-md-4 col-form-label text-md-left">Tipo de producto</label>
 
                         <div class="col-md-8">
-                            <select id="producto_tipos_id" name="select"
+                            <select id="producto_tipos_id" name="producto_tipos_id"
                                     class="form-control @error('producto_tipos_id') is-invalid @enderror"
                                     value="{{old('producto_tipos_id')}}" name="producto_tipos_id" required>
                                 @foreach($tipos as $tipo)
@@ -64,8 +64,8 @@
                         <label class="col-md-4 col-form-label text-md-left">Costo:</label>
 
                         <div class="col-md-8">
-                            <input id="costounitario" class="form-control @error('costounitario') is-invalid @enderror"
-                                   value="{{old('costounitario')}}" name="nombre" required autocomplete="costounitario">
+                            <input id="costounitario" type="number" class="form-control @error('costounitario') is-invalid @enderror"
+                                   value="{{old('costounitario')}}" name="costounitario" required autocomplete="costounitario">
                             @error('costounitario')
                             <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
@@ -77,8 +77,8 @@
                         <label class="col-md-4 col-form-label text-md-left">Utilidad:</label>
 
                         <div class="col-md-8">
-                            <input id="utilidadunitaria" class="form-control @error('utilidadunitaria') is-invalid @enderror"
-                                   value="{{old('utilidadunitaria')}}" name="nombre" required autocomplete="utilidadunitaria">
+                            <input id="utilidadunitaria" type="number" class="form-control @error('utilidadunitaria') is-invalid @enderror"
+                                   value="{{old('utilidadunitaria')}}" name="utilidadunitaria" required autocomplete="utilidadunitaria">
                             @error('utilidadunitaria')
                             <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
@@ -89,8 +89,8 @@
                     <div class="form-group row">
                         <label class="col-md-4 col-form-label text-md-left">Precio:</label>
                         <div class="col-md-8">
-                            <input id="preciounitario" class="form-control @error('preciounitario') is-invalid @enderror"
-                                   value="{{old('preciounitario')}}" name="nombre" required autocomplete="preciounitario">
+                            <input id="preciounitario" type="number" class="form-control @error('preciounitario') is-invalid @enderror"
+                                   value="{{old('preciounitario')}}" name="preciounitario" required autocomplete="preciounitario">
                             @error('preciounitario')
                             <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
@@ -101,9 +101,9 @@
                     <div class="form-group row">
                         <label class="col-md-4 col-form-label text-md-left">Unidades stock:</label>
                         <div class="col-md-8">
-                            <input id="preciounitario" class="form-control @error('preciounitario') is-invalid @enderror"
-                                   value="{{old('preciounitario')}}" name="nombre" required autocomplete="preciounitario">
-                            @error('preciounitario')
+                            <input id="stockunitario" type="number" class="form-control @error('stockunitario') is-invalid @enderror"
+                                   value="{{old('stockunitario')}}" name="stockunitario" required autocomplete="stockunitario">
+                            @error('stockunitario')
                             <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
@@ -155,7 +155,7 @@
                         @foreach($productos as $registro)
                             <tr class="row-hover">
                                 @foreach ($registro as $key => $value)
-                                    <td>{{ $value }}</td>
+                                    <td class="text-center">{{ $value }}</td>
                                 @endforeach
                             </tr>
                         @endforeach
@@ -172,13 +172,22 @@
             let conf = {
                 "columnDefs": [
                     {
-                        "targets": [ 6 ],
-                        "visible": false,
-                        "searchable": false
+                        targets: [6],
+                        visible: false,
+                        searchable: false
                     },
-                ],
-                options
+                    {
+                        targets: [2, 4],
+                        render: $.fn.dataTable.render.number(',', '.', 0,'$ ')
+                    },
+                    {
+                        targets: 3, render: function (data, type, full, meta) {
+                            return +data + '%';
+                        }
+                    }
+                ]
             }
+            $.extend(conf, options);
             let table = $('#recurso').DataTable(conf);
             $('#recurso tbody').on('click', 'tr', function () {
                 document.getElementById('registrar').disabled = true;
@@ -200,8 +209,10 @@
             $("#limpiar").click(function () {
                 document.getElementById('id').value = "";
                 document.getElementById('nombre').value = "";
-                document.getElementById('telefono').value = "";
-                document.getElementById('direccion').value = "";
+                document.getElementById('costounitario').value = "";
+                document.getElementById('utilidadunitaria').value = "";
+                document.getElementById('preciounitario').value = "";
+                document.getElementById('stockunitario').value = "";
                 document.getElementById('registrar').disabled = false;
             });
 
@@ -225,6 +236,14 @@
                             document.form.submit();
                         }
                     });
+            });
+
+            $("#costounitario,#utilidadunitaria").keyup(function() {
+                var costo = parseInt(document.getElementById('costounitario').value,10);
+                var utilidad = parseInt(document.getElementById('utilidadunitaria').value,10);
+                if(!isNaN(costo) && !isNaN(utilidad)){
+                    document.getElementById('preciounitario').value = Math.round(costo * (1 + utilidad / 100));
+                }
             });
         });
     </script>
