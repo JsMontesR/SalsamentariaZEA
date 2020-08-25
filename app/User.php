@@ -39,7 +39,22 @@ class User extends Authenticatable
 
     public function rol()
     {
-        return $this->hasOne('App\Rol');
+        return $this->belongsTo('App\Rol');
+    }
+
+    public function ventasRealizadas()
+    {
+        return $this->hasMany('App\Venta');
+    }
+
+    public function ventasQueLeRealizaron()
+    {
+        return $this->hasMany('App\Venta');
+    }
+
+    public function entradas()
+    {
+        return $this->hasMany('App\Entrada');
     }
 
 }

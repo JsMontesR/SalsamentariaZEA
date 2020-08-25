@@ -45,5 +45,16 @@ Route::post('/crearempleado', 'EmpleadoController@store')->name('empleados.crear
 Route::post('/modificarempleado', 'EmpleadoController@update')->name('empleados.actualizar')->middleware('auth');
 Route::post('/borrarempleado', 'EmpleadoController@destroy')->name('empleados.borrar')->middleware('auth');
 
+// CRUD usuarios
+Route::get('/empleados', 'EmpleadoController@index')->name('empleados')->middleware('auth');
+Route::post('/crearempleado', 'EmpleadoController@store')->name('empleados.crear')->middleware('auth');
+Route::post('/modificarempleado', 'EmpleadoController@update')->name('empleados.actualizar')->middleware('auth');
+Route::post('/borrarempleado', 'EmpleadoController@destroy')->name('empleados.borrar')->middleware('auth');
+
+// CRUD entradas
+Route::get('/entradas', 'EntradasController@index')->name('entradas')->middleware('auth');
+Route::post('/crearentradas', 'EntradasController@store')->name('entradas.crear')->middleware('auth');
+Route::post('/modificarentradas', 'EntradasController@update')->name('entradas.actualizar')->middleware('auth');
+Route::post('/borrarentradas', 'EntradasController@destroy')->name('entradas.borrar')->middleware('auth');
 
 

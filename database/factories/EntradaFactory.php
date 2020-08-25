@@ -2,10 +2,10 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Gasto;
+use App\Entrada;
 use Faker\Generator as Faker;
 
-$factory->define(Gasto::class, function (Faker $faker) {
+$factory->define(Entrada::class, function (Faker $faker) {
     return [
         //
     ];

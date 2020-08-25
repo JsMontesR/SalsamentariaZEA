@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Venta extends Model
+class Entrada extends Model
 {
     public function productos()
     {
@@ -14,8 +14,8 @@ class Venta extends Model
     {
         return $this->belongsTo('App\User');
     }
-    public function cliente()
+    public function proveedor()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\Proveedor');
     }
 }

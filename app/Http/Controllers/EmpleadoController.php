@@ -96,7 +96,9 @@ class EmpleadoController extends Controller
             throw ValidationException::withMessages(['email' => 'El email ingresado ya está bajo uso de otra persona',]);
         }
         if ($request->password != null) {
-            $request->password = Hash::make($request->password);
+            $request->merge([
+                'password' => Hash::make($request->password),
+            ]);
         }
 
         $empleado->update($request->all());
