@@ -41,7 +41,7 @@
                                 <i class="fa fa-truck fa-fw fa-sm text-light"></i>
                             </div>
                         </div>
-                        <a class="card-footer bg-secondary text-light clearfix small z-1" href="#">
+                        <a class="card-footer bg-secondary text-light clearfix small z-1" href="{{route('entradas')}}">
                             <span class="float-left">Ver entradas a inventario</span>
                             <span class="float-right">
                   <em class="fas fa-angle-right"></em>

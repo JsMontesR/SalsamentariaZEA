@@ -8,7 +8,7 @@ class Entrada extends Model
 {
     public function productos()
     {
-        return $this->belongsToMany('App\Producto');
+        return $this->belongsToMany('App\Producto')->withPivot('cantidadunitaria','cantidadgramos');
     }
     public function empleado()
     {

@@ -154,27 +154,24 @@
                     </div>
                 </form>
                 <br>
-                <div class="d-flex justify-content-center">
-                    <br>
-                    <div class="row btn-toolbar" role="toolbar">
+                <div class="row btn-toolbar justify-content-center" >
 
-                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 py-2">
-                            <input id="registrar" type="button" value="Registrar"
-                                   class="btn btn-primary container-fluid"/>
-                        </div>
-                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 py-2">
-                            <input id="limpiar" type="button" value="Limpiar"
-                                   class="btn btn-light text-dark container-fluid"/>
-                        </div>
-                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 py-2">
-                            <input id="modificar" type="button" value="Modificar"
-                                   class="btn btn-warning container-fluid"/>
-                        </div>
-                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 py-2">
-                            <input id="eliminar" type="button" value="Eliminar" class="btn btn-danger container-fluid"/>
-                        </div>
-
+                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 py-2">
+                        <input id="registrar" type="button" value="Registrar"
+                               class="btn btn-primary container-fluid"/>
                     </div>
+                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 py-2">
+                        <input id="limpiar" type="button" value="Limpiar"
+                               class="btn btn-light text-dark container-fluid"/>
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 py-2">
+                        <input id="modificar" type="button" value="Modificar"
+                               class="btn btn-warning container-fluid"/>
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 py-2">
+                        <input id="eliminar" type="button" value="Eliminar" class="btn btn-danger container-fluid"/>
+                    </div>
+
                 </div>
             </div>
         </div>

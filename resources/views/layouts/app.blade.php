@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/fonts/flag-icon-css/flag-icon.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/datatables/css/dataTables.bootstrap4.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/datatables/css/responsive.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css') }}">
     <script src="{{ asset('assets/vendor/jquery/jquery-3.5.1.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/datatables/js/dataTables.bootstrap4.min.js') }}"></script>
@@ -129,7 +130,7 @@
                             <div id="submenu-2" class="collapse submenu" style="">
                                 <ul class="nav flex-column">
                                     <li class="nav-item">
-                                        <a class="nav-link" href="pages/cards.html">Entradas a inventario</a>
+                                        <a class="nav-link" href="{{route('entradas')}}">Entradas a inventario</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="{{route("productosunitarios")}}">Productos unitarios</a>

@@ -20,6 +20,7 @@ class CreateEntradaProductoTable extends Migration
             $table->foreign('producto_id')->references('id')->on('productos')->onDelete('cascade');
             $table->unsignedBigInteger('cantidadunitaria')->nullable();
             $table->unsignedBigInteger('cantidadgramos')->nullable();
+            $table->unsignedBigInteger('precio');
         });
     }
 

@@ -15,9 +15,9 @@ class CreateEntradasTable extends Migration
     {
         Schema::create('entradas', function (Blueprint $table) {
             $table->id();
+            $table->date('fechapago');
+            $table->date('fechapagado')->nullable();
             $table->unsignedBigInteger('costo')->nullable();
-            $table->date('fechaPago');
-            $table->date('fechaPagado')->nullable();
             $table->timestamps();
         });
     }

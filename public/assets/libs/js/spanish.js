@@ -27,11 +27,6 @@ let options = {
             "copy": "Copiar",
             "colvis": "Visibilidad"
         }
-    },
-
-    select: {
-        style: 'os',
-        className: 'focusedRow',
-        selector: 'td:last-child a'
     }
+
 }

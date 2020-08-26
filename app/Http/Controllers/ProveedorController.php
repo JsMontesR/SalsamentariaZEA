@@ -29,7 +29,8 @@ class ProveedorController extends Controller
             DB::raw('nombre as "Nombre"'),
             DB::raw('telefono as "Telefono"'),
             DB::raw('direccion as "Direccion"'),
-            DB::raw('created_at as "Fecha de creación"'))->get();
+            DB::raw('created_at as "Fecha de creación"'),
+            DB::raw('updated_at as "Fecha de actualización"'))->get();
 
         return view("proveedores", compact("proveedores"));
     }
