@@ -40,7 +40,7 @@ class ProductoUnitarioController extends Controller
             DB::raw('productos.updated_at as "Fecha de actualización"')
         )
             ->join("producto_tipos", "productos.producto_tipos_id", "=", "producto_tipos.id")
-            ->where("categoria", "UNITARIO")->get();
+            ->where("categoria", "Unitario")->get();
 
         $tipos = DB::table('producto_tipos')->select(
             DB::raw('id as Id'),
@@ -59,7 +59,7 @@ class ProductoUnitarioController extends Controller
     public function store(Request $request)
     {
         $request->validate($this->validationRules);
-        Producto::create($request->all() + ['categoria' => 'UNITARIO']);
+        Producto::create($request->all() + ['categoria' => 'Unitario']);
         return back()->with('success', 'Producto registrado');
     }
 

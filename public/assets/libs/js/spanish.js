@@ -4,7 +4,7 @@ let options = {
         "sProcessing": "Procesando...",
         "sLengthMenu": "Mostrar _MENU_ registros",
         "sZeroRecords": "No se encontraron resultados",
-        "sEmptyTable": "Ningún dato disponible en esta tabla =(",
+        "sEmptyTable": "Ningún dato disponible en esta tabla",
         "sInfo": "Registros del _START_ al _END_, total _TOTAL_ registros",
         "sInfoEmpty": "Registros del 0 al 0, total 0 registros",
         "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",

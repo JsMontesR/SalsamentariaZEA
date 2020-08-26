@@ -79,7 +79,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 p-3">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 p-3">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
                                     <h3 class="m-0 font-weight-bold text-primary text-center">Productos disponibles</h3>
@@ -101,7 +101,7 @@
                                             @foreach($productos as $registro)
                                                 <tr class="row-hover">
                                                     @foreach ($registro as $key => $value)
-                                                        <td class="text-center">{{ $value }}</td>
+                                                        <td>{{ $value }}</td>
                                                     @endforeach
                                                 </tr>
                                             @endforeach
@@ -116,7 +116,7 @@
 
                         <input id="productos_entrada" type="hidden" required>
 
-                        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 p-3">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 p-3">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
                                     <h3 class="m-0 font-weight-bold text-primary text-center">Productos de la
@@ -130,19 +130,14 @@
                                                data-name="recursos">
                                             <thead>
                                             <tr>
+                                                <th>Eliminar</th>
                                                 @foreach ($productos->get(0) as $key => $value)
                                                     <th>{{$key}}</th>
                                                 @endforeach
+                                                <th>Cantidad (Unidades/g)</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach($productos as $registro)
-                                                <tr class="row-hover">
-                                                    @foreach ($registro as $key => $value)
-                                                        <td class="text-center">{{ $value }}</td>
-                                                    @endforeach
-                                                </tr>
-                                            @endforeach
                                             </tbody>
                                         </table>
                                     @else
@@ -198,7 +193,7 @@
                 <br>
 
                 <br>
-                <div class="row btn-toolbar justify-content-center" >
+                <div class="row btn-toolbar justify-content-center">
 
                     <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 py-2">
                         <input id="registrar" type="button" value="Registrar"
@@ -274,7 +269,7 @@
             let table = $('#recurso').DataTable(conf);
             $('#recurso tbody').on('click', 'tr', function () {
                 document.getElementById('registrar').disabled = true;
-                var data = table.row(this).data();
+                let data = table.row(this).data();
                 document.getElementById('id').value = data[0];
                 document.getElementById('proveedor_id').value = data[1];
                 document.getElementById('fechapago').value = data[4];
@@ -289,16 +284,35 @@
                 document.getElementById('proveedor_id').value = data[0];
             });
 
-            let productos_table = $('#productos_table').DataTable(options);
-            $('#productos_table tbody').on('click', 'tr', function () {
-                var data = tablaProveedores.row(this).data();
-                document.getElementById('proveedor_id').value = data[0];
-            });
 
             let productos_entrada_table = $('#productos_entrada_table').DataTable(options);
-            $('#productos_entrada_table tbody').on('click', 'tr', function () {
-                var data = tablaProveedores.row(this).data();
-                document.getElementById('proveedor_id').value = data[0];
+
+            $('#btn_eliminar_producto_entrada').on('click', function () {
+                console.log("Hello");
+                let data = productos_table.row($(this).parents('tr')).data();
+                console.log(data);
+            });
+
+            let productos_table = $('#productos_table').DataTable(options);
+            $('#productos_table tbody').on('click', 'tr', function () {
+                let data = productos_table.row(this).data();
+                let row = [];
+                row.push("<div align='center' ><button id='btn_eliminar_producto_entrada' class='btn btn-primary-link' type='button'>Eliminar</button></div>");
+                row.push(data[0]);
+                row.push(data[1]);
+                row.push(data[2]);
+                row.push(data[3]);
+                let tipoDeCantidad = "";
+                if(data[2] == "Unitario"){
+                    tipoDeCantidad = "Cantidad en unidades";
+                }else{
+                    tipoDeCantidad = "Cantidad en gramos";
+                }
+                let input = "<div class='form-group mb-2' align='center' ><input class='form-control' type='number'id=" + data[0] + "amount' placeholder='" + tipoDeCantidad + "'/>";
+
+                row.push(input + '</div>');
+                productos_entrada_table.row.add(row).draw(false);
+                productos_table.row($(this)).remove().draw();
             });
 
 

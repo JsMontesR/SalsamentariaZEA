@@ -39,8 +39,8 @@ class EntradaController extends Controller
         $productos = DB::table('productos')->select(
             DB::raw('productos.id as Id'),
             DB::raw('productos.nombre as "Nombre"'),
-            DB::raw('productos.categoria as "Categoría del producto"'),
-            DB::raw('producto_tipos.nombre as "Tipo de producto"'))
+            DB::raw('productos.categoria as "Categoría"'),
+            DB::raw('producto_tipos.nombre as "Tipo"'))
             ->join("producto_tipos", "productos.producto_tipos_id", "=", "producto_tipos.id")
             ->get();
 

@@ -40,7 +40,7 @@ class ProductoGranelController extends Controller
             DB::raw('productos.updated_at as "Fecha de actualización"')
         )
             ->join("producto_tipos", "productos.producto_tipos_id", "=", "producto_tipos.id")
-            ->where("categoria", "GRANEL")->get();
+            ->where("categoria", "Granel ")->get();
 
         $tipos = DB::table('producto_tipos')->select(
             DB::raw('id as Id'),
@@ -59,7 +59,7 @@ class ProductoGranelController extends Controller
     public function store(Request $request)
     {
         $request->validate($this->validationRules);
-        Producto::create($request->all() + ['categoria' => 'GRANEL']);
+        Producto::create($request->all() + ['categoria' => 'Granel']);
         return back()->with('success', 'Producto registrado');
     }
 
