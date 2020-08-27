@@ -3,12 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Entrada;
+use App\Proveedor;
 use Illuminate\Http\Request;
 use DB;
 use Illuminate\Support\Facades\Log;
 
 class EntradaController extends Controller
 {
+
+    public $validationRules = [
+        'proveedor_id' => 'required|integer|min:1',
+        'fechapago' => 'required|date',
+        'productos_entrada' => 'required',
+        'costo' => 'required|integer'
+    ];
+
+    public $validationIdRule = ['id' => 'required|integer|min:1'];
+
     /**
      * Display a listing of the resource.
      *
@@ -57,18 +68,21 @@ class EntradaController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate($this->validationRules);
+        $entrada = new Entrada();
+        $entrada->fechapago = $request->fechapago;
+        $entrada->proveedor()->associate(Proveedor::findOrFail($request->proveedor_id));
+        $entrada->empleado()->associate(auth()->user());
+        $entrada->save();
+        foreach ($request->productos_entrada as $productoCoded) {
+            $producto = json_decode($productoCoded);
+//            Log::info($producto->id);
+//            Log::info($producto->cantidad);
+//            Log::info($producto->precio);
+            $entrada->productos()->attach($producto->id, ['cantidad' => $producto->cantidad, 'precio' => $producto->precio]);
+        }
+        $entrada->save();
         return $request;
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Entrada $entrada
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Entrada $entrada)
-    {
-        //
     }
 
     /**

@@ -125,7 +125,7 @@
                             </div>
                         </div>
 
-                        <input id="productos_entrada" name="productos_entrada[]" type="hidden" required/>
+                        {{--                        <input id="productos_entrada" name="productos_entrada[]" type="hidden" required/>--}}
 
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 p-3">
                             <div class="card shadow mb-4">
@@ -181,7 +181,7 @@
                         <label class="col-md-4 col-form-label text-md-left">Fecha de pago:</label>
 
                         <div class="col-md-8">
-                            <input id="fechapagado" type="date"
+                            <input id="fechapagado" type="date" readonly="readonly"
                                    class="form-control @error('fechapagado') is-invalid @enderror"
                                    value="{{old('fechapagado')}}" name="fechapagado" required>
                             @error('fechapagado')
@@ -284,25 +284,28 @@
                 'columnDefs': [
                     {
                         'targets': [5, 6],
-                        'render': function(data, type, row, meta){
-                            if(type === 'display'){
+                        'render': function (data, type, row, meta) {
+                            if (type === 'display') {
                                 var api = new $.fn.dataTable.Api(meta.settings);
 
-                                var $el = $('input, select, textarea', api.cell({ row: meta.row, column: meta.col }).node());
+                                var $el = $('input, select, textarea', api.cell({
+                                    row: meta.row,
+                                    column: meta.col
+                                }).node());
 
                                 var $html = $(data).wrap('<div/>').parent();
 
-                                if($el.prop('tagName') === 'INPUT'){
+                                if ($el.prop('tagName') === 'INPUT') {
                                     $('input', $html).attr('value', $el.val());
-                                    if($el.prop('checked')){
+                                    if ($el.prop('checked')) {
                                         $('input', $html).attr('checked', 'checked');
                                     }
-                                } else if ($el.prop('tagName') === 'TEXTAREA'){
+                                } else if ($el.prop('tagName') === 'TEXTAREA') {
                                     $('textarea', $html).html($el.val());
 
-                                } else if ($el.prop('tagName') === 'SELECT'){
+                                } else if ($el.prop('tagName') === 'SELECT') {
                                     $('option:selected', $html).removeAttr('selected');
-                                    $('option', $html).filter(function(){
+                                    $('option', $html).filter(function () {
                                         return ($(this).attr('value') === $el.val());
                                     }).attr('selected', 'selected');
                                 }
@@ -342,13 +345,13 @@
             });
 
             // Update original input/select on change in child row
-            $('#productos_entrada_table tbody').on('keyup change', '.child input, .child select, .child textarea', function(e){
+            $('#productos_entrada_table tbody').on('keyup change', '.child input, .child select, .child textarea', function (e) {
                 var $el = $(this);
                 var rowIdx = $el.closest('ul').data('dtr-index');
                 var colIdx = $el.closest('li').data('dtr-index');
-                var cell = productos_entrada_table.cell({ row: rowIdx, column: colIdx }).node();
+                var cell = productos_entrada_table.cell({row: rowIdx, column: colIdx}).node();
                 $('input, select, textarea', cell).val($el.val());
-                if($el.is(':checked')){
+                if ($el.is(':checked')) {
                     $('input', cell).prop('checked', true);
                 } else {
                     $('input', cell).removeProp('checked');
@@ -394,10 +397,16 @@
                 productos_entrada_table.rows().every(function (rowIdx, tableLoop, rowLoop) {
                     let data = this.data();
                     let id = data[0];
-                    productos_entrada_array[rowIdx] = [id,$('#cantidad_producto_entrada' + id).val(),$('#precio_producto_entrada' + id).val()];
+                    $("<input />").attr("type", "hidden")
+                        .attr("name", "productos_entrada[]")
+                        .attr("value", JSON.stringify({
+                            "id": id,
+                            "cantidad": $('#cantidad_producto_entrada' + id).val(),
+                            "precio": $('#precio_producto_entrada' + id).val()
+                        }))
+                            .appendTo("#form");
                 });
-                console.log(productos_entrada_array);
-                document.getElementById("productos_entrada").value = productos_entrada_array;
+
                 document.form.action = "{{ route('entradas.crear') }}";
                 document.form.submit();
             });
