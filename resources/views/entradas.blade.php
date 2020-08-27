@@ -93,6 +93,9 @@
                                             <thead>
                                             <tr>
                                                 @foreach ($productos->get(0) as $key => $value)
+                                                    @if($key == "Nombre")
+                                                        <th>Agregar</th>
+                                                    @endif
                                                     <th>{{$key}}</th>
                                                 @endforeach
                                             </tr>
@@ -101,8 +104,16 @@
                                             @foreach($productos as $registro)
                                                 <tr class="row-hover">
                                                     @foreach ($registro as $key => $value)
+                                                        @if($key == "Nombre")
+                                                            <td>
+                                                                <input name='btn_agregar_productos_tabla' type='button'
+                                                                       value='Agregar'
+                                                                       class='btn btn-success container-fluid'/>
+                                                            </td>
+                                                        @endif
                                                         <td>{{ $value }}</td>
                                                     @endforeach
+
                                                 </tr>
                                             @endforeach
                                             </tbody>
@@ -130,11 +141,15 @@
                                                data-name="recursos">
                                             <thead>
                                             <tr>
-                                                <th>Eliminar</th>
+
                                                 @foreach ($productos->get(0) as $key => $value)
+                                                    @if($key == "Nombre")
+                                                        <th>Eliminar</th>
+                                                    @endif
                                                     <th>{{$key}}</th>
                                                 @endforeach
                                                 <th>Cantidad (Unidades/g)</th>
+                                                <th>Precio total</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -265,8 +280,14 @@
                     },
                 ]
             }
+
             $.extend(conf, options);
+
             let table = $('#recurso').DataTable(conf);
+            let tablaProveedores = $('#proveedores').DataTable(options);
+            let productos_entrada_table = $('#productos_entrada_table').DataTable(options);
+            let productos_table = $('#productos_table').DataTable(options);
+
             $('#recurso tbody').on('click', 'tr', function () {
                 document.getElementById('registrar').disabled = true;
                 let data = table.row(this).data();
@@ -278,45 +299,48 @@
                 //llamada ajax
             });
 
-            let tablaProveedores = $('#proveedores').DataTable(options);
             $('#proveedores tbody').on('click', 'tr', function () {
                 var data = tablaProveedores.row(this).data();
                 document.getElementById('proveedor_id').value = data[0];
             });
 
-
-            let productos_entrada_table = $('#productos_entrada_table').DataTable(options);
-
-            $('#btn_eliminar_producto_entrada').on('click', function () {
-                console.log("Hello");
-                let data = productos_table.row($(this).parents('tr')).data();
-                console.log(data);
+            $(document).on('click', '[name="btn_eliminar_productos_entrada_table"]', function () {
+                let row = $(this).closest('tr');
+                let data = productos_entrada_table.row(row).data();
+                let newRow = [];
+                newRow.push(data[0]);
+                newRow.push("<input name='btn_agregar_productos_tabla' type='button' value='Agregar' class='btn btn-success container-fluid'/>")
+                newRow.push(data[2]);
+                newRow.push(data[3]);
+                newRow.push(data[4]);
+                productos_table.row.add(newRow).draw(false);
+                productos_entrada_table.row(row).remove().draw();
             });
 
-            let productos_table = $('#productos_table').DataTable(options);
-            $('#productos_table tbody').on('click', 'tr', function () {
-                let data = productos_table.row(this).data();
-                let row = [];
-                row.push("<div align='center' ><button id='btn_eliminar_producto_entrada' class='btn btn-primary-link' type='button'>Eliminar</button></div>");
-                row.push(data[0]);
-                row.push(data[1]);
-                row.push(data[2]);
-                row.push(data[3]);
+            $(document).on('click', '[name="btn_agregar_productos_tabla"]', function () {
+                let row = $(this).closest('tr');
+                let data = productos_table.row(row).data();
+                let newRow = [];
+                newRow.push(data[0]);
+                newRow.push("<input name='btn_eliminar_productos_entrada_table' type='button' value='Eliminar' class='btn btn-warning container-fluid'/>");
+                newRow.push(data[2]);
+                newRow.push(data[3]);
+                newRow.push(data[4]);
                 let tipoDeCantidad = "";
-                if(data[2] == "Unitario"){
+                if (data[2] == "Unitario") {
                     tipoDeCantidad = "Cantidad en unidades";
-                }else{
+                } else {
                     tipoDeCantidad = "Cantidad en gramos";
                 }
-                let input = "<div class='form-group mb-2' align='center' ><input class='form-control' type='number'id=" + data[0] + "amount' placeholder='" + tipoDeCantidad + "'/>";
-
-                row.push(input + '</div>');
-                productos_entrada_table.row.add(row).draw(false);
-                productos_table.row($(this)).remove().draw();
+                newRow.push("<div class='form-group mb-1'><input name='cantidad_producto_entrada' class='form-control' type='number' placeholder='" + tipoDeCantidad + "'/></div>");
+                newRow.push("<div class='form-group mb-1'><input name='precio_producto_entrada' class='form-control' type='number' placeholder='Costo total'/></div>");
+                productos_entrada_table.row.add(newRow).draw(false);
+                productos_table.row(row).remove().draw();
             });
 
 
             $("#registrar").click(function () {
+                //Construir array
                 document.form.action = "{{ route('entradas.crear') }}";
                 document.form.submit();
             });
