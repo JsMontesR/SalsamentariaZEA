@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Entrada;
 use Illuminate\Http\Request;
 use DB;
+use Illuminate\Support\Facades\Log;
 
 class EntradaController extends Controller
 {
@@ -47,15 +48,6 @@ class EntradaController extends Controller
         return view("entradas", compact("entradas", "proveedors", "productos"));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -65,18 +57,7 @@ class EntradaController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param \App\Entrada $entrada
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Entrada $entrada)
-    {
-        //
+        return $request;
     }
 
     /**

@@ -125,7 +125,7 @@
                             </div>
                         </div>
 
-                        <input id="productos_entrada" type="hidden" required>
+                        <input id="productos_entrada" name="productos_entrada[]" type="hidden" required/>
 
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 p-3">
                             <div class="card shadow mb-4">
@@ -280,12 +280,49 @@
                     },
                 ]
             }
+            let formrowtable = {
+                'columnDefs': [
+                    {
+                        'targets': [5, 6],
+                        'render': function(data, type, row, meta){
+                            if(type === 'display'){
+                                var api = new $.fn.dataTable.Api(meta.settings);
+
+                                var $el = $('input, select, textarea', api.cell({ row: meta.row, column: meta.col }).node());
+
+                                var $html = $(data).wrap('<div/>').parent();
+
+                                if($el.prop('tagName') === 'INPUT'){
+                                    $('input', $html).attr('value', $el.val());
+                                    if($el.prop('checked')){
+                                        $('input', $html).attr('checked', 'checked');
+                                    }
+                                } else if ($el.prop('tagName') === 'TEXTAREA'){
+                                    $('textarea', $html).html($el.val());
+
+                                } else if ($el.prop('tagName') === 'SELECT'){
+                                    $('option:selected', $html).removeAttr('selected');
+                                    $('option', $html).filter(function(){
+                                        return ($(this).attr('value') === $el.val());
+                                    }).attr('selected', 'selected');
+                                }
+
+                                data = $html.html();
+                            }
+
+                            return data;
+                        }
+                    }
+                ],
+
+                'responsive': true
+            }
 
             $.extend(conf, options);
-
+            $.extend(formrowtable, options);
             let table = $('#recurso').DataTable(conf);
             let tablaProveedores = $('#proveedores').DataTable(options);
-            let productos_entrada_table = $('#productos_entrada_table').DataTable(options);
+            let productos_entrada_table = $('#productos_entrada_table').DataTable(formrowtable);
             let productos_table = $('#productos_table').DataTable(options);
 
             $('#recurso tbody').on('click', 'tr', function () {
@@ -302,6 +339,20 @@
             $('#proveedores tbody').on('click', 'tr', function () {
                 var data = tablaProveedores.row(this).data();
                 document.getElementById('proveedor_id').value = data[0];
+            });
+
+            // Update original input/select on change in child row
+            $('#productos_entrada_table tbody').on('keyup change', '.child input, .child select, .child textarea', function(e){
+                var $el = $(this);
+                var rowIdx = $el.closest('ul').data('dtr-index');
+                var colIdx = $el.closest('li').data('dtr-index');
+                var cell = productos_entrada_table.cell({ row: rowIdx, column: colIdx }).node();
+                $('input, select, textarea', cell).val($el.val());
+                if($el.is(':checked')){
+                    $('input', cell).prop('checked', true);
+                } else {
+                    $('input', cell).removeProp('checked');
+                }
             });
 
             $(document).on('click', '[name="btn_eliminar_productos_entrada_table"]', function () {
@@ -332,15 +383,21 @@
                 } else {
                     tipoDeCantidad = "Cantidad en gramos";
                 }
-                newRow.push("<div class='form-group mb-1'><input name='cantidad_producto_entrada' class='form-control' type='number' placeholder='" + tipoDeCantidad + "'/></div>");
-                newRow.push("<div class='form-group mb-1'><input name='precio_producto_entrada' class='form-control' type='number' placeholder='Costo total'/></div>");
+                newRow.push("<div class='form-group mb-1'><input id='cantidad_producto_entrada" + data[0] + "' class='form-control' type='number' placeholder='" + tipoDeCantidad + "'/></div>");
+                newRow.push("<div class='form-group mb-1'><input id='precio_producto_entrada" + data[0] + "' class='form-control' type='number' placeholder='Costo total'/></div>");
                 productos_entrada_table.row.add(newRow).draw(false);
                 productos_table.row(row).remove().draw();
             });
 
-
             $("#registrar").click(function () {
-                //Construir array
+                let productos_entrada_array = [];
+                productos_entrada_table.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                    let data = this.data();
+                    let id = data[0];
+                    productos_entrada_array[rowIdx] = [id,$('#cantidad_producto_entrada' + id).val(),$('#precio_producto_entrada' + id).val()];
+                });
+                console.log(productos_entrada_array);
+                document.getElementById("productos_entrada").value = productos_entrada_array;
                 document.form.action = "{{ route('entradas.crear') }}";
                 document.form.submit();
             });
