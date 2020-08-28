@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Entrada;
+use App\Producto;
+use App\ProductoTipo;
 use App\Proveedor;
 use Illuminate\Http\Request;
 use DB;
@@ -14,8 +16,7 @@ class EntradaController extends Controller
     public $validationRules = [
         'proveedor_id' => 'required|integer|min:1',
         'fechapago' => 'required|date',
-        'productos_entrada' => 'required',
-        'costo' => 'required|integer'
+        'productos_entrada' => 'required'
     ];
 
     public $validationIdRule = ['id' => 'required|integer|min:1'];
@@ -74,16 +75,40 @@ class EntradaController extends Controller
         $entrada->proveedor()->associate(Proveedor::findOrFail($request->proveedor_id));
         $entrada->empleado()->associate(auth()->user());
         $entrada->save();
+        $costo = 0;
         foreach ($request->productos_entrada as $productoCoded) {
             $producto = json_decode($productoCoded);
-//            Log::info($producto->id);
-//            Log::info($producto->cantidad);
-//            Log::info($producto->precio);
-            $entrada->productos()->attach($producto->id, ['cantidad' => $producto->cantidad, 'precio' => $producto->precio]);
+            $entrada->productos()->attach($producto->id, ['cantidad' => $producto->cantidad, 'costo' => $producto->costo]);
+            $productoActual = Producto::findOrFail($producto->id);
+            if($productoActual->categoria == ProductoTipo::UNITARIO){
+                $productoActual->costounitario = $producto->costo / $producto->cantidad;
+                $preciounitario = $productoActual->costounitario * (1 + $productoActual->utilidadunitaria/100);
+                $productoActual->preciounitario = $preciounitario;
+                $productoActual->stockunitario = $productoActual->stockunitario + $producto->cantidad;
+            }elseif ($productoActual->categoria == ProductoTipo::GRANEL){
+                $productoActual->costokilo = $producto->costo / $producto->cantidad;
+                $productoActual->preciokilo = $productoActual->costokilo * (1 + $productoActual->utilidadkilo/100);
+                $productoActual->stockgramos = $productoActual->stockgramos + ($producto->cantidad * 1000);
+            }
+            $productoActual->save();
+            $costo += $producto->costo;
         }
+        $entrada->costo = $costo;
         $entrada->save();
-        return $request;
+        return back()->with('success', 'Entrada registrada');
     }
+
+    /**
+     * Procesa el pago de una entrada.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function pagar(Request $request)
+    {
+
+    }
+
 
     /**
      * Update the specified resource in storage.
@@ -92,7 +117,7 @@ class EntradaController extends Controller
      * @param \App\Entrada $entrada
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Entrada $entrada)
+    public function update(Request $request)
     {
         //
     }

@@ -53,8 +53,8 @@ Route::post('/borrarempleado', 'EmpleadoController@destroy')->name('empleados.bo
 
 // CRUD entradas
 Route::get('/entradas', 'EntradaController@index')->name('entradas')->middleware('auth');
-Route::post('/crearentradas', 'EntradaController@store')->name('entradas.crear')->middleware('auth');
-Route::post('/modificarentradas', 'EntradaController@update')->name('entradas.actualizar')->middleware('auth');
-Route::post('/borrarentradas', 'EntradaController@destroy')->name('entradas.borrar')->middleware('auth');
+Route::post('/crearentrada', 'EntradaController@store')->name('entradas.crear')->middleware('auth');
+Route::post('/modificarentrada', 'EntradaController@update')->name('entradas.actualizar')->middleware('auth');
+Route::post('/borrarentrada', 'EntradaController@destroy')->name('entradas.borrar')->middleware('auth');
 
 

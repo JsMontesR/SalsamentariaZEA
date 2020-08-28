@@ -34,7 +34,7 @@
 
                         <div class="col-md-8">
                             <input id="proveedor_id" class="form-control @error('proveedor_id') is-invalid @enderror"
-                                   value="{{old('proveedor_id')}}" name="proveedor_id" required>
+                                   value="{{old('proveedor_id')}}" name="proveedor_id" required="required">
                             @error('proveedor_id')
                             <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
@@ -148,8 +148,8 @@
                                                     @endif
                                                     <th>{{$key}}</th>
                                                 @endforeach
-                                                <th>Cantidad (Unidades/g)</th>
-                                                <th>Precio total</th>
+                                                <th>Cantidad (Unidades/Kg)</th>
+                                                <th>Costo total</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -177,6 +177,20 @@
                             @enderror
                         </div>
                     </div>
+                    <hr>
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label text-md-left">Costo:</label>
+                        <div class="col-md-8">
+                            <input id="costo" type="number" readonly="readonly"
+                                   class="form-control @error('costo') is-invalid @enderror"
+                                   value="{{old('costo')}}" name="costo" required autocomplete="costo">
+                            @error('costo')
+                            <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                            @enderror
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label class="col-md-4 col-form-label text-md-left">Fecha de pago:</label>
 
@@ -185,19 +199,6 @@
                                    class="form-control @error('fechapagado') is-invalid @enderror"
                                    value="{{old('fechapagado')}}" name="fechapagado" required>
                             @error('fechapagado')
-                            <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                            @enderror
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-md-4 col-form-label text-md-left">Costo:</label>
-                        <div class="col-md-8">
-                            <input id="costo" type="number"
-                                   class="form-control @error('costo') is-invalid @enderror"
-                                   value="{{old('costo')}}" name="costo" required autocomplete="costo">
-                            @error('costo')
                             <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
@@ -381,10 +382,10 @@
                 newRow.push(data[3]);
                 newRow.push(data[4]);
                 let tipoDeCantidad = "";
-                if (data[2] == "Unitario") {
+                if (data[3] == "Unitario") {
                     tipoDeCantidad = "Cantidad en unidades";
                 } else {
-                    tipoDeCantidad = "Cantidad en gramos";
+                    tipoDeCantidad = "Cantidad en kilos";
                 }
                 newRow.push("<div class='form-group mb-1'><input id='cantidad_producto_entrada" + data[0] + "' class='form-control' type='number' placeholder='" + tipoDeCantidad + "'/></div>");
                 newRow.push("<div class='form-group mb-1'><input id='precio_producto_entrada" + data[0] + "' class='form-control' type='number' placeholder='Costo total'/></div>");
@@ -402,7 +403,7 @@
                         .attr("value", JSON.stringify({
                             "id": id,
                             "cantidad": $('#cantidad_producto_entrada' + id).val(),
-                            "precio": $('#precio_producto_entrada' + id).val()
+                            "costo": $('#precio_producto_entrada' + id).val()
                         }))
                             .appendTo("#form");
                 });
