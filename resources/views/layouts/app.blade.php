@@ -133,10 +133,7 @@
                                         <a class="nav-link" href="{{route('entradas')}}">Entradas a inventario</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="{{route("productosunitarios")}}">Productos unitarios</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{route("productosgranel")}}">Productos a granel</a>
+                                        <a class="nav-link" href="{{route("productos")}}">Productos</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="{{route('tiposproductos')}}">Tipos de productos</a>

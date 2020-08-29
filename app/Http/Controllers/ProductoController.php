@@ -3,19 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Producto;
-use App\Proveedor;
 use Illuminate\Http\Request;
 use DB;
 
-class ProductoUnitarioController extends Controller
+class ProductoController extends Controller
 {
     public $validationRules = [
         'nombre' => 'required',
         'producto_tipos_id' => 'required|integer|min:1',
-        'costounitario' => 'required|integer|min:0',
-        'utilidadunitaria' => 'required|integer|min:0',
-        'preciounitario' => 'required|integer|min:0',
-        'stockunitario' => 'required|integer|min:0',
+        'categoria' => 'required',
+        'costo' => 'nullable|integer|min:0',
+        'utilidad' => 'nullable|integer|min:0',
+        'precio' => 'nullable|integer|min:0',
+        'stock' => 'nullable|integer|min:0',
     ];
 
     public $validationIdRule = ['id' => 'required|integer|min:1'];
@@ -30,23 +30,23 @@ class ProductoUnitarioController extends Controller
         $productos = DB::table('productos')->select(
             DB::raw('productos.id as Id'),
             DB::raw('productos.nombre as "Nombre"'),
-            DB::raw('productos.costounitario as "Costo unitario"'),
-            DB::raw('productos.utilidadunitaria as "Utilidad unitaria"'),
-            DB::raw('productos.preciounitario as "Precio unitario"'),
-            DB::raw('productos.stockunitario as "Unidades en stock"'),
+            DB::raw('productos.categoria as "Categoría"'),
+            DB::raw('productos.costo as "Costo Unitario/Kg"'),
+            DB::raw('productos.utilidad as "Utilidad Unitaria/Kg"'),
+            DB::raw('productos.precio as "Precio Unitario/Kg"'),
+            DB::raw('productos.stock as "Unidades/g en stock"'),
             DB::raw('producto_tipos.id as "Id de tipo"'),
             DB::raw('producto_tipos.nombre as "Tipo de producto"'),
             DB::raw('productos.created_at as "Fecha de creación"'),
             DB::raw('productos.updated_at as "Fecha de actualización"')
         )
-            ->join("producto_tipos", "productos.producto_tipos_id", "=", "producto_tipos.id")
-            ->where("categoria", "Unitario")->get();
+            ->join("producto_tipos", "productos.producto_tipos_id", "=", "producto_tipos.id")->get();
 
         $tipos = DB::table('producto_tipos')->select(
             DB::raw('id as Id'),
             DB::raw('nombre as "Nombre"'))->get();
 
-        return view("productos_unitarios", compact("productos", "tipos"));
+        return view("productos", compact("productos", "tipos"));
     }
 
 
@@ -59,7 +59,15 @@ class ProductoUnitarioController extends Controller
     public function store(Request $request)
     {
         $request->validate($this->validationRules);
-        Producto::create($request->all() + ['categoria' => 'Unitario']);
+        $producto = new Producto();
+        $producto->nombre = $request->nombre;
+        $producto->producto_tipos_id = $request->producto_tipos_id;
+        $producto->categoria = $request->categoria;
+        $producto->costo = $request->costo == null ? 0 : $request->costo;
+        $producto->utilidad = $request->utilidad == null ? 0 : $request->utilidad;
+        $producto->precio = $request->precio == null ? 0 : $request->precio;
+        $producto->stock = $request->stock == null ? 0 : $request->stock;
+        $producto->save();
         return back()->with('success', 'Producto registrado');
     }
 
@@ -74,7 +82,13 @@ class ProductoUnitarioController extends Controller
         $request->validate($this->validationIdRule);
         $request->validate($this->validationRules);
         $producto = Producto::findOrFail($request->id);
-        $producto->update($request->all());
+        $producto->nombre = $request->nombre;
+        $producto->producto_tipos_id = $request->producto_tipos_id;
+        $producto->categoria = $request->categoria;
+        $producto->costo = $request->costo == null ? 0 : $request->costo;
+        $producto->utilidad = $request->utilidad == null ? 0 : $request->utilidad;
+        $producto->precio = $request->precio == null ? 0 : $request->precio;
+        $producto->stock = $request->stock == null ? 0 : $request->stock;
         $producto->save();
         return back()->with('success', 'Producto actualizado');
     }

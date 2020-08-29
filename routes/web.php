@@ -22,16 +22,10 @@ Route::post('/modificartipoproducto', 'ProductoTipoController@update')->name('ti
 Route::post('/borrartipoproducto', 'ProductoTipoController@destroy')->name('tiposproductos.borrar')->middleware('auth');
 
 // CRUD productos unitarios
-Route::get('/productosunitarios', 'ProductoUnitarioController@index')->name('productosunitarios')->middleware('auth');
-Route::post('/crearproductounitario', 'ProductoUnitarioController@store')->name('productosunitarios.crear')->middleware('auth');
-Route::post('/modificarproductounitario', 'ProductoUnitarioController@update')->name('productosunitarios.actualizar')->middleware('auth');
-Route::post('/borrarproductounitario', 'ProductoUnitarioController@destroy')->name('productosunitarios.borrar')->middleware('auth');
-
-// CRUD productos granel
-Route::get('/productosgranel', 'ProductoGranelController@index')->name('productosgranel')->middleware('auth');
-Route::post('/crearproductogranel', 'ProductoGranelController@store')->name('productosgranel.crear')->middleware('auth');
-Route::post('/modificarproductogranel', 'ProductoGranelController@update')->name('productosgranel.actualizar')->middleware('auth');
-Route::post('/borrarproductogranel', 'ProductoGranelController@destroy')->name('productosgranel.borrar')->middleware('auth');
+Route::get('/productos', 'ProductoController@index')->name('productos')->middleware('auth');
+Route::post('/crearproducto', 'ProductoController@store')->name('productos.crear')->middleware('auth');
+Route::post('/modificarproducto', 'ProductoController@update')->name('productos.actualizar')->middleware('auth');
+Route::post('/borrarproducto', 'ProductoController@destroy')->name('productos.borrar')->middleware('auth');
 
 // CRUD clientes
 Route::get('/clientes', 'ClienteController@index')->name('clientes')->middleware('auth');

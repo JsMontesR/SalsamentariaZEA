@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <div class="card-header py-3">
-        <h1 class="m-0 font-weight-bold text-primary text-center">Productos unitarios</h1>
+        <h1 class="m-0 font-weight-bold text-primary text-center">Productos</h1>
     </div>
     <br>
 
@@ -18,7 +18,7 @@
                 <form id="form" name="form" method="POST">
                     @csrf
                     <div class="form-group row">
-                        <label class="col-md-4 col-form-label text-md-left">Id:</label>
+                        <label id="label_id" class="col-md-4 col-form-label text-md-left">Id:</label>
                         <div class="col-md-8">
                             <input readonly="readonly" id="id" class="form-control @error('id') is-invalid @enderror"
                                    value="{{old('id')}}" name="id">
@@ -30,7 +30,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-md-4 col-form-label text-md-left">Nombre:</label>
+                        <label id="label_nombre" class="col-md-4 col-form-label text-md-left">Nombre:</label>
 
                         <div class="col-md-8">
                             <input id="nombre" class="form-control @error('nombre') is-invalid @enderror"
@@ -43,12 +43,33 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-md-4 col-form-label text-md-left">Tipo de producto</label>
+                        <label id="label_categoria" class="col-md-4 col-form-label text-md-left">Categoría de
+                            producto</label>
+
+                        <div class="col-md-8">
+                            <select id="categoria" name="categoria"
+                                    class="form-control @error('categoria') is-invalid @enderror"
+                                    value="{{old('categoria')}}" name="categoria" required>
+                                <option disabled selected value>Seleccione una opción</option>
+                                <option value="Unitario">Unitario</option>
+                                <option value="Granel">Granel</option>
+                            </select>
+                            @error('categoria')
+                            <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label id="label_producto_tipos_id" class="col-md-4 col-form-label text-md-left">Tipo de
+                            producto</label>
 
                         <div class="col-md-8">
                             <select id="producto_tipos_id" name="producto_tipos_id"
                                     class="form-control @error('producto_tipos_id') is-invalid @enderror"
                                     value="{{old('producto_tipos_id')}}" name="producto_tipos_id" required>
+                                <option disabled selected value>Seleccione una opción</option>
                                 @foreach($tipos as $tipo)
                                     <option value="{{$tipo->Id}}">{{$tipo->Nombre}}</option>
                                 @endforeach
@@ -61,12 +82,13 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-md-4 col-form-label text-md-left">Costo:</label>
+                        <label id="label_costo" class="col-md-4 col-form-label text-md-left">Costo por
+                            unidad/kg:</label>
 
                         <div class="col-md-8">
-                            <input id="costounitario" type="number" class="form-control @error('costounitario') is-invalid @enderror"
-                                   value="{{old('costounitario')}}" name="costounitario" required autocomplete="costounitario">
-                            @error('costounitario')
+                            <input id="costo" type="number" class="form-control @error('costo') is-invalid @enderror"
+                                   value="{{old('costo')}}" name="costo" required autocomplete="costo">
+                            @error('costo')
                             <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
@@ -74,12 +96,14 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-md-4 col-form-label text-md-left">Utilidad:</label>
+                        <label id="label_utilidad" class="col-md-4 col-form-label text-md-left">Utilidad por
+                            unidad/kg:</label>
 
                         <div class="col-md-8">
-                            <input id="utilidadunitaria" type="number" class="form-control @error('utilidadunitaria') is-invalid @enderror"
-                                   value="{{old('utilidadunitaria')}}" name="utilidadunitaria" required autocomplete="utilidadunitaria">
-                            @error('utilidadunitaria')
+                            <input id="utilidad" type="number"
+                                   class="form-control @error('utilidad') is-invalid @enderror"
+                                   value="{{old('utilidad')}}" name="utilidad" required autocomplete="utilidad">
+                            @error('utilidad')
                             <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
@@ -87,11 +111,12 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-md-4 col-form-label text-md-left">Precio:</label>
+                        <label id="label_precio" class="col-md-4 col-form-label text-md-left">Precio por
+                            unidad/kg:</label>
                         <div class="col-md-8">
-                            <input id="preciounitario" type="number" class="form-control @error('preciounitario') is-invalid @enderror"
-                                   value="{{old('preciounitario')}}" name="preciounitario" required autocomplete="preciounitario">
-                            @error('preciounitario')
+                            <input id="precio" type="number" class="form-control @error('precio') is-invalid @enderror"
+                                   value="{{old('precio')}}" name="precio" required autocomplete="precio">
+                            @error('precio')
                             <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
@@ -99,11 +124,12 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-md-4 col-form-label text-md-left">Unidades stock:</label>
+                        <label id="label_stock" class="col-md-4 col-form-label text-md-left">Unidades/g en
+                            stock:</label>
                         <div class="col-md-8">
-                            <input id="stockunitario" type="number" class="form-control @error('stockunitario') is-invalid @enderror"
-                                   value="{{old('stockunitario')}}" name="stockunitario" required autocomplete="stockunitario">
-                            @error('stockunitario')
+                            <input id="stock" type="number" class="form-control @error('stock') is-invalid @enderror"
+                                   value="{{old('stock')}}" name="stock" required autocomplete="stock">
+                            @error('stock')
                             <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
@@ -112,7 +138,7 @@
                     </div>
                 </form>
                 <br>
-                <div class="row btn-toolbar justify-content-center" >
+                <div class="row btn-toolbar justify-content-center">
 
                     <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 py-2">
                         <input id="registrar" type="button" value="Registrar"
@@ -159,27 +185,63 @@
                         </tbody>
                     </table>
                 @else
-                    <h3 align="center">No hay productos unitarios disponibles.</h3>
+                    <h3 align="center">No hay productos disponibles.</h3>
                 @endif
             </div>
         </div>
     </div>
     <script>
         $(document).ready(function () {
+
+            function caracterizarFormulario(tipo) {
+                if (tipo == undefined) {
+                    document.getElementById('label_costo').innerText = "Costo por unidad/kg:";
+                    document.getElementById('label_utilidad').innerText = "Utilidad por unidad/kg:";
+                    document.getElementById('label_precio').innerText = "Precio por unidad/kg:";
+                    document.getElementById('label_stock').innerText = "Unidades/g en stock:";
+                } else if (tipo == "Granel") {
+                    document.getElementById('label_costo').innerText = "Costo por kilo (kg):";
+                    document.getElementById('label_utilidad').innerText = "Utilidad por kilo (kg):";
+                    document.getElementById('label_precio').innerText = "Precio por kilo (kg):";
+                    document.getElementById('label_stock').innerText = "Gramos en stock (g):"
+                } else if (tipo == "Unitario") {
+                    document.getElementById('label_costo').innerText = "Costo por unidad:";
+                    document.getElementById('label_utilidad').innerText = "Utilidad por unidad:";
+                    document.getElementById('label_precio').innerText = "Precio por unidad:";
+                    document.getElementById('label_stock').innerText = "Unidades en stock:"
+                }
+            }
+
+            $("#categoria").change(function () {
+                caracterizarFormulario($(this).val());
+            })
+
             let conf = {
                 "columnDefs": [
                     {
-                        targets: [6],
+                        targets: [7],
                         visible: false,
                         searchable: false
                     },
                     {
-                        targets: [2, 4],
-                        render: $.fn.dataTable.render.number(',', '.', 0,'$ ')
+                        targets: [3, 5],
+                        render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
                     },
                     {
-                        targets: 3, render: function (data, type, full, meta) {
+                        targets: 4,
+                        render: function (data, type, full, meta) {
                             return +data + '%';
+                        }
+                    },
+                    {
+                        targets: 6,
+                        render: function (data, type, row) {
+                            if (row[2] == "Granel") {
+                                return +data + ' gramos';
+                            } else if (row[2] == "Unitario") {
+                                return +data + ' unidades';
+                            }
+
                         }
                     }
                 ]
@@ -191,30 +253,35 @@
                 var data = table.row(this).data();
                 document.getElementById('id').value = data[0];
                 document.getElementById('nombre').value = data[1];
-                document.getElementById('costounitario').value = data[2];
-                document.getElementById('utilidadunitaria').value = data[3];
-                document.getElementById('preciounitario').value = data[4];
-                document.getElementById('stockunitario').value = data[5];
-                document.getElementById('producto_tipos_id').value = data[6];
+                document.getElementById('categoria').value = data[2];
+                document.getElementById('costo').value = data[3];
+                document.getElementById('utilidad').value = data[4];
+                document.getElementById('precio').value = data[5];
+                document.getElementById('stock').value = data[6];
+                document.getElementById('producto_tipos_id').value = data[7];
+                caracterizarFormulario(data[2]);
             });
 
             $("#registrar").click(function () {
-                document.form.action = "{{ route('productosunitarios.crear') }}";
+                document.form.action = "{{ route('productos.crear') }}";
                 document.form.submit();
             });
 
             $("#limpiar").click(function () {
                 document.getElementById('id').value = "";
                 document.getElementById('nombre').value = "";
-                document.getElementById('costounitario').value = "";
-                document.getElementById('utilidadunitaria').value = "";
-                document.getElementById('preciounitario').value = "";
-                document.getElementById('stockunitario').value = "";
+                document.getElementById('categoria').value = "";
+                document.getElementById('costo').value = "";
+                document.getElementById('utilidad').value = "";
+                document.getElementById('precio').value = "";
+                document.getElementById('stock').value = "";
+                document.getElementById('producto_tipos_id').value = "";
                 document.getElementById('registrar').disabled = false;
+                caracterizarFormulario(undefined);
             });
 
             $("#modificar").click(function () {
-                document.form.action = "{{ route('productosunitarios.actualizar') }}";
+                document.form.action = "{{ route('productos.actualizar') }}";
                 document.form.submit();
             });
 
@@ -228,18 +295,17 @@
                 })
                     .then((willDelete) => {
                         if (willDelete) {
-                            var url = "{{ route('productosunitarios.borrar', ':id') }}";
-                            document.form.action = url.replace(':id', document.getElementById('id').value);
+                            document.form.action = "{{ route('productos.borrar') }}";
                             document.form.submit();
                         }
                     });
             });
 
-            $("#costounitario,#utilidadunitaria").keyup(function() {
-                var costo = parseInt(document.getElementById('costounitario').value,10);
-                var utilidad = parseInt(document.getElementById('utilidadunitaria').value,10);
-                if(!isNaN(costo) && !isNaN(utilidad)){
-                    document.getElementById('preciounitario').value = Math.round(costo * (1 + utilidad / 100));
+            $("#costo,#utilidad").keyup(function () {
+                var costo = parseInt(document.getElementById('costo').value, 10);
+                var utilidad = parseInt(document.getElementById('utilidad').value, 10);
+                if (!isNaN(costo) && !isNaN(utilidad)) {
+                    document.getElementById('precio').value = Math.round(costo * (1 + utilidad / 100));
                 }
             });
         });

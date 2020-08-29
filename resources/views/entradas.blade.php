@@ -33,7 +33,8 @@
                         <label class="col-md-4 col-form-label text-md-left">Proveedor:</label>
 
                         <div class="col-md-8">
-                            <input id="proveedor_id" class="form-control @error('proveedor_id') is-invalid @enderror"
+                            <input id="proveedor_id" readonly
+                                   class="form-control @error('proveedor_id') is-invalid @enderror"
                                    value="{{old('proveedor_id')}}" name="proveedor_id" required="required">
                             @error('proveedor_id')
                             <span class="invalid-feedback" role="alert">
@@ -124,9 +125,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        {{--                        <input id="productos_entrada" name="productos_entrada[]" type="hidden" required/>--}}
-
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 p-3">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
@@ -141,7 +139,6 @@
                                                data-name="recursos">
                                             <thead>
                                             <tr>
-
                                                 @foreach ($productos->get(0) as $key => $value)
                                                     @if($key == "Nombre")
                                                         <th>Eliminar</th>
@@ -180,7 +177,10 @@
                     <hr>
                     <div class="form-group row">
                         <label class="col-md-4 col-form-label text-md-left">Costo:</label>
-                        <div class="col-md-8">
+                        <div class="input-group col-md-8">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">$</span>
+                            </div>
                             <input id="costo" type="number" readonly="readonly"
                                    class="form-control @error('costo') is-invalid @enderror"
                                    value="{{old('costo')}}" name="costo" required autocomplete="costo">
@@ -337,7 +337,7 @@
                 document.getElementById('fechapago').value = data[4];
                 document.getElementById('fechapagado').value = data[5];
                 document.getElementById('costo').value = data[6];
-                //llamada ajax
+
             });
 
             $('#proveedores tbody').on('click', 'tr', function () {
@@ -393,6 +393,21 @@
                 productos_table.row(row).remove().draw();
             });
 
+
+            $(document).on('keyup', '[id^="precio_producto_entrada"]', function () {
+                let alreadyUsed = {};
+                let costo = 0;
+                $('[id^="precio_producto_entrada"]').each(function (index, value) {
+                    if (!alreadyUsed[$(this).attr("id")]) {
+                        console.log($(this).attr("id"));
+                        costo += isNaN(parseInt(value.value, 10)) ? 0 : parseInt(value.value, 10)
+                    }
+                    alreadyUsed[$(this).attr("id")] = true;
+                })
+                document.getElementById("costo").value = costo;
+            });
+
+
             $("#registrar").click(function () {
                 let productos_entrada_array = [];
                 productos_entrada_table.rows().every(function (rowIdx, tableLoop, rowLoop) {
@@ -405,7 +420,7 @@
                             "cantidad": $('#cantidad_producto_entrada' + id).val(),
                             "costo": $('#precio_producto_entrada' + id).val()
                         }))
-                            .appendTo("#form");
+                        .appendTo("#form");
                 });
 
                 document.form.action = "{{ route('entradas.crear') }}";

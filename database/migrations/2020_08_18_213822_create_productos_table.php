@@ -17,14 +17,10 @@ class CreateProductosTable extends Migration
             $table->id();
             $table->string("nombre");
             $table->string("categoria");
-            $table->unsignedBigInteger("costounitario")->nullable();
-            $table->unsignedBigInteger("preciounitario")->nullable();
-            $table->unsignedBigInteger("utilidadunitaria")->nullable();
-            $table->unsignedBigInteger("stockunitario")->nullable();
-            $table->unsignedBigInteger("costokilo")->nullable();
-            $table->unsignedBigInteger("preciokilo")->nullable();
-            $table->unsignedBigInteger("utilidadkilo")->nullable();
-            $table->unsignedBigInteger("stockgramos")->nullable();
+            $table->unsignedBigInteger("costo");
+            $table->unsignedBigInteger("precio");
+            $table->unsignedBigInteger("utilidad");
+            $table->unsignedBigInteger("stock");
             $table->timestamps();
         });
     }

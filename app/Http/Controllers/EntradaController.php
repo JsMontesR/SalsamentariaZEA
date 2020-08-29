@@ -69,6 +69,7 @@ class EntradaController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate($this->validationRules);
         $entrada = new Entrada();
         $entrada->fechapago = $request->fechapago;
@@ -76,23 +77,23 @@ class EntradaController extends Controller
         $entrada->empleado()->associate(auth()->user());
         $entrada->save();
         $costo = 0;
+
         foreach ($request->productos_entrada as $productoCoded) {
             $producto = json_decode($productoCoded);
             $entrada->productos()->attach($producto->id, ['cantidad' => $producto->cantidad, 'costo' => $producto->costo]);
             $productoActual = Producto::findOrFail($producto->id);
-            if($productoActual->categoria == ProductoTipo::UNITARIO){
-                $productoActual->costounitario = $producto->costo / $producto->cantidad;
-                $preciounitario = $productoActual->costounitario * (1 + $productoActual->utilidadunitaria/100);
-                $productoActual->preciounitario = $preciounitario;
-                $productoActual->stockunitario = $productoActual->stockunitario + $producto->cantidad;
-            }elseif ($productoActual->categoria == ProductoTipo::GRANEL){
-                $productoActual->costokilo = $producto->costo / $producto->cantidad;
-                $productoActual->preciokilo = $productoActual->costokilo * (1 + $productoActual->utilidadkilo/100);
-                $productoActual->stockgramos = $productoActual->stockgramos + ($producto->cantidad * 1000);
+            $productoActual->costo = $producto->costo / $producto->cantidad;
+            $precio = $productoActual->costo * (1 + $productoActual->utilidad / 100);
+            $productoActual->precio = $precio;
+            if ($productoActual->categoria == ProductoTipo::UNITARIO) {
+                $productoActual->stock = $productoActual->stock + $producto->cantidad;
+            } elseif ($productoActual->categoria == ProductoTipo::GRANEL) {
+                $productoActual->stock = $productoActual->stock + ($producto->cantidad * 1000);
             }
             $productoActual->save();
             $costo += $producto->costo;
         }
+
         $entrada->costo = $costo;
         $entrada->save();
         return back()->with('success', 'Entrada registrada');
