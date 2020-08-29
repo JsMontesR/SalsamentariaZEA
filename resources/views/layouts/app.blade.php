@@ -134,6 +134,7 @@
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="{{route("productos")}}">Productos</a>
+                                        <a class="nav-link" href="{{route("productos")}}">Productos</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="{{route('tiposproductos')}}">Tipos de productos</a>
@@ -158,7 +159,7 @@
                                         <a class="nav-link" href="{{route('empleados')}}">Empleados</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="#">Nómina</a>
+                                        <a class="nav-link" href="{{route('nominas')}}">Nómina</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="#">Movimientos</a>

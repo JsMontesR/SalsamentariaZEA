@@ -57,4 +57,9 @@ class User extends Authenticatable
         return $this->hasMany('App\Entrada');
     }
 
+    public function nominas()
+    {
+        return $this->hasMany('App\Nomina','empleado_id');
+    }
+
 }

@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->unsignedBigInteger('fijo')->nullable();
             $table->string('direccion')->nullable();
             $table->unsignedBigInteger('salario')->nullable()->default(0);
+            $table->boolean("activo")->default(true);
             $table->rememberToken();
             $table->timestamps();
         });

@@ -51,4 +51,10 @@ Route::post('/crearentrada', 'EntradaController@store')->name('entradas.crear')-
 Route::post('/modificarentrada', 'EntradaController@update')->name('entradas.actualizar')->middleware('auth');
 Route::post('/borrarentrada', 'EntradaController@destroy')->name('entradas.borrar')->middleware('auth');
 
+// CRUD nóminas
+Route::get('/nominas', 'NominaController@index')->name('nominas')->middleware('auth');
+Route::post('/pagarnomina', 'NominaController@pay')->name('nominas.pagar')->middleware('auth');
+Route::post('/modificarnomina', 'NominaController@update')->name('nominas.actualizar')->middleware('auth');
+Route::post('/borrarnomina', 'NominaController@destroy')->name('nominas.borrar')->middleware('auth');
+
 

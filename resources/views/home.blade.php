@@ -151,7 +151,7 @@
                                 <i class="fa fa-calendar fa-fw fa-sm text-light"></i>
                             </div>
                         </div>
-                        <a class="card-footer text-dark bg-warning clearfix small z-1" href="#">
+                        <a class="card-footer text-dark bg-warning clearfix small z-1" href="{{route('nominas')}}">
                             <span class="float-left">Ver nómina</span>
                             <span class="float-right">
                   <em class="fas fa-angle-right"></em>
