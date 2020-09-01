@@ -18,4 +18,8 @@ class Entrada extends Model
     {
         return $this->belongsTo('App\Proveedor');
     }
+
+    public function movimientos(){
+        return $this->morphMany(Movimiento::class,'movimientoable');
+    }
 }

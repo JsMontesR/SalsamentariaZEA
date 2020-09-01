@@ -16,7 +16,11 @@ class EntradaController extends Controller
     public $validationRules = [
         'proveedor_id' => 'required|integer|min:1',
         'fechapago' => 'required|date',
-        'productos_entrada' => 'required'
+        'productos_entrada' => 'required',
+    ];
+
+    public $customMessages = [
+        'productos_entrada.required' => 'La tabla de productos de la entrada debe contener productos con sus respectivas cantidades y costos'
     ];
 
     public $validationIdRule = ['id' => 'required|integer|min:1'];
@@ -69,15 +73,13 @@ class EntradaController extends Controller
      */
     public function store(Request $request)
     {
-
-        $request->validate($this->validationRules);
+        $request->validate($this->validationRules, $this->customMessages);
         $entrada = new Entrada();
         $entrada->fechapago = $request->fechapago;
         $entrada->proveedor()->associate(Proveedor::findOrFail($request->proveedor_id));
         $entrada->empleado()->associate(auth()->user());
         $entrada->save();
         $costo = 0;
-
         foreach ($request->productos_entrada as $productoCoded) {
             $producto = json_decode($productoCoded);
             $entrada->productos()->attach($producto->id, ['cantidad' => $producto->cantidad, 'costo' => $producto->costo]);
@@ -96,7 +98,7 @@ class EntradaController extends Controller
 
         $entrada->costo = $costo;
         $entrada->save();
-        return back()->with('success', 'Entrada registrada');
+        return response()->json(['success'=>'Data is successfully added']);
     }
 
     /**

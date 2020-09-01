@@ -12,4 +12,8 @@ class Nomina extends Model
     {
         return $this->belongsTo('App\User','empleado_id');
     }
+
+    public function movimientos(){
+        return $this->morphMany(Movimiento::class,'movimientoable');
+    }
 }

@@ -20,30 +20,18 @@
                     <div class="form-group row">
                         <label class="col-md-4 col-form-label text-md-left">Id:</label>
                         <div class="col-md-8">
-                            <input readonly="readonly" id="id" class="form-control @error('id') is-invalid @enderror"
-                                   value="{{old('id')}}" name="id">
-                            @error('id')
-                            <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                            @enderror
+                            <input readonly="readonly" id="id" class="form-control"
+                                   name="id">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-4 col-form-label text-md-left">Proveedor:</label>
-
                         <div class="col-md-8">
                             <input id="proveedor_id" readonly
-                                   class="form-control @error('proveedor_id') is-invalid @enderror"
-                                   value="{{old('proveedor_id')}}" name="proveedor_id" required="required">
-                            @error('proveedor_id')
-                            <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                            @enderror
+                                   class="form-control"
+                                   name="proveedor_id" required="required">
                         </div>
                     </div>
-
                     <div class="card mb-3">
                         <div class="card-body">
                             <div class="table-responsive">
@@ -81,7 +69,7 @@
 
                     <div class="row">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 p-3">
-                            <div class="card shadow mb-4">
+                            <div class="card shadow mb-4 form-control">
                                 <div class="card-header py-3">
                                     <h3 class="m-0 font-weight-bold text-primary text-center">Productos disponibles</h3>
                                 </div>
@@ -114,7 +102,6 @@
                                                         @endif
                                                         <td>{{ $value }}</td>
                                                     @endforeach
-
                                                 </tr>
                                             @endforeach
                                             </tbody>
@@ -126,12 +113,14 @@
                             </div>
                         </div>
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 p-3">
-                            <div class="card shadow mb-4">
+                            <div
+                                class="card shadow mb-4 form-control @error('productos_entrada') border-danger @enderror @error('productos_entrada_error') border-danger @enderror">
                                 <div class="card-header py-3">
                                     <h3 class="m-0 font-weight-bold text-primary text-center">Productos de la
                                         entrada</h3>
                                 </div>
-                                <div class="card-body">
+                                <div id="card_productos_entrada_table"
+                                     class="card-body">
                                     @if(!$productos->isEmpty())
                                         <table id="productos_entrada_table"
                                                class="table table-bordered dt-responsive nowrap table-hover"
@@ -157,6 +146,7 @@
                                     @endif
                                 </div>
                             </div>
+
                         </div>
                     </div>
 
@@ -165,13 +155,8 @@
 
                         <div class="col-md-8">
                             <input id="fechapago" type="date"
-                                   class="form-control @error('fechapago') is-invalid @enderror"
-                                   value="{{old('fechapago')}}" name="fechapago" required>
-                            @error('fechapago')
-                            <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                            @enderror
+                                   class="form-control"
+                                   name="fechapago" required>
                         </div>
                     </div>
                     <hr>
@@ -182,13 +167,8 @@
                                 <span class="input-group-text">$</span>
                             </div>
                             <input id="costo" type="number" readonly="readonly"
-                                   class="form-control @error('costo') is-invalid @enderror"
-                                   value="{{old('costo')}}" name="costo" required autocomplete="costo">
-                            @error('costo')
-                            <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                            @enderror
+                                   class="form-control"
+                                   name="costo" required autocomplete="costo">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -196,13 +176,8 @@
 
                         <div class="col-md-8">
                             <input id="fechapagado" type="date" readonly="readonly"
-                                   class="form-control @error('fechapagado') is-invalid @enderror"
-                                   value="{{old('fechapagado')}}" name="fechapagado" required>
-                            @error('fechapagado')
-                            <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                            @enderror
+                                   class="form-control"
+                                   name="fechapagado" required>
                         </div>
                     </div>
                 </form>
@@ -268,6 +243,7 @@
     </div>
     <script>
         $(document).ready(function () {
+
             let conf = {
                 "columnDefs": [
                     {
@@ -328,6 +304,19 @@
             let tablaProveedores = $('#proveedores').DataTable(options);
             let productos_entrada_table = $('#productos_entrada_table').DataTable(formrowtable);
             let productos_table = $('#productos_table').DataTable(options);
+
+            function calibrarTablas() {
+                productos_entrada_table.rows().every(function () {
+                    let data = this.data();
+                    console.log(data);
+                    productos_table.rows().every(function (row) {
+                        let dataProd = this.data();
+                        if (data[0] == dataProd[0]) {
+                            productos_table.row(row).remove().draw();
+                        }
+                    })
+                })
+            }
 
             $('#recurso tbody').on('click', 'tr', function () {
                 document.getElementById('registrar').disabled = true;
@@ -393,7 +382,6 @@
                 productos_table.row(row).remove().draw();
             });
 
-
             $(document).on('keyup', '[id^="precio_producto_entrada"]', function () {
                 let alreadyUsed = {};
                 let costo = 0;
@@ -406,7 +394,6 @@
                 })
                 document.getElementById("costo").value = costo;
             });
-
 
             $("#registrar").click(function () {
                 let productos_entrada_array = [];
@@ -423,8 +410,36 @@
                         .appendTo("#form");
                 });
 
-                document.form.action = "{{ route('entradas.crear') }}";
-                document.form.submit();
+                $("<input />").attr("type", "hidden")
+                    .attr("name", "productos_entrada_table")
+                    .attr("value", document.getElementById("productos_entrada_table").outerHTML)
+                    .appendTo("#form");
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                $.post('{{route("entradas.crear")}}', $('#form').serialize(), function (data) {
+                    alert(data);
+                }).fail(function (err) {
+                    if (err.status == 422) {
+                        $('#success_message').fadeIn().html(err.responseJSON.message);
+                        console.warn(err.responseJSON.errors);
+                        $.each(err.responseJSON.errors, function (i, error) {
+                            if (i == "productos_entrada") {
+                                $("#card_productos_entrada_table").append(' <div class="alert alert-danger">' + error[0] + '</div>');
+                            } else {
+                                let el = $(document).find('[name^="' + i + '"]').addClass("is-invalid");
+                                el.after($('<span class="invalid-feedback" role="alert"><strong>' + error[0] + '</strong></span>'));
+                            }
+                        });
+                    }
+                })
+
+                {{--document.form.action = "{{ route('entradas.crear') }}";--}}
+                {{--document.form.submit();--}}
             });
 
             $("#limpiar").click(function () {
@@ -433,9 +448,9 @@
                 document.getElementById('fechapagado').value = "";
                 document.getElementById('fechapago').value = "";
                 document.getElementById('costo').value = "";
-                document.getElementById('registrar').disabled = false;
+                calibrarTablas();
+                document.getElementById('pagar').disabled = false;
 
-                //limpiar carrito
             });
 
             $("#modificar").click(function () {

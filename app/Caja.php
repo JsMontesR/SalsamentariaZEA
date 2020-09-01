@@ -19,11 +19,16 @@ class Caja extends Model
 
     public function sacarDinero($cantidad)
     {
-        if($cantidad >$this->saldo){
+        if ($cantidad > $this->saldo) {
             throw new Exception("Operación no realizable, saldo en caja insuficiente");
-        }else{
+        } else {
             $this->saldo = $this->saldo - $cantidad;
             $this->save();
         }
+    }
+
+    public function pagar($cantidad, $auxtarjeta)
+    {
+
     }
 }
