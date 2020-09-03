@@ -8,7 +8,6 @@ use App\ProductoTipo;
 use App\Proveedor;
 use Illuminate\Http\Request;
 use DB;
-use Illuminate\Support\Facades\Log;
 
 class EntradaController extends Controller
 {
@@ -32,20 +31,6 @@ class EntradaController extends Controller
      */
     public function index()
     {
-        $entradas = DB::table('entradas')->select(
-            DB::raw('entradas.id as Id'),
-            DB::raw('proveedors.id as "Id proveedor"'),
-            DB::raw('proveedors.nombre as "Nombre del proveedor"'),
-            DB::raw('users.name as "Empleado que registró la entrada"'),
-            DB::raw('entradas.fechapago as "Fecha límite de pago"'),
-            DB::raw('entradas.fechapagado as "Fecha de pago"'),
-            DB::raw('entradas.costo as "Costo total de la entrada"'),
-            DB::raw('entradas.created_at as "Fecha de creación"'),
-            DB::raw('entradas.updated_at as "Fecha de actualización"')
-        )
-            ->join("users", "entradas.empleado_id", "=", "users.id")
-            ->join("proveedors", "entradas.proveedor_id", "=", "proveedors.id")->get();
-
         $proveedors = DB::table('proveedors')->select(
             DB::raw('id as Id'),
             DB::raw('nombre as "Nombre"'),
@@ -61,9 +46,19 @@ class EntradaController extends Controller
             ->join("producto_tipos", "productos.producto_tipos_id", "=", "producto_tipos.id")
             ->get();
 
-        return view("entradas", compact("entradas", "proveedors", "productos"));
+        return view("entradas", compact("proveedors", "productos"));
     }
 
+    /**
+     * Return list of the resource in storage.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+
+    public function list()
+    {
+        return datatables(Entrada::with(['empleado','proveedor']))->toJson();
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -82,6 +77,7 @@ class EntradaController extends Controller
         $costo = 0;
         foreach ($request->productos_entrada as $productoCoded) {
             $producto = json_decode($productoCoded);
+
             $entrada->productos()->attach($producto->id, ['cantidad' => $producto->cantidad, 'costo' => $producto->costo]);
             $productoActual = Producto::findOrFail($producto->id);
             $productoActual->costo = $producto->costo / $producto->cantidad;
@@ -98,7 +94,10 @@ class EntradaController extends Controller
 
         $entrada->costo = $costo;
         $entrada->save();
-        return response()->json(['success'=>'Data is successfully added']);
+        return response()->json([
+            'mensaje' => 'Operación realizada',
+            'descripcion' => '¡Entrada registrada!',
+        ]);
     }
 
     /**

@@ -215,48 +215,30 @@
                 <h3 class="m-0 font-weight-bold text-primary text-center">Entradas registradas</h3>
             </div>
             <div class="card-body">
-                @if(!$entradas->isEmpty())
-                    <table id="recurso" class="table table-bordered dt-responsive nowrap table-hover"
-                           style="width:100%" cellspacing="0" data-page-length='5' data-name="recursos">
-                        <thead>
-                        <tr>
-                            @foreach ($entradas->get(0) as $key => $value)
-                                <th>{{$key}}</th>
-                            @endforeach
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($entradas as $registro)
-                            <tr class="row-hover">
-                                @foreach ($registro as $key => $value)
-                                    <td class="text-center">{{ $value }}</td>
-                                @endforeach
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                @else
-                    <h3 align="center">No hay entradas disponibles.</h3>
-                @endif
+                <table id="recurso" class="table table-bordered dt-responsive nowrap table-hover"
+                       style="width:100%" cellspacing="0" data-page-length='5' data-name="recursos">
+                    {{--                        <thead>--}}
+                    {{--                        <tr>--}}
+                    {{--                            @foreach ($entradas->get(0) as $key => $value)--}}
+                    {{--                                <th>{{$key}}</th>--}}
+                    {{--                            @endforeach--}}
+                    {{--                        </tr>--}}
+                    {{--                        </thead>--}}
+                    {{--                        <tbody>--}}
+                    {{--                        @foreach($entradas as $registro)--}}
+                    {{--                            <tr class="row-hover">--}}
+                    {{--                                @foreach ($registro as $key => $value)--}}
+                    {{--                                    <td class="text-center">{{ $value }}</td>--}}
+                    {{--                                @endforeach--}}
+                    {{--                            </tr>--}}
+                    {{--                        @endforeach--}}
+                    {{--                        </tbody>--}}
+                </table>
             </div>
         </div>
     </div>
     <script>
         $(document).ready(function () {
-
-            let conf = {
-                "columnDefs": [
-                    {
-                        targets: [1],
-                        visible: false,
-                        searchable: false
-                    },
-                    {
-                        targets: [6],
-                        render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
-                    },
-                ]
-            }
             let formrowtable = {
                 'columnDefs': [
                     {
@@ -298,25 +280,49 @@
                 'responsive': true
             }
 
-            $.extend(conf, options);
-            $.extend(formrowtable, options);
-            let table = $('#recurso').DataTable(conf);
-            let tablaProveedores = $('#proveedores').DataTable(options);
-            let productos_entrada_table = $('#productos_entrada_table').DataTable(formrowtable);
-            let productos_table = $('#productos_table').DataTable(options);
-
-            function calibrarTablas() {
-                productos_entrada_table.rows().every(function () {
-                    let data = this.data();
+            $.ajax({
+                url: "api/listarentradas",
+                type: "get",
+                success: function (data) {
                     console.log(data);
-                    productos_table.rows().every(function (row) {
-                        let dataProd = this.data();
-                        if (data[0] == dataProd[0]) {
-                            productos_table.row(row).remove().draw();
-                        }
-                    })
-                })
-            }
+                },
+                error: function (err){
+                    console.warn(err);
+                }
+            })
+
+            let table = $('#recurso').DataTable($.extend({
+                columnDefs: [
+                    {
+                        targets: [1],
+                        visible: false,
+                        searchable: false
+                    },
+                    {
+                        targets: [6],
+                        render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
+                    },
+                ],
+                processing: true,
+                serverSide: true,
+                ajax: "api/listarentradas",
+                columns: [
+                    {data: 'id', title: 'Id'},
+                    {data: 'proveedor.id', title: 'Id del proveedor'},
+                    {data: 'proveedor.nombre', title: 'Nombre del proveedor'},
+                    {data: 'empleado.name', title: 'Nombre del empleado'},
+                    {data: 'fechapago', title: 'Fecha de pago'},
+                    {data: 'fechapagado', title: 'Fecha límite de pago'},
+                    {data: 'costo', title: 'Costo'},
+                    {data: 'created_at', title: 'Fecha de creación'},
+                    {data: 'updated_at', title: 'Fecha de actualización'},
+                ]
+            }, options));
+
+
+            let tablaProveedores = $('#proveedores').DataTable(options);
+            let productos_entrada_table = $('#productos_entrada_table').DataTable($.extend(formrowtable, options));
+            let productos_table = $('#productos_table').DataTable(options);
 
             $('#recurso tbody').on('click', 'tr', function () {
                 document.getElementById('registrar').disabled = true;
@@ -334,7 +340,6 @@
                 document.getElementById('proveedor_id').value = data[0];
             });
 
-            // Update original input/select on change in child row
             $('#productos_entrada_table tbody').on('keyup change', '.child input, .child select, .child textarea', function (e) {
                 var $el = $(this);
                 var rowIdx = $el.closest('ul').data('dtr-index');
@@ -350,16 +355,32 @@
 
             $(document).on('click', '[name="btn_eliminar_productos_entrada_table"]', function () {
                 let row = $(this).closest('tr');
-                let data = productos_entrada_table.row(row).data();
+                agregarATablaDeProductos(row);
+                quitarProductoDeEntrada(row)
+            });
+
+            function vacearTablaDeProductosEntrada() {
+                productos_entrada_table.rows().every(function () {
+                    let data = this.data();
+                    agregarATablaDeProductos(this)
+                })
+                productos_entrada_table.clear().draw();
+            }
+
+            function agregarATablaDeProductos(row) {
                 let newRow = [];
+                let data = productos_entrada_table.row(row).data();
                 newRow.push(data[0]);
                 newRow.push("<input name='btn_agregar_productos_tabla' type='button' value='Agregar' class='btn btn-success container-fluid'/>")
                 newRow.push(data[2]);
                 newRow.push(data[3]);
                 newRow.push(data[4]);
                 productos_table.row.add(newRow).draw(false);
+            }
+
+            function quitarProductoDeEntrada(row) {
                 productos_entrada_table.row(row).remove().draw();
-            });
+            }
 
             $(document).on('click', '[name="btn_agregar_productos_tabla"]', function () {
                 let row = $(this).closest('tr');
@@ -387,7 +408,6 @@
                 let costo = 0;
                 $('[id^="precio_producto_entrada"]').each(function (index, value) {
                     if (!alreadyUsed[$(this).attr("id")]) {
-                        console.log($(this).attr("id"));
                         costo += isNaN(parseInt(value.value, 10)) ? 0 : parseInt(value.value, 10)
                     }
                     alreadyUsed[$(this).attr("id")] = true;
@@ -395,8 +415,7 @@
                 document.getElementById("costo").value = costo;
             });
 
-            $("#registrar").click(function () {
-                let productos_entrada_array = [];
+            function armarFormulario() {
                 productos_entrada_table.rows().every(function (rowIdx, tableLoop, rowLoop) {
                     let data = this.data();
                     let id = data[0];
@@ -409,11 +428,11 @@
                         }))
                         .appendTo("#form");
                 });
+            }
 
-                $("<input />").attr("type", "hidden")
-                    .attr("name", "productos_entrada_table")
-                    .attr("value", document.getElementById("productos_entrada_table").outerHTML)
-                    .appendTo("#form");
+            $("#registrar").click(function () {
+
+                armarFormulario();
 
                 $.ajaxSetup({
                     headers: {
@@ -422,40 +441,53 @@
                 });
 
                 $.post('{{route("entradas.crear")}}', $('#form').serialize(), function (data) {
-                    alert(data);
+                    swal(data.mensaje, data.descripcion, "success");
+                    eliminarErroresDeValidacion();
+                    limpiarFormulario()
+                    table.ajax.reload();
                 }).fail(function (err) {
                     if (err.status == 422) {
                         $('#success_message').fadeIn().html(err.responseJSON.message);
-                        console.warn(err.responseJSON.errors);
+                        eliminarErroresDeValidacion();
                         $.each(err.responseJSON.errors, function (i, error) {
                             if (i == "productos_entrada") {
-                                $("#card_productos_entrada_table").append(' <div class="alert alert-danger">' + error[0] + '</div>');
+                                $("#card_productos_entrada_table").append(' <div name="valerr" class="alert alert-danger">' + error[0] + '</div>');
                             } else {
                                 let el = $(document).find('[name^="' + i + '"]').addClass("is-invalid");
-                                el.after($('<span class="invalid-feedback" role="alert"><strong>' + error[0] + '</strong></span>'));
+                                el.after($('<span name="valerr" class="invalid-feedback" role="alert"><strong>' + error[0] + '</strong></span>'));
                             }
                         });
                     }
+                    console.warn(err);
                 })
-
-                {{--document.form.action = "{{ route('entradas.crear') }}";--}}
-                {{--document.form.submit();--}}
             });
 
-            $("#limpiar").click(function () {
+            function eliminarErroresDeValidacion() {
+                $("form#form :input").each(function () {
+                    $(this).removeClass("is-invalid");
+                });
+                $("[name^='valerr']").remove();
+            }
+
+            function limpiarFormulario() {
                 document.getElementById('id').value = "";
                 document.getElementById('proveedor_id').value = "";
                 document.getElementById('fechapagado').value = "";
                 document.getElementById('fechapago').value = "";
                 document.getElementById('costo').value = "";
-                calibrarTablas();
+                vacearTablaDeProductosEntrada();
                 document.getElementById('pagar').disabled = false;
+                eliminarErroresDeValidacion();
+            }
 
+            $("#limpiar").click(function (){
+                limpiarFormulario();
             });
 
             $("#modificar").click(function () {
                 document.form.action = "{{ route('entradas.actualizar') }}";
                 document.form.submit();
+                eliminarErroresDeValidacion();
             });
 
             $("#eliminar").click(function () {
@@ -472,7 +504,9 @@
                             document.form.submit();
                         }
                     });
+                eliminarErroresDeValidacion();
             });
+
 
         });
     </script>

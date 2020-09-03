@@ -38,9 +38,9 @@
     <div class="dashboard-header">
         <nav class="navbar navbar-expand-lg bg-white fixed-top">
             <a class="navbar-brand" href="{{route('home')}}">{{config('app.name', 'Laravel')}}</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            <button class="navbar-toggler px-4" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon d-inline"><i class="fas fa-caret-square-down mr-2"></i></span>
             </button>
             <div class="collapse navbar-collapse " id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto navbar-right-top">
@@ -104,7 +104,7 @@
         <div class="menu-list">
             <nav class="navbar navbar-expand-lg navbar-light">
                 <a class="d-xl-none d-lg-none" href="{{route('home')}}}">Tablero de control</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                <button class="navbar-toggler mx-2" type="button" data-toggle="collapse" data-target="#navbarNav"
                         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -133,7 +133,6 @@
                                         <a class="nav-link" href="{{route('entradas')}}">Entradas a inventario</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="{{route("productos")}}">Productos</a>
                                         <a class="nav-link" href="{{route("productos")}}">Productos</a>
                                     </li>
                                     <li class="nav-item">
