@@ -81,7 +81,7 @@
                         </thead>
                         <tbody>
                         @foreach($tipos as $registro)
-                            <tr class="row-hover">
+                            <tr class="row-cursor-hand">
                                 @foreach ($registro as $key => $value)
                                     <td>{{ $value }}</td>
                                 @endforeach

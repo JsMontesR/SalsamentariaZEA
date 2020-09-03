@@ -18,22 +18,24 @@ class ProveedorController extends Controller
     public $validationIdRule = ['id' => 'required|integer|min:0'];
 
     /**
-     * Display a listing of the resource.
+     * Display a main page of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $proveedores = DB::table('proveedors')->select(
-            DB::raw('id as Id'),
-            DB::raw('nombre as "Nombre"'),
-            DB::raw('telefono as "Telefono"'),
-            DB::raw('direccion as "Direccion"'),
-            DB::raw('created_at as "Fecha de creación"'),
-            DB::raw('updated_at as "Fecha de actualización"'))->get();
-
-        return view("proveedores", compact("proveedores"));
+        return view("proveedores");
     }
+
+    /**
+     * Retrive a list of the resource in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function list(){
+        return datatables()->eloquent(Proveedor::query())->toJson();
+    }
+
 
     /**
      * Store a newly created resource in storage.

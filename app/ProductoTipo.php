@@ -21,4 +21,8 @@ class ProductoTipo extends Model
     {
         return $date->format('Y-m-d H:i:s');
     }
+
+    public function productos(){
+        return $this->hasMany('App\Producto');
+    }
 }

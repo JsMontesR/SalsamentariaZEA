@@ -72,6 +72,16 @@ class ProductoController extends Controller
     }
 
     /**
+     * Retriive the specified resources in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    public function list(){
+        return datatables(Producto::with(['tipo']))->toJson();
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request

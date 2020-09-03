@@ -176,7 +176,7 @@
                         </thead>
                         <tbody>
                         @foreach($productos as $registro)
-                            <tr class="row-hover">
+                            <tr class="row-cursor-hand">
                                 @foreach ($registro as $key => $value)
                                     <td class="text-center">{{ $value }}</td>
                                 @endforeach

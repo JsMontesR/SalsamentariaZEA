@@ -7,7 +7,8 @@
 
     <div class="container-fluid">
         @if(session()->has('success'))
-            <div class="alert alert-success" role="alert">{{session('success')}} <i class="fas fa-fw fa-check-circle"></i></div>
+            <div class="alert alert-success" role="alert">{{session('success')}} <i
+                    class="fas fa-fw fa-check-circle"></i></div>
         @endif
         <div class="card shadow mb-4">
             <div class="card-header py-3">
@@ -70,7 +71,7 @@
                     </div>
                 </form>
                 <br>
-                <div class="row btn-toolbar justify-content-center" >
+                <div class="row btn-toolbar justify-content-center">
 
                     <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 py-2">
                         <input id="registrar" type="button" value="Registrar"
@@ -96,79 +97,13 @@
                 <h3 class="m-0 font-weight-bold text-primary text-center">Proveedores registrados</h3>
             </div>
             <div class="card-body">
-                @if(!$proveedores->isEmpty())
-                    <table id="recurso" class="table table-bordered dt-responsive nowrap table-hover"
-                           style="width:100%" cellspacing="0" data-page-length='5' data-name="recursos">
-                        <thead>
-                        <tr>
-                            @foreach ($proveedores->get(0) as $key => $value)
-                                <th>{{$key}}</th>
-                            @endforeach
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($proveedores as $registro)
-                            <tr class="row-hover">
-                                @foreach ($registro as $key => $value)
-                                    <td>{{ $value }}</td>
-                                @endforeach
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                @else
-                    <h3 align="center">No hay proveedores disponibles, intentelo más tarde</h3>
-                @endif
+                <table id="recurso" class="table table-bordered dt-responsive nowrap table-hover"
+                       style="width:100%" cellspacing="0" data-page-length='5' data-name="recursos">
+                    <tbody></tbody>
+                </table>
             </div>
         </div>
     </div>
-    <script>
-        $(document).ready(function () {
-            var table = $('#recurso').DataTable(options);
-            $('#recurso tbody').on('click', 'tr', function () {
-                document.getElementById('registrar').disabled = true;
-                var data = table.row(this).data();
-                document.getElementById('id').value = data[0];
-                document.getElementById('nombre').value = data[1];
-                document.getElementById('telefono').value = data[2];
-                document.getElementById('direccion').value = data[3];
-            });
-
-            $("#registrar").click(function () {
-                document.form.action = "{{ route('proveedores.crear') }}";
-                document.form.submit();
-            });
-
-            $("#limpiar").click(function () {
-                document.getElementById('id').value = "";
-                document.getElementById('nombre').value = "";
-                document.getElementById('telefono').value = "";
-                document.getElementById('direccion').value = "";
-                document.getElementById('registrar').disabled = false;
-            });
-
-            $("#modificar").click(function () {
-                document.form.action = "{{ route('proveedores.actualizar') }}";
-                document.form.submit();
-            });
-
-            $("#eliminar").click(function () {
-                swal({
-                    title: "¿Estas seguro?",
-                    text: "¡Una vez borrado no será posible recuperarlo!",
-                    icon: "warning",
-                    dangerMode: true,
-                    buttons: ["Cancelar","Borrar"]
-                })
-                    .then((willDelete) => {
-                        if (willDelete) {
-                            var url = "{{ route('proveedores.borrar', ':id') }}";
-                            document.form.action = url.replace(':id', document.getElementById('id').value);
-                            document.form.submit();
-                        }
-                    });
-            });
-        });
-    </script>
+    <script src="{{ asset('assets/libs/js/controllers/proveedores.js') }}"></script>
 @endsection
 
