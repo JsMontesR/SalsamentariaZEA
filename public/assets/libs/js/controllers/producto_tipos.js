@@ -3,21 +3,15 @@ $(document).ready(function () {
     function limpiarFormulario() {
         document.getElementById('id').value = "";
         document.getElementById('nombre').value = "";
-        document.getElementById('telefono').value = "";
-        document.getElementById('direccion').value = "";
         document.getElementById('registrar').disabled = false;
     }
 
     let table = $('#recurso').DataTable($.extend({
         serverSide: true,
-        ajax: 'api/listarproveedores',
+        ajax: 'api/listartiposproductos',
         columns: [
             {data: 'id', title: 'Id', className: "text-center"},
-            {data: 'nombre', title: 'Nombre del proveedor', className: "text-center"},
-            {data: 'telefono', title: 'Teléfono del proveedor', className: "text-center"},
-            {data: 'direccion', title: 'Dirección del empleado', className: "text-center"},
-            {data: 'created_at', title: 'Fecha de creación', className: "text-center"},
-            {data: 'updated_at', title: 'Fecha de actualización', className: "text-center"},
+            {data: 'nombre', title: 'Nombre', className: "text-center"},
         ]
     }, options));
 
@@ -26,13 +20,11 @@ $(document).ready(function () {
         let data = table.row($(this)).data();
         document.getElementById('id').value = data['id'];
         document.getElementById('nombre').value = data['nombre'];
-        document.getElementById('telefono').value = data['telefono'];
-        document.getElementById('direccion').value = data['direccion'];
     });
 
 
     $("#registrar").click(function () {
-        $.post('api/crearproveedor', $('#form').serialize(), function (data) {
+        $.post('api/creartipoproducto', $('#form').serialize(), function (data) {
             swal("¡Operación exitosa!", data.msg, "success");
             limpiarFormulario()
             table.ajax.reload();
@@ -50,7 +42,7 @@ $(document).ready(function () {
     });
 
     $("#modificar").click(function () {
-        $.post('api/modificarproveedor', $('#form').serialize(), function (data) {
+        $.post('api/modificartipoproducto', $('#form').serialize(), function (data) {
             swal("¡Operación exitosa!", data.msg, "success");
             limpiarFormulario()
             table.ajax.reload();
@@ -72,7 +64,7 @@ $(document).ready(function () {
         })
             .then((willDelete) => {
                 if (willDelete) {
-                    $.post('api/borrarproveedor', $('#form').serialize(), function (data) {
+                    $.post('api/borrartipoproducto', $('#form').serialize(), function (data) {
                         swal("¡Operación exitosa!", data.msg, "success");
                         limpiarFormulario()
                         table.ajax.reload();

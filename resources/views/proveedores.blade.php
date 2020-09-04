@@ -4,12 +4,7 @@
         <h1 class="m-0 font-weight-bold text-primary text-center">Proveedores</h1>
     </div>
     <br>
-
     <div class="container-fluid">
-        @if(session()->has('success'))
-            <div class="alert alert-success" role="alert">{{session('success')}} <i
-                    class="fas fa-fw fa-check-circle"></i></div>
-        @endif
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <h3 class="m-0 font-weight-bold text-primary text-center">Detalle del proveedor</h3>
@@ -20,26 +15,16 @@
                     <div class="form-group row">
                         <label class="col-md-4 col-form-label text-md-left">Id:</label>
                         <div class="col-md-8">
-                            <input readonly="readonly" id="id" class="form-control @error('id') is-invalid @enderror"
+                            <input readonly="readonly" id="id" class="form-control"
                                    value="{{old('id')}}" name="id">
-                            @error('id')
-                            <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                            @enderror
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-4 col-form-label text-md-left">Nombre:</label>
 
                         <div class="col-md-8">
-                            <input id="nombre" class="form-control @error('nombre') is-invalid @enderror"
+                            <input id="nombre" class="form-control"
                                    value="{{old('nombre')}}" name="nombre" required autocomplete="nombreProveedor">
-                            @error('nombre')
-                            <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                            @enderror
                         </div>
                     </div>
                     <div class="form-group row">
@@ -47,14 +32,9 @@
 
                         <div class="col-md-8">
                             <input id="telefono" type="number"
-                                   class="form-control @error('telefono') is-invalid @enderror"
+                                   class="form-control"
                                    value="{{old('telefono')}}" name="telefono" required
                                    autocomplete="telefonoProveedor">
-                            @error('telefono')
-                            <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                            @enderror
                         </div>
                     </div>
                     <div class="form-group row">
@@ -62,11 +42,6 @@
                         <div class="col-md-8">
                             <input id="direccion" class="form-control " name="direccion" value="{{old('direccion')}}"
                                    required autocomplete="direccionProveedor">
-                            @error('direccion')
-                            <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                            @enderror
                         </div>
                     </div>
                 </form>
@@ -97,7 +72,7 @@
                 <h3 class="m-0 font-weight-bold text-primary text-center">Proveedores registrados</h3>
             </div>
             <div class="card-body">
-                <table id="recurso" class="table table-bordered dt-responsive nowrap table-hover">
+                <table id="recurso" class="table table-bordered dt-responsive nowrap table-hover row-cursor-hand" style="width:100%">
                     <tbody></tbody>
                 </table>
             </div>

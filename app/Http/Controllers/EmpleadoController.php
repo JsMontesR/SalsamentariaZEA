@@ -20,9 +20,17 @@ class EmpleadoController extends Controller
         'celular' => 'nullable|integer|min:0',
         'fijo' => 'nullable|integer|min:0',
         'email' => 'nullable|email',
-        'password' => 'required|min:8',
         'rol_id' => 'required|integer|min:1',
         'direccion' => 'nullable',
+    ];
+
+    public $passwordValidationRule = [
+        'password' => 'required|min:8',
+    ];
+
+    public $customMessages = [
+        'id.required' => 'Seleccione un empleado de la tabla',
+        'rol_id.required' => 'Por favor seleccione un rol para el empleado'
     ];
 
     public $validationIdRule = ['id' => 'required|integer|min:1'];
@@ -34,31 +42,26 @@ class EmpleadoController extends Controller
      */
     public function index()
     {
-        $empleados = DB::table('users')->select(
-            DB::raw('users.id as Id'),
-            DB::raw('users.name as "Nombre"'),
-            DB::raw('users.di as "Documento de identidad"'),
-            DB::raw('users.celular as "Teléfono celular"'),
-            DB::raw('users.fijo as "Teléfono fijo"'),
-            DB::raw('users.email as "Correo electrónico"'),
-            DB::raw('users.direccion as "Dirección"'),
-            DB::raw('users.salario as "Salario"'),
-            DB::raw('rols.id as "Id de rol"'),
-            DB::raw('rols.nombre as "Rol"'),
-            DB::raw('users.created_at as "Fecha de creación"'),
-            DB::raw('users.updated_at as "Fecha de actualización"')
-        )
-            ->join("rols", "users.rol_id", "=", "rols.id")
-            ->where("rols.nombre", "<>", "cliente")->get();
 
         $rols = DB::table('rols')->select(
             DB::raw('id as "Id de rol"'),
             DB::raw('nombre as "Rol"')
         )->where("nombre", "<>", "cliente")->get();
 
-        return view("empleados", compact("empleados", "rols"));
+        return view("empleados", compact("rols"));
     }
 
+
+    /**
+     * Retrive the specified resources in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    public function list()
+    {
+        return datatables()->eloquent(User::query()->with('rol'))->toJson();
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -68,7 +71,8 @@ class EmpleadoController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate($this->validationRules);
+        $request->validate($this->validationRules, $this->customMessages);
+        $request->validate($this->passwordValidationRule);
         if ($request->email != null && DB::table('users')->where('email', '=', $request->email)->exists()) {
             throw ValidationException::withMessages(['email' => 'El email ingresado ya está bajo uso de otra persona',]);
         }
@@ -78,7 +82,9 @@ class EmpleadoController extends Controller
             ]);
         }
         User::create($request->all());
-        return back()->with('success', 'Empleado registrado');
+        return response()->json([
+            'msg' => '¡Empleado registrado!',
+        ]);
     }
 
     /**
@@ -89,21 +95,25 @@ class EmpleadoController extends Controller
      */
     public function update(Request $request)
     {
-        $request->validate($this->validationIdRule);
-        $request->validate($this->validationRules);
+        $request->validate($this->validationIdRule, $this->customMessages);
+        $request->validate($this->validationRules, $this->customMessages);
         $empleado = User::findOrFail($request->id);
-        if ($request->email != null && $empleado->email !=  $request->email && DB::table('users')->where('email', '=', $request->email)->exists()) {
+        if ($request->email != null && $empleado->email != $request->email && User::where('email', $request->email)->exists()) {
             throw ValidationException::withMessages(['email' => 'El email ingresado ya está bajo uso de otra persona',]);
         }
         if ($request->password != null) {
             $request->merge([
                 'password' => Hash::make($request->password),
             ]);
+        } else {
+            $request->except('password');
         }
 
         $empleado->update($request->all());
         $empleado->save();
-        return back()->with('success', 'Empleado actualizado');
+        return response()->json([
+            'msg' => '¡Empleado actualizado!',
+        ]);
     }
 
     /**
@@ -114,8 +124,10 @@ class EmpleadoController extends Controller
      */
     public function destroy(Request $request)
     {
-        $request->validate($this->validationIdRule);
+        $request->validate($this->validationIdRule, $this->customMessages);
         User::findOrFail($request->id)->delete();
-        return back()->with('success', 'Empleado eliminado');
+        return response()->json([
+            'msg' => '¡Empleado eliminado!',
+        ]);
     }
 }

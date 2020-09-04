@@ -22,12 +22,18 @@ class ProductoTipoController extends Controller
      */
     public function index()
     {
-        $tipos = DB::table('producto_tipos')->select(
-            DB::raw('id as Id'),
-            DB::raw('nombre as "Nombre"'))->get();
-
-        return view("producto_tipos", compact("tipos"));
+        return view("producto_tipos");
     }
+
+    /**
+     * Retrive a list of the resource in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function list(){
+        return datatables()->eloquent(ProductoTipo::query())->toJson();
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -39,7 +45,9 @@ class ProductoTipoController extends Controller
     {
         $request->validate($this->validationRules);
         ProductoTipo::create($request->all());
-        return back()->with('success', 'Tipo de producto registrado');
+        return response()->json([
+            'msg' => '¡Tipo de producto registrado!',
+        ]);
     }
 
     /**
@@ -55,7 +63,9 @@ class ProductoTipoController extends Controller
         $productoTipo = ProductoTipo::findOrFail($request->id);
         $productoTipo->update($request->all());
         $productoTipo->save();
-        return back()->with('success', 'Tipo de producto actualizado');
+        return response()->json([
+            'msg' => '¡Tipo de producto actualizado!',
+        ]);
     }
 
     /**
@@ -68,6 +78,8 @@ class ProductoTipoController extends Controller
     {
         $request->validate($this->validationIdRule);
         ProductoTipo::findOrFail($request->id)->delete();
-        return back()->with('success', 'Tipo de producto eliminado');
+        return response()->json([
+            'msg' => '¡Tipo de producto eliminado!',
+        ]);
     }
 }
