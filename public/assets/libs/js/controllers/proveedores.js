@@ -1,5 +1,13 @@
 $(document).ready(function () {
 
+    function limpiarFormulario() {
+        document.getElementById('id').value = "";
+        document.getElementById('nombre').value = "";
+        document.getElementById('telefono').value = "";
+        document.getElementById('direccion').value = "";
+        document.getElementById('registrar').disabled = false;
+    }
+
     let table = $('#recurso').DataTable($.extend({
         serverSide: true,
         ajax: 'api/listarproveedores',
@@ -24,22 +32,34 @@ $(document).ready(function () {
 
 
     $("#registrar").click(function () {
-        document.form.action = "crearproveedor";
-        document.form.submit();
-        table.ajax.reload();
+        $.post('crearproveedor', $('#form').serialize(), function (data) {
+            swal("¡Operación exitosa!", data.msg, "success");
+            limpiarFormulario()
+            table.ajax.reload();
+        }).fail(function (err) {
+            $.each(err.responseJSON.errors, function (i, error) {
+                toastr.error(error[0]);
+            });
+            console.error(err);
+        })
     });
 
+
     $("#limpiar").click(function () {
-        document.getElementById('id').value = "";
-        document.getElementById('nombre').value = "";
-        document.getElementById('telefono').value = "";
-        document.getElementById('direccion').value = "";
-        document.getElementById('registrar').disabled = false;
+        limpiarFormulario();
     });
 
     $("#modificar").click(function () {
-        document.form.action = "modificarproveedor";
-        document.form.submit();
+        $.post('modificarproveedor', $('#form').serialize(), function (data) {
+            swal("¡Operación exitosa!", data.msg, "success");
+            limpiarFormulario()
+            table.ajax.reload();
+        }).fail(function (err) {
+            $.each(err.responseJSON.errors, function (i, error) {
+                toastr.error(error[0]);
+            });
+            console.warn(err);
+        })
     });
 
     $("#eliminar").click(function () {
@@ -52,8 +72,16 @@ $(document).ready(function () {
         })
             .then((willDelete) => {
                 if (willDelete) {
-                    document.form.action = "borrarproveedor";
-                    document.form.submit();
+                    $.post('borrarproveedor', $('#form').serialize(), function (data) {
+                        swal("¡Operación exitosa!", data.msg, "success");
+                        limpiarFormulario()
+                        table.ajax.reload();
+                    }).fail(function (err) {
+                        $.each(err.responseJSON.errors, function (i, error) {
+                            toastr.error(error[0]);
+                        });
+                        console.warn(err);
+                    })
                 }
             });
     });

@@ -47,7 +47,9 @@ class ProveedorController extends Controller
     {
         $request->validate($this->validationRules);
         Proveedor::create($request->all());
-        return back()->with('success', 'Proveedor registrado');
+        return response()->json([
+            'msg' => '¡Proveedor registrado!',
+        ]);
     }
 
     /**
@@ -63,7 +65,9 @@ class ProveedorController extends Controller
         $proveedor = Proveedor::findOrFail($request->id);
         $proveedor->update($request->all());
         $proveedor->save();
-        return back()->with('success', 'Proveedor actualizado');
+        return response()->json([
+            'msg' => '¡Proveedor actualizado!',
+        ]);
     }
 
     /**
@@ -76,6 +80,8 @@ class ProveedorController extends Controller
     {
         $request->validate($this->validationIdRule);
         Proveedor::findOrFail($request->id)->delete();
-        return back()->with('success', 'Proveedor eliminado');
+        return response()->json([
+            'msg' => '¡Proveedor eliminado!',
+        ]);
     }
 }

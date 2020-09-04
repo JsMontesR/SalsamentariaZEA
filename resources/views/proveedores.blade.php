@@ -97,8 +97,7 @@
                 <h3 class="m-0 font-weight-bold text-primary text-center">Proveedores registrados</h3>
             </div>
             <div class="card-body">
-                <table id="recurso" class="table table-bordered dt-responsive nowrap table-hover"
-                       style="width:100%" cellspacing="0" data-page-length='5' data-name="recursos">
+                <table id="recurso" class="table table-bordered dt-responsive nowrap table-hover">
                     <tbody></tbody>
                 </table>
             </div>
