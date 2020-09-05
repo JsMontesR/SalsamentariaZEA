@@ -38,6 +38,8 @@ class Caja extends Model
             $nuevoMovimiento->ingreso = Movimiento::EGRESO;
             $nuevoMovimiento->parteCrediticia = $parteCrediticia == null ? 0 : $parteCrediticia;
             $this->saldo = $this->saldo - $parteEfectiva;
+            $this->save();
+            $this->refresh();
             $movimientoable->save();
             $movimientoable->refresh();
             $nuevoMovimiento->caja()->associate($this);

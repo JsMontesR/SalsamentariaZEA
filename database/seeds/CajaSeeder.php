@@ -13,7 +13,7 @@ class CajaSeeder extends Seeder
     public function run()
     {
         $caja = new Caja();
-        $caja->saldo = 1000000;
+        $caja->saldo = 200000;
         $caja->save();
     }
 }
