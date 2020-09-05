@@ -88,7 +88,7 @@
                         <div class="col-md-8">
                             <input id="direccion"
                                    class="form-control"
-                                   value="{{old('direccion')}}" name="direccion">
+                                   name="direccion">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -96,7 +96,7 @@
                         <div class="col-md-8">
                             <input id="salario" type="number"
                                    class="form-control"
-                                   value="{{old('salario')}}" name="salario">
+                                   name="salario">
                         </div>
                     </div>
                 </form>
