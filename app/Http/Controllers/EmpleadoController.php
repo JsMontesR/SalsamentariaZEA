@@ -19,7 +19,7 @@ class EmpleadoController extends Controller
         'cedula' => 'nullable|integer|min:0',
         'celular' => 'nullable|integer|min:0',
         'fijo' => 'nullable|integer|min:0',
-        'email' => 'nullable|email',
+        'email' => 'required|email',
         'rol_id' => 'required|integer|min:1',
         'direccion' => 'nullable',
     ];
@@ -60,7 +60,7 @@ class EmpleadoController extends Controller
 
     public function list()
     {
-        return datatables()->eloquent(User::query()->with('rol'))->toJson();
+        return datatables()->eloquent(User::query()->with('rol')->where('rol_id','<>',3))->toJson();
     }
 
     /**
@@ -73,7 +73,7 @@ class EmpleadoController extends Controller
     {
         $request->validate($this->validationRules, $this->customMessages);
         $request->validate($this->passwordValidationRule);
-        if ($request->email != null && DB::table('users')->where('email', '=', $request->email)->exists()) {
+        if ($request->email != null && User::where('email', $request->email)->exists()) {
             throw ValidationException::withMessages(['email' => 'El email ingresado ya está bajo uso de otra persona',]);
         }
         if ($request->password != null) {
@@ -106,7 +106,7 @@ class EmpleadoController extends Controller
                 'password' => Hash::make($request->password),
             ]);
         } else {
-            $request->except('password');
+            $request->request->remove('password');
         }
 
         $empleado->update($request->all());

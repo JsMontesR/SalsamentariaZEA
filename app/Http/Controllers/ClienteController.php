@@ -30,22 +30,19 @@ class ClienteController extends Controller
      */
     public function index()
     {
-        $clientes = DB::table('users')->select(
-            DB::raw('users.id as Id'),
-            DB::raw('users.name as "Nombre"'),
-            DB::raw('users.di as "Documento de identidad"'),
-            DB::raw('users.celular as "Teléfono celular"'),
-            DB::raw('users.fijo as "Teléfono fijo"'),
-            DB::raw('users.email as "Correo electrónico"'),
-            DB::raw('users.direccion as "Dirección"'),
-            DB::raw('users.created_at as "Fecha de creación"'),
-            DB::raw('users.updated_at as "Fecha de actualización"')
-        )
-            ->where("rol_id","=",3)->get();
-
-        return view("clientes", compact("clientes"));
+        return view("clientes");
     }
 
+    /**
+     * Retrive the specified resources in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    public function list()
+    {
+        return datatables()->eloquent(User::query()->where('rol_id','=',3))->toJson();
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -56,11 +53,13 @@ class ClienteController extends Controller
     public function store(Request $request)
     {
         $request->validate($this->validationRules);
-        if ($request->email != null && DB::table('users')->where('email', '=', $request->email)->exists()) {
+        if ($request->email != null && User::where('email', $request->email)->exists()) {
             throw ValidationException::withMessages(['email' => 'El email ingresado ya está bajo uso de otra persona',]);
         }
         User::create($request->all() + ['rol_id' => 3]);
-        return back()->with('success', 'Cliente registrado');
+        return response()->json([
+            'msg' => '¡Cliente registrado!',
+        ]);
     }
 
     /**
@@ -74,12 +73,14 @@ class ClienteController extends Controller
         $request->validate($this->validationIdRule);
         $request->validate($this->validationRules);
         $cliente = User::findOrFail($request->id);
-        if ($request->email != null && $cliente->email !=  $request->email && DB::table('users')->where('email', '=', $request->email)->exists()) {
+        if ($request->email != null && $cliente->email !=  $request->email && User::where('email', $request->email)->exists()) {
             throw ValidationException::withMessages(['email' => 'El email ingresado ya está bajo uso de otra persona',]);
         }
         $cliente->update($request->all());
         $cliente->save();
-        return back()->with('success', 'Cliente actualizado');
+        return response()->json([
+            'msg' => '¡Cliente actualizado!',
+        ]);
     }
 
     /**
@@ -92,6 +93,8 @@ class ClienteController extends Controller
     {
         $request->validate($this->validationIdRule);
         User::findOrFail($request->id)->delete();
-        return back()->with('success', 'Cliente eliminado');
+        return response()->json([
+            'msg' => '¡Cliente eliminado!',
+        ]);
     }
 }

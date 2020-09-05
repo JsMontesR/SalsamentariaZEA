@@ -1,23 +1,13 @@
 $(document).ready(function () {
 
-    $.ajax({
-        url: "api/listarempleados",
-        type: "get",
-        success: function (data) {
-            console.log(data);
-        },
-        error: function (err){
-            console.warn(err);
-        }
-    })
-
-    function limpiarFormulario(){
+    function limpiarFormulario() {
         document.getElementById('id').value = "";
         document.getElementById('name').value = "";
         document.getElementById('di').value = "";
         document.getElementById('celular').value = "";
         document.getElementById('fijo').value = "";
         document.getElementById('email').value = "";
+        document.getElementById('password').value = "";
         document.getElementById('direccion').value = "";
         document.getElementById('salario').value = "";
         document.getElementById('rol_id').value = "";

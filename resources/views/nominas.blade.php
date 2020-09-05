@@ -6,10 +6,6 @@
     <br>
 
     <div class="container-fluid">
-        @if(session()->has('success'))
-            <div class="alert alert-success" role="alert">{{session('success')}} <i
-                    class="fas fa-fw fa-check-circle"></i></div>
-        @endif
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <h3 class="m-0 font-weight-bold text-primary text-center">Detalle de la nómina</h3>
