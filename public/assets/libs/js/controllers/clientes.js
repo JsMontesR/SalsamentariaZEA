@@ -20,7 +20,7 @@ $(document).ready(function () {
             {
                 data: 'di',
                 title: 'Documento de identidad',
-                render: $.fn.dataTable.render.number('.', '.', 0,),
+                render: $.fn.dataTable.render.number('.', '.', 0),
                 className: "text-center"
             },
             {data: 'celular', title: 'Teléfono celular', className: "text-center"},

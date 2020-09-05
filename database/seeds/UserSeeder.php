@@ -18,6 +18,7 @@ class UserSeeder extends Seeder
         $user->rol_id = 1;
         $user->email = 'admin@admin.com';
         $user->password = Hash::make('1234');
+        $user->salario = 100000;
         $user->save();
     }
 }

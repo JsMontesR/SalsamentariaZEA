@@ -17,6 +17,7 @@ class CreateNominasTable extends Migration
             $table->id();
             $table->unsignedBigInteger("valor");
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

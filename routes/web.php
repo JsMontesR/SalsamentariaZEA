@@ -9,6 +9,10 @@ Route::get('/inicio', 'HomeController@index')->name('home');
 Route::get('/index', 'HomeController@index')->name('home');
 Route::get('/home', 'HomeController@index')->name('home');
 
+/*
+ * OPERACIONES CRUD DEL NEGOCIO
+ */
+
 // CRUD Proveedores
 Route::get('/proveedores', 'ProveedorController@index')->name('proveedores')->middleware('auth');
 
@@ -49,20 +53,29 @@ Route::post('api/crearempleado', 'EmpleadoController@store')->middleware('auth')
 Route::post('api/modificarempleado', 'EmpleadoController@update')->middleware('auth');
 Route::post('api/borrarempleado', 'EmpleadoController@destroy')->middleware('auth');
 
-// CRUD entradas
+/*
+ * OPERACIONES CORE DEL NEGOCIO
+ */
+
+// Procesamiento de entradas
 Route::get('/entradas', 'EntradaController@index')->name('entradas')->middleware('auth');
 
 Route::get('api/listarentradas', 'EntradaController@list')->middleware('auth');
-Route::post('api/crearentrada', 'EntradaController@store')->middleware('auth');
-Route::post('api/modificarentrada', 'EntradaController@update')->middleware('auth');
-Route::post('api/borrarentrada', 'EntradaController@destroy')->middleware('auth');
+Route::post('api/pagarentrada', 'EntradaController@pay')->middleware('auth');
+Route::post('api/anularentrada', 'EntradaController@undoPay')->middleware('auth');
 
-// CRUD nóminas
+// Procesamiento de ventas
+Route::get('/entradas', 'EntradaController@index')->name('entradas')->middleware('auth');
+
+Route::get('api/listarventas', 'EntradaController@list')->middleware('auth');
+Route::post('api/cobrarventa', 'EntradaController@charge')->middleware('auth');
+Route::post('api/anularventa', 'EntradaController@undoCharge')->middleware('auth');
+
+// Procesamiento nóminas
 Route::get('/nominas', 'NominaController@index')->name('nominas')->middleware('auth');
 
 Route::get('api/listarnominas', 'NominaController@list')->middleware('auth');
 Route::post('api/pagarnomina', 'NominaController@pay')->middleware('auth');
-Route::post('api/modificarnomina', 'NominaController@update')->middleware('auth');
-Route::post('api/borrarnomina', 'NominaController@destroy')->middleware('auth');
+Route::post('api/anularnomina', 'NominaController@undoPay')->middleware('auth');
 
 

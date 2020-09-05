@@ -4,24 +4,28 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use DateTimeInterface;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Nomina extends Model
 {
     protected $guarded = ["id"];
 
+    use SoftDeletes;
+
     public function empleado()
     {
-        return $this->belongsTo('App\User','empleado_id');
+        return $this->belongsTo('App\User', 'empleado_id');
     }
 
-    public function movimientos(){
-        return $this->morphMany(Movimiento::class,'movimientoable');
+    public function movimientos()
+    {
+        return $this->morphMany(Movimiento::class, 'movimientoable');
     }
 
     /**
      * Prepare a date for array / JSON serialization.
      *
-     * @param  \DateTimeInterface  $date
+     * @param \DateTimeInterface $date
      * @return string
      */
     protected function serializeDate(DateTimeInterface $date)
