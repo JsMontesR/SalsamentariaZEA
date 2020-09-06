@@ -28,7 +28,7 @@ class Caja extends Model
         return $this->hasMany('App\Movimiento');
     }
 
-    public function pagar($movimientoable, $parteEfectiva = 0, $parteCrediticia = 0)
+    public function pagarNomina($movimientoable, $parteEfectiva = 0, $parteCrediticia = 0)
     {
         if ($parteEfectiva > $this->saldo) {
             throw new FondosInsuficientesException("Operación no realizable, saldo en caja insuficiente");
@@ -48,7 +48,7 @@ class Caja extends Model
         }
     }
 
-    public function cobrar($movimientoable, $parteEfectiva, $parteCrediticia)
+    public function anularNomina($movimientoable, $parteEfectiva, $parteCrediticia)
     {
         $nuevoMovimiento = new Movimiento();
         $nuevoMovimiento->parteEfectiva = $parteEfectiva == null ? 0 : $parteEfectiva;

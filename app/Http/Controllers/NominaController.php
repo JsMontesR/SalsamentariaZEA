@@ -43,7 +43,7 @@ class NominaController extends Controller
         $nomina->empleado()->associate(User::findOrFail($request->empleado_id));
         $nomina->valor = $request->parteCrediticia + $request->parteEfectiva;
         try {
-            Caja::findOrFail(1)->pagar($nomina, $request->parteEfectiva, $request->parteCrediticia);
+            Caja::findOrFail(1)->pagarNomina($nomina, $request->parteEfectiva, $request->parteCrediticia);
         } catch (FondosInsuficientesException $e) {
             throw ValidationException::withMessages(["valor" => $e->getMessage()]);
         }
@@ -74,7 +74,7 @@ class NominaController extends Controller
         $request->validate($this->validationRules);
         $nomina = Nomina::find($request->id);
         $movimiento = $nomina->movimientos->first();
-        Caja::findOrFail(1)->cobrar($nomina, $movimiento->parteEfectiva, $movimiento->parteCrediticia);
+        Caja::findOrFail(1)->anularNomina($nomina, $movimiento->parteEfectiva, $movimiento->parteCrediticia);
         $nomina->delete();
         return response()->json([
             'msg' => '¡Pago de nomina anulado!',
