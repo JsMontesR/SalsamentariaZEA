@@ -48,7 +48,7 @@ class NominaController extends Controller
             throw ValidationException::withMessages(["valor" => $e->getMessage()]);
         }
         return response()->json([
-            'msg' => '¡Nomina pagada!',
+            'msg' => '¡Pago de nómina realizado!',
         ]);
     }
 
@@ -74,10 +74,10 @@ class NominaController extends Controller
         $request->validate($this->validationRules);
         $nomina = Nomina::find($request->id);
         $movimiento = $nomina->movimientos->first();
-        $nomina->delete();
         Caja::findOrFail(1)->cobrar($nomina, $movimiento->parteEfectiva, $movimiento->parteCrediticia);
+        $nomina->delete();
         return response()->json([
-            'msg' => '¡Nomina anulada!',
+            'msg' => '¡Pago de nomina anulado!',
         ]);
     }
 }

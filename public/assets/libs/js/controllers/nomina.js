@@ -43,6 +43,7 @@ $(document).ready(function () {
     }, options));
 
     $('#recurso tbody').on('click', 'tr', function () {
+        limpiarFormulario();
         document.getElementById('pagar').disabled = true;
         let data = table.row(this).data();
         document.getElementById('id').value = data['id'];
