@@ -15,26 +15,6 @@ $(document).ready(function () {
         ajax: 'api/listarmovimientos',
         columns: [
             {data: 'id', title: 'Id', className: "text-center"},
-            {data: 'parteEfectiva', title: 'Parte efectiva', className: "text-center", render: $.fn.dataTable.render.number(',', '.', 0, '$ ')},
-            {data: 'parteCrediticia', title: 'Parte crediticia', className: "text-center", render: $.fn.dataTable.render.number(',', '.', 0, '$ ')},
-            {data: 'movimientoable_id', title: 'Id del movimiento', className: "text-center", visible: false},
-            {
-                data: 'movimientoable_type',
-                title: 'Operación realizada',
-                className: "text-center",
-                render: function (data, type, row) {
-                    switch (data) {
-                        case "App\\Entrada":
-                            return '<span class="text-danger"><i class="fas fa-hand-holding-usd"></i><br>Entrada a inventario</span>';
-                        case "App\\Retiro":
-                            return '<span class="text-danger"><i class="fas fa-hand-holding-usd"></i><br>Retiro de inventario</span>';
-                        case "App\\Venta":
-                            return '<span class="text-success"><i class="fas fa-hand-holding-usd"></i><br>Venta</span>';
-                        case "App\\Nomina":
-                            return '<span class="text-danger"><i class="fas fa-hand-holding-usd"></i><br>Pago de nómina</span>';
-                    }
-                }
-            },
             {
                 data: 'ingreso', title: 'Tipo de movimiento', className: "text-center", render: function (data) {
                     if(data){
@@ -44,12 +24,29 @@ $(document).ready(function () {
                     }
                 }
             },
+            {
+                data: 'movimientoable_type',
+                title: 'Operación realizada',
+                className: "text-center",
+                render: function (data, type, row) {
+                    switch (data) {
+                        case "App\\Entrada":
+                            return '<i class="fas fa-hand-holding-usd"></i><br>Entrada a inventario';
+                        case "App\\Retiro":
+                            return '<i class="fas fa-hand-holding-usd"></i><br>Retiro de inventario';
+                        case "App\\Venta":
+                            return '<i class="fas fa-hand-holding-usd"></i><br>Venta';
+                        case "App\\Nomina":
+                            return '<i class="fas fa-hand-holding-usd"></i><br>Pago de nómina';
+                    }
+                }
+            },
+            {data: 'movimientoable.empleado.name', title:'Empleado que realizó el movimiento', className: "text-center"},
+            {data: 'parteEfectiva', title: 'Parte efectiva', className: "text-center", render: $.fn.dataTable.render.number(',', '.', 0, '$ ')},
+            {data: 'parteCrediticia', title: 'Parte crediticia', className: "text-center", render: $.fn.dataTable.render.number(',', '.', 0, '$ ')},
+            {data: 'movimientoable.valor', title:'Total de dinero', className: "text-center", render: $.fn.dataTable.render.number(',', '.', 0, '$ ')},
             {data: 'created_at', title: 'Fecha de creación', className: "text-center"}
         ]
     }, options));
-
-    // $('#recurso tbody').on('click', 'tr', function () {
-    //     let data = table.row($(this)).data();
-    // });
 
 });
