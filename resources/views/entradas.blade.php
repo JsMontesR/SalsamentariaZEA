@@ -31,7 +31,7 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table id="proveedores"
-                                       class="table table-bordered dt-responsive nowrap table-hover row-cursor-hand"
+                                       class="table table-bordered dt-responsive table-hover row-cursor-hand"
                                        style="width:100%">
                                     <tbody></tbody>
                                 </table>
@@ -147,7 +147,7 @@
                     </div>
                     <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 py-2">
                         <input id="registrar" type="button" value="Registrar y pagar"
-                               class="btn btn-success container-fluid"/>
+                               class="btn btn-info container-fluid"/>
                     </div>
                     <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 py-2">
                         <input id="limpiar" type="button" value="Limpiar"
@@ -166,7 +166,7 @@
                 <h3 class="m-0 font-weight-bold text-primary text-center">Entradas registradas</h3>
             </div>
             <div class="card-body">
-                <table id="recurso" class="table table-bordered dt-responsive nowrap table-hover row-cursor-hand"
+                <table id="recurso" class="table table-bordered dt-responsive table-hover row-cursor-hand"
                        style="width:100%">
                 </table>
             </div>

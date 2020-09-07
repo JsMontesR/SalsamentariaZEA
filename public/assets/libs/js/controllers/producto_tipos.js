@@ -4,6 +4,7 @@ $(document).ready(function () {
         document.getElementById('id').value = "";
         document.getElementById('nombre').value = "";
         document.getElementById('registrar').disabled = false;
+        $('#recurso tr').removeClass("selected");
     }
 
     let table = $('#recurso').DataTable($.extend({
@@ -17,6 +18,7 @@ $(document).ready(function () {
 
     $('#recurso tbody').on('click', 'tr', function () {
         limpiarFormulario();
+        $(this).addClass('selected');
         document.getElementById('registrar').disabled = true;
         let data = table.row($(this)).data();
         document.getElementById('id').value = data['id'];

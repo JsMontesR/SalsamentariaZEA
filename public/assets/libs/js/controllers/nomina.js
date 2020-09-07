@@ -10,6 +10,7 @@ $(document).ready(function () {
         document.getElementById('parteEfectiva').value = "";
         document.getElementById('parteCrediticia').value = "";
         document.getElementById('pagar').disabled = false;
+        $('#recurso tr').removeClass("selected");
     }
 
     let table = $('#recurso').DataTable($.extend({
@@ -44,6 +45,7 @@ $(document).ready(function () {
 
     $('#recurso tbody').on('click', 'tr', function () {
         limpiarFormulario();
+        $(this).addClass('selected');
         document.getElementById('pagar').disabled = true;
         let data = table.row(this).data();
         document.getElementById('id').value = data['id'];

@@ -31,7 +31,7 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table id="empleados"
-                                       class="table table-bordered dt-responsive nowrap table-hover row-cursor-hand"
+                                       class="table table-bordered dt-responsive table-hover row-cursor-hand"
                                        style="width:100%">
                                     <tbody></tbody>
                                 </table>
@@ -124,7 +124,7 @@
             </div>
             <div class="card-body">
 
-                <table id="recurso" class="table table-bordered dt-responsive nowrap table-hover row-cursor-hand"
+                <table id="recurso" class="table table-bordered dt-responsive table-hover row-cursor-hand"
                        style="width:100%">
                     <tbody></tbody>
                 </table>

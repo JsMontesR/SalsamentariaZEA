@@ -30,6 +30,7 @@ $(document).ready(function () {
         document.getElementById('stock').value = "";
         document.getElementById('tipo_id').value = "";
         document.getElementById('registrar').disabled = false;
+        $('#recurso tr').removeClass("selected");
         caracterizarFormulario(undefined);
     }
 
@@ -83,6 +84,7 @@ $(document).ready(function () {
 
     $('#recurso tbody').on('click', 'tr', function () {
         limpiarFormulario();
+        $(this).addClass('selected');
         document.getElementById('registrar').disabled = true;
         let data = table.row(this).data();
         document.getElementById('id').value = data['id'];

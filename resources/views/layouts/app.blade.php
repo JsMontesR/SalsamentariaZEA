@@ -164,7 +164,7 @@
                                         <a class="nav-link" href="{{route('nominas')}}">Nómina</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="#">Movimientos</a>
+                                        <a class="nav-link" href="{{ route('movimientos') }}">Movimientos</a>
                                     </li>
 
                                 </ul>

@@ -49,12 +49,12 @@ class EntradaController extends Controller
     }
 
     /**
-     * Procesa el pago de una entrada.
+     * Registra una entrada.
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function pay(Request $request)
+    public function store(Request $request)
     {
         $request->validate($this->validationRules, $this->customMessages);
         $entrada = new Entrada();
@@ -87,6 +87,17 @@ class EntradaController extends Controller
             'mensaje' => 'Operación realizada',
             'descripcion' => '¡Entrada registrada!',
         ]);
+    }
+
+    /**
+     * Procesa el pago de una entrada.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function pay(Request $request)
+    {
+
     }
 
 

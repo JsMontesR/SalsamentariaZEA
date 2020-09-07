@@ -169,7 +169,7 @@
                                 <i class="fa fa-cogs fa-fw fa-sm text-light"></i>
                             </div>
                         </div>
-                        <a class="card-footer text-light bg-success clearfix small z-1" href="#">
+                        <a class="card-footer text-light bg-success clearfix small z-1" href=""{{ route('movimientos') }}"">
                             <span class="float-left">Ver movimientos</span>
                             <span class="float-right">
                   <em class="fas fa-angle-right"></em>

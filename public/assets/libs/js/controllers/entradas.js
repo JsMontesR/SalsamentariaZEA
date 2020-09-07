@@ -149,6 +149,8 @@ $(document).ready(function () {
     }, options));
 
     $('#recurso tbody').on('click', 'tr', function () {
+        limpiarFormulario();
+        $(this).addClass('selected');
         document.getElementById('registrar').disabled = true;
         let data = table.row(this).data();
         document.getElementById('id').value = data['id'];
@@ -263,6 +265,29 @@ $(document).ready(function () {
         })
     });
 
+    $("#registrar").click(function () {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.post('api/crearentrada',
+            {
+                proveedor_id: $("#proveedor_id").val(),
+                fechapago: $("#fechapago").val(),
+                productos_entrada: crearEstructuraDeProductos()
+            }, function (data) {
+                swal(data.mensaje, data.descripcion, "success");
+                limpiarFormulario()
+                table.ajax.reload();
+            }).fail(function (err) {
+            $.each(err.responseJSON.errors, function (i, error) {
+                toastr.error(error[0]);
+            });
+            console.error(err);
+        })
+    });
+
 
     function limpiarFormulario() {
         document.getElementById('id').value = "";
@@ -270,6 +295,7 @@ $(document).ready(function () {
         document.getElementById('fechapagado').value = "";
         document.getElementById('fechapago').value = "";
         document.getElementById('costo').value = "";
+        $('#recurso tr').removeClass("selected");
         vacearTablaDeProductosEntrada();
         document.getElementById('pagar').disabled = false;
     }

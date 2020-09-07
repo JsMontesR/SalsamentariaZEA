@@ -68,6 +68,7 @@ Route::post('api/anularnomina', 'NominaController@undoPay')->middleware('auth');
 Route::get('/entradas', 'EntradaController@index')->name('entradas')->middleware('auth');
 
 Route::get('api/listarentradas', 'EntradaController@list')->middleware('auth');
+Route::post('api/crearentrada', 'EntradaController@store')->middleware('auth');
 Route::post('api/pagarentrada', 'EntradaController@pay')->middleware('auth');
 Route::post('api/anularentrada', 'EntradaController@undoPay')->middleware('auth');
 
@@ -78,6 +79,11 @@ Route::get('api/listarventas', 'EntradaController@list')->middleware('auth');
 Route::post('api/cobrarventa', 'EntradaController@charge')->middleware('auth');
 Route::post('api/anularventa', 'EntradaController@undoCharge')->middleware('auth');
 
+/*
+ * RUTAS DE UTILIDAD DEL NEGOCIO
+ */
 
+Route::get('/movimientos','MovimientoController@index')->name('movimientos')->middleware('auth');
+Route::get('api/listarmovimientos','MovimientoController@list')->middleware('auth');
 
 
