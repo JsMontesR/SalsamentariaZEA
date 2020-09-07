@@ -62,12 +62,12 @@ $(document).ready(function () {
         ajax: 'api/listarproductos',
         columns: [
             {data: 'id', title: 'Id', className: "text-center"},
-            {data: 'nombre', title: 'Nombre', className: "text-center"},
             {
                 data: null, title: 'Agregar', className: "text-center", render: function () {
                     return btnAgregar;
                 }
             },
+            {data: 'nombre', title: 'Nombre', className: "text-center"},
             {data: 'categoria', title: 'Categoría', className: "text-center"},
             {
                 data: 'costo',
@@ -100,10 +100,11 @@ $(document).ready(function () {
                 }, className: "text-center"
             },
             {data: 'tipo.id', title: 'Id de tipo', visible: false, searchable: false, className: "text-center"},
-            {data: 'tipo.nombre', title: 'Tipo de producto', className: "text-center"},
+            {data: 'tipo.nombre', title: 'Tipo', className: "text-center"},
             {data: 'created_at', title: 'Fecha de creación', className: "text-center"},
             {data: 'updated_at', title: 'Fecha de actualización', className: "text-center"},
-        ]
+        ],
+        responsive: true
     }, options));
 
     let tablaProveedores = $('#proveedores').DataTable($.extend({
@@ -116,25 +117,35 @@ $(document).ready(function () {
             {data: 'direccion', title: 'Dirección del empleado', className: "text-center"},
             {data: 'created_at', title: 'Fecha de creación', className: "text-center"},
             {data: 'updated_at', title: 'Fecha de actualización', className: "text-center"},
-        ]
+        ],
+        responsive: true
     }, options));
 
     let productos_entrada_table = $('#productos_entrada_table').DataTable($.extend({
         columns: [
-            {data: null, title: 'Id', className: "text-center"},
-            {data: null, title: 'Nombre', className: "text-center"},
+            {data: 'id', title: 'Id', className: "text-center"},
+            {data: 'btnEliminar', title: 'Eliminar', className: "text-center"},
+            {data: 'nombre', title: 'Nombre', className: "text-center text-wrap"},
+            {data: 'categoria', title: 'Categoría', className: "text-center"},
+            {data: 'tipo.nombre', title: 'Tipo', className: "text-center"},
             {
-                data: null, title: 'Eliminar', className: "text-center", render: function () {
-                    return btnAgregar;
+                data: 'cantidad',
+                title: 'Cantidad (Unidades/Kg)',
+                className: "text-center",
+                render: function (data, type, row, meta) {
+                    return renderChange(data, type, row, meta);
                 }
             },
-            {data: null, title: 'Categoría', className: "text-center"},
-            {data: null, title: 'Tipo de producto', className: "text-center"},
-            {data: null, title: 'Cantidad (Unidades/Kg)', className: "text-center", render: renderChange()},
-            {data: null, title: 'Costo total', className: "text-center", render: renderChange()},
+            {
+                data: 'costoTotal',
+                title: 'Costo total',
+                className: "text-center",
+                render: function (data, type, row, meta) {
+                    return renderChange(data, type, row, meta);
+                }
+            }
         ],
-
-        'responsive': true
+        responsive: true
     }, options));
 
     $('#recurso tbody').on('click', 'tr', function () {
@@ -149,15 +160,15 @@ $(document).ready(function () {
     });
 
     $('#proveedores tbody').on('click', 'tr', function () {
-        var data = tablaProveedores.row(this).data();
+        let data = tablaProveedores.row(this).data();
         document.getElementById('proveedor_id').value = data['id'];
     });
 
     $('#productos_entrada_table tbody').on('keyup change', '.child input, .child select, .child textarea', function (e) {
-        var $el = $(this);
-        var rowIdx = $el.closest('ul').data('dtr-index');
-        var colIdx = $el.closest('li').data('dtr-index');
-        var cell = productos_entrada_table.cell({row: rowIdx, column: colIdx}).node();
+        let $el = $(this);
+        let rowIdx = $el.closest('ul').data('dtr-index');
+        let colIdx = $el.closest('li').data('dtr-index');
+        let cell = productos_entrada_table.cell({row: rowIdx, column: colIdx}).node();
         $('input, select, textarea', cell).val($el.val());
         if ($el.is(':checked')) {
             $('input', cell).prop('checked', true);
@@ -168,27 +179,11 @@ $(document).ready(function () {
 
     $(document).on('click', '[name="btn_eliminar_productos_entrada_table"]', function () {
         let row = $(this).closest('tr');
-        agregarATablaDeProductos(row);
         quitarProductoDeEntrada(row)
     });
 
     function vacearTablaDeProductosEntrada() {
-        productos_entrada_table.rows().every(function () {
-            let data = this.data();
-            agregarATablaDeProductos(this)
-        })
         productos_entrada_table.clear().draw();
-    }
-
-    function agregarATablaDeProductos(row) {
-        let newRow = [];
-        let data = productos_entrada_table.row(row).data();
-        newRow.push(data[0]);
-        newRow.push(btnAgregar);
-        newRow.push(data[2]);
-        newRow.push(data[3]);
-        newRow.push(data[4]);
-        productos_table.row.add(newRow).draw(false);
     }
 
     function quitarProductoDeEntrada(row) {
@@ -196,24 +191,26 @@ $(document).ready(function () {
     }
 
     $(document).on('click', '[name="btn_agregar_productos_tabla"]', function () {
-        let row = $(this).closest('tr');
+        let row = productos_table.row($(this).closest('tr'));
         let data = productos_table.row(row).data();
-        let newRow = [];
-        newRow.push(data['id']);
-        newRow.push("<input name='btn_eliminar_productos_entrada_table' type='button' value='Eliminar' class='btn btn-warning container-fluid'/>");
-        newRow.push(data['name']);
-        newRow.push(data['categoria']);
-        newRow.push(data['tipo']['nombre']);
         let tipoDeCantidad = "";
         if (data['categoria'] == "Unitario") {
             tipoDeCantidad = "Cantidad en unidades";
         } else {
             tipoDeCantidad = "Cantidad en kilos";
         }
-        newRow.push("<div class='form-group mb-1'><input id='cantidad_producto_entrada" + data[0] + "' class='form-control' type='number' placeholder='" + tipoDeCantidad + "'/></div>");
-        newRow.push("<div class='form-group mb-1'><input id='precio_producto_entrada" + data[0] + "' class='form-control' type='number' placeholder='Costo total'/></div>");
-        productos_entrada_table.row.add(newRow).draw(false);
-        productos_table.row(row).remove().draw();
+        let newRow = $.extend({
+            'btnEliminar': "<input name='btn_eliminar_productos_entrada_table' type='button' value='Eliminar' class='btn btn-warning container-fluid'/>",
+            'cantidad': "<div class='form-group mb-1'><input id='cantidad_producto_entrada" + data['id'] + "' class='form-control' type='number' placeholder='" + tipoDeCantidad + "'/></div>",
+            'costoTotal': "<div class='form-group mb-1'><input id='precio_producto_entrada" + data['id'] + "' class='form-control' type='number' placeholder='Costo total'/></div>"
+        }, data)
+        if (!productos_entrada_table.row(newRow).any()) {
+            productos_entrada_table.row.add(newRow).draw();
+            productos_entrada_table.responsive.rebuild();
+            productos_entrada_table.responsive.recalc();
+        } else {
+            toastr.warning("El producto seleccionado ya se agregó a la entrada");
+        }
     });
 
     $(document).on('keyup', '[id^="precio_producto_entrada"]', function () {
@@ -228,29 +225,37 @@ $(document).ready(function () {
         document.getElementById("costo").value = costo;
     });
 
-    function armarFormulario() {
+    function crearEstructuraDeProductos() {
+        let arr = [];
         productos_entrada_table.rows().every(function (rowIdx, tableLoop, rowLoop) {
             let data = this.data();
-            let id = data[0];
-            $("<input />").attr("type", "hidden")
-                .attr("name", "productos_entrada[]")
-                .attr("value", JSON.stringify({
-                    "id": id,
-                    "cantidad": $('#cantidad_producto_entrada' + id).val(),
-                    "costo": $('#precio_producto_entrada' + id).val()
-                }))
-                .appendTo("#form");
+            let id = data['id'];
+            arr.push({
+                id: id,
+                cantidad: $('#cantidad_producto_entrada' + id).val(),
+                costo: $('#precio_producto_entrada' + id).val()
+            });
         });
+        console.log(arr);
+        return arr;
     }
 
     $("#pagar").click(function () {
-        armarFormulario();
-        $.post('api/pagarentrada', $('#form').serialize(), function (data) {
-            swal(data.mensaje, data.descripcion, "success");
-            eliminarErroresDeValidacion();
-            limpiarFormulario()
-            table.ajax.reload();
-        }).fail(function (err) {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.post('api/pagarentrada',
+            {
+                proveedor_id: $("#proveedor_id").val(),
+                fechapago: $("#fechapago").val(),
+                productos_entrada: crearEstructuraDeProductos()
+            }, function (data) {
+                swal(data.mensaje, data.descripcion, "success");
+                limpiarFormulario()
+                table.ajax.reload();
+            }).fail(function (err) {
             $.each(err.responseJSON.errors, function (i, error) {
                 toastr.error(error[0]);
             });

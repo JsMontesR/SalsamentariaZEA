@@ -10,7 +10,7 @@ class Entrada extends Model
 
     public function productos()
     {
-        return $this->belongsToMany('App\Producto')->withPivot('cantidadunitaria','cantidadgramos');
+        return $this->belongsToMany('App\Producto')->withPivot('cantidad','costo');
     }
     public function empleado()
     {

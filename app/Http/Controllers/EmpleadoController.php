@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Producto;
-use App\Proveedor;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use DB;
 use App\User;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 
 class EmpleadoController extends Controller
 {

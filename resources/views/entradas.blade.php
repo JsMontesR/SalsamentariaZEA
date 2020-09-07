@@ -52,7 +52,7 @@
                                 </div>
                                 <div class="card-body">
                                     <table id="productos_table"
-                                           class="table table-bordered dt-responsive nowrap table-hover"
+                                           class="table table-bordered dt-responsive table-hover"
                                            style="width:100%">
                                         <tbody>
                                         </tbody>
@@ -70,7 +70,7 @@
                                 <div id="card_productos_entrada_table"
                                      class="card-body">
                                     <table id="productos_entrada_table"
-                                           class="table table-bordered dt-responsive nowrap table-hover"
+                                           class="table table-bordered dt-responsive wrap table-hover"
                                            style="width:100%">
                                         <tbody></tbody>
                                     </table>
@@ -137,15 +137,23 @@
                 <br>
                 <div class="row btn-toolbar justify-content-center">
 
-                    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 py-2">
+                    <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 py-2">
+                        <input id="registrar" type="button" value="Registrar"
+                               class="btn btn-primary container-fluid"/>
+                    </div>
+                    <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 py-2">
                         <input id="pagar" type="button" value="Pagar"
                                class="btn btn-success container-fluid"/>
                     </div>
-                    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 py-2">
+                    <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 py-2">
+                        <input id="registrar" type="button" value="Registrar y pagar"
+                               class="btn btn-success container-fluid"/>
+                    </div>
+                    <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 py-2">
                         <input id="limpiar" type="button" value="Limpiar"
                                class="btn btn-light text-dark container-fluid"/>
                     </div>
-                    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 py-2">
+                    <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 py-2">
                         <input id="eliminar" type="button" value="Eliminar" class="btn btn-danger container-fluid"/>
                     </div>
 

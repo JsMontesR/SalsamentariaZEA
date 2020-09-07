@@ -57,6 +57,13 @@ Route::post('api/borrarempleado', 'EmpleadoController@destroy')->middleware('aut
  * OPERACIONES CORE DEL NEGOCIO
  */
 
+// Procesamiento nóminas
+Route::get('/nominas', 'NominaController@index')->name('nominas')->middleware('auth');
+
+Route::get('api/listarnominas', 'NominaController@list')->middleware('auth');
+Route::post('api/pagarnomina', 'NominaController@pay')->middleware('auth');
+Route::post('api/anularnomina', 'NominaController@undoPay')->middleware('auth');
+
 // Procesamiento de entradas
 Route::get('/entradas', 'EntradaController@index')->name('entradas')->middleware('auth');
 
@@ -71,11 +78,6 @@ Route::get('api/listarventas', 'EntradaController@list')->middleware('auth');
 Route::post('api/cobrarventa', 'EntradaController@charge')->middleware('auth');
 Route::post('api/anularventa', 'EntradaController@undoCharge')->middleware('auth');
 
-// Procesamiento nóminas
-Route::get('/nominas', 'NominaController@index')->name('nominas')->middleware('auth');
 
-Route::get('api/listarnominas', 'NominaController@list')->middleware('auth');
-Route::post('api/pagarnomina', 'NominaController@pay')->middleware('auth');
-Route::post('api/anularnomina', 'NominaController@undoPay')->middleware('auth');
 
 
