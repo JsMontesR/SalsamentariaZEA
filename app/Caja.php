@@ -35,7 +35,7 @@ class Caja extends Model
         } else {
             $nuevoMovimiento = new Movimiento();
             $nuevoMovimiento->parteEfectiva = $parteEfectiva == null ? 0 : $parteEfectiva;
-            $nuevoMovimiento->ingreso = Movimiento::EGRESO;
+            $nuevoMovimiento->tipo = Movimiento::EGRESO;
             $nuevoMovimiento->parteCrediticia = $parteCrediticia == null ? 0 : $parteCrediticia;
             $this->saldo = $this->saldo - $parteEfectiva;
             $this->save();
@@ -56,7 +56,7 @@ class Caja extends Model
     {
         $nuevoMovimiento = new Movimiento();
         $nuevoMovimiento->parteEfectiva = $parteEfectiva == null ? 0 : $parteEfectiva;
-        $nuevoMovimiento->ingreso = Movimiento::INGRESO;
+        $nuevoMovimiento->tipo = Movimiento::INGRESO;
         $nuevoMovimiento->parteCrediticia = $parteCrediticia == null ? 0 : $parteCrediticia;
         $this->saldo = $this->saldo + $parteEfectiva;
         $this->save();

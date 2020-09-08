@@ -18,7 +18,7 @@ class CreateMovimientosTable extends Migration
             $table->unsignedBigInteger("parteCrediticia")->default(0);
             $table->unsignedBigInteger("parteEfectiva")->default(0);
             $table->unsignedBigInteger('movimientoable_id');
-            $table->boolean('ingreso')->default(1);
+            $table->string('tipo')->default("Ingreso");
             $table->string('movimientoable_type');
             $table->timestamps();
         });

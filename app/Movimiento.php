@@ -9,8 +9,8 @@ class Movimiento extends Model
 {
     protected $fillable = ["parteCrediticia", "parteEfectiva"];
 
-    const INGRESO = 1;
-    const EGRESO = 0;
+    const INGRESO = "Ingreso";
+    const EGRESO = "Egreso";
 
     public function movimientoable()
     {

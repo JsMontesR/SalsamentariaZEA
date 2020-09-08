@@ -16,11 +16,11 @@ $(document).ready(function () {
         columns: [
             {data: 'id', title: 'Id', className: "text-center"},
             {
-                data: 'ingreso', title: 'Tipo de movimiento', className: "text-center", render: function (data) {
-                    if (data) {
-                        return '<span class="text-success"><i class="fas fa-dollar-sign"></i><br>Ingreso</span>';
-                    } else {
-                        return '<span class="text-danger"><i class="fas fa-dollar-sign"></i><br>Egreso</span>';
+                data: 'tipo', title: 'Tipo de movimiento', className: "text-center", render: function (data) {
+                    if (data == "Ingreso") {
+                        return '<span class="text-success"><i class="fas fa-dollar-sign"></i><br>' + data + '</span>';
+                    } else if (data == "Egreso") {
+                        return '<span class="text-danger"><i class="fas fa-dollar-sign"></i><br>' + data + '</span>';
                     }
                 }
             },
@@ -28,7 +28,7 @@ $(document).ready(function () {
                 data: 'movimientoable_type',
                 title: 'Operación realizada',
                 className: "text-center",
-                render: function (data, type, row) {
+                render: function (data) {
                     switch (data) {
                         case "App\\Entrada":
                             return '<i class="fas fa-dolly"></i><br>Entrada a inventario';
