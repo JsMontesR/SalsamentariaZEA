@@ -14,7 +14,7 @@ class Movimiento extends Model
 
     public function movimientoable()
     {
-        return $this->morphTo();
+        return $this->morphTo()->withTrashed();
     }
 
     public function caja()

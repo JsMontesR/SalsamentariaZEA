@@ -30,20 +30,20 @@ class MovimientoController extends Controller
     public function list()
     {
         return datatables()->eloquent(Movimiento::query()
-        )->addColumn('valor', function ($movimiento) {
+        )->addColumn('valor', function (Movimiento $movimiento) {
             return $movimiento->movimientoable->valor;
-        })->addColumn('empleado', function ($movimiento) {
+        })->addColumn('empleado', function (Movimiento $movimiento) {
             return $movimiento->movimientoable->empleado->name;
         })->filterColumn('valor', function ($query, $keyword) {
             $movimientos = Movimiento::whereHasMorph('movimientoable', "*", function ($subquery) use ($keyword) {
-                $subquery->where('valor', 'like', '%' . $keyword . '%');
+                $subquery->where('valor', 'like', '%' . $keyword . '%')->withTrashed();
             })->get()->pluck('id')->toArray();
             $query->whereIn('id', $movimientos);
         })->filterColumn('empleado', function ($query, $keyword) {
             $movimientos = Movimiento::whereHasMorph('movimientoable', "*", function (Builder $subquery) use ($keyword) {
                 $subquery
                     ->join('users','users.id','=','empleado_id')
-                    ->where('users.name', 'like', '%' . $keyword . '%');
+                    ->where('users.name', 'like', '%' . $keyword . '%')->withTrashed();
             })->get()->pluck('id')->toArray();
             $query->whereIn('id', $movimientos);
         })->toJson();
