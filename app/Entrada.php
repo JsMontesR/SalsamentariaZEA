@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Entrada extends Model
 {
-
     use SoftDeletes;
 
     public function productos()

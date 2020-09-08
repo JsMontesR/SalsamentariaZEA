@@ -7,7 +7,6 @@ use DateTimeInterface;
 
 class Movimiento extends Model
 {
-
     protected $fillable = ["parteCrediticia", "parteEfectiva"];
 
     const INGRESO = 1;

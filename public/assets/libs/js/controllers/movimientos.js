@@ -10,16 +10,16 @@ $(document).ready(function () {
         }
     })
 
-    let table = $('#movimiento').DataTable($.extend({
+    $('#movimiento').DataTable($.extend({
         serverSide: true,
         ajax: 'api/movimientos/listar',
         columns: [
             {data: 'id', title: 'Id', className: "text-center"},
             {
                 data: 'ingreso', title: 'Tipo de movimiento', className: "text-center", render: function (data) {
-                    if(data){
+                    if (data) {
                         return '<span class="text-success"><i class="fas fa-dollar-sign"></i><br>Ingreso</span>';
-                    }else{
+                    } else {
                         return '<span class="text-danger"><i class="fas fa-dollar-sign"></i><br>Egreso</span>';
                     }
                 }
@@ -41,10 +41,25 @@ $(document).ready(function () {
                     }
                 }
             },
-            {data: 'movimientoable.empleado.name', title:'Empleado que realizó el movimiento', className: "text-center"},
-            {data: 'parteEfectiva', title: 'Parte efectiva', className: "text-center", render: $.fn.dataTable.render.number(',', '.', 0, '$ ')},
-            {data: 'parteCrediticia', title: 'Parte crediticia', className: "text-center", render: $.fn.dataTable.render.number(',', '.', 0, '$ ')},
-            {data: 'movimientoable.valor', title:'Total de dinero', className: "text-center", render: $.fn.dataTable.render.number(',', '.', 0, '$ ')},
+            {data: 'empleado', title: 'Empleado que realizó el movimiento', className: "text-center"},
+            {
+                data: 'parteEfectiva',
+                title: 'Parte efectiva',
+                className: "text-center",
+                render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
+            },
+            {
+                data: 'parteCrediticia',
+                title: 'Parte crediticia',
+                className: "text-center",
+                render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
+            },
+            {
+                data: 'valor',
+                title: 'Total de dinero',
+                className: "text-center",
+                render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
+            },
             {data: 'created_at', title: 'Fecha de creación', className: "text-center"}
         ]
     }, options));
