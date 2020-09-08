@@ -4,8 +4,8 @@ namespace App;
 
 use App\Exceptions\FondosInsuficientesException;
 use Illuminate\Database\Eloquent\Model;
-use Exception;
 use DateTimeInterface;
+use \Datetime;
 
 class Caja extends Model
 {
@@ -28,7 +28,7 @@ class Caja extends Model
         return $this->hasMany('App\Movimiento');
     }
 
-    public function pagarNomina($movimientoable, $parteEfectiva = 0, $parteCrediticia = 0)
+    public function pagar($movimientoable, $parteEfectiva = 0, $parteCrediticia = 0)
     {
         if ($parteEfectiva > $this->saldo) {
             throw new FondosInsuficientesException("Operación no realizable, saldo en caja insuficiente");
@@ -40,6 +40,9 @@ class Caja extends Model
             $this->saldo = $this->saldo - $parteEfectiva;
             $this->save();
             $this->refresh();
+            if($movimientoable instanceof Entrada){
+                $movimientoable->fechapagado = now();
+            }
             $movimientoable->save();
             $movimientoable->refresh();
             $nuevoMovimiento->caja()->associate($this);
@@ -48,7 +51,8 @@ class Caja extends Model
         }
     }
 
-    public function anularNomina($movimientoable, $parteEfectiva, $parteCrediticia)
+
+    public function anularPago($movimientoable, $parteEfectiva, $parteCrediticia)
     {
         $nuevoMovimiento = new Movimiento();
         $nuevoMovimiento->parteEfectiva = $parteEfectiva == null ? 0 : $parteEfectiva;

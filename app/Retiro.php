@@ -4,10 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use DateTimeInterface;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Retiro extends Model
 {
     //
+    use SoftDeletes;
 
     /**
      * Prepare a date for array / JSON serialization.

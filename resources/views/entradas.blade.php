@@ -98,7 +98,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-md-4 col-form-label text-md-left">Valor a pagar desde el efectivo:</label>
+                        <label class="col-md-4 col-form-label text-md-left">Valor a pagar en efectivo:</label>
                         <div class="input-group col-md-8">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">💵</span>
@@ -109,7 +109,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-md-4 col-form-label text-md-left">Valor a pagar desde la tarjeta:</label>
+                        <label class="col-md-4 col-form-label text-md-left">Valor con tarjeta:</label>
                         <div class="input-group col-md-8">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">💳</span>
@@ -121,14 +121,14 @@
                     </div>
                     <hr>
                     <div class="form-group row">
-                        <label class="col-md-4 col-form-label text-md-left">Costo:</label>
+                        <label class="col-md-4 col-form-label text-md-left">Valor total:</label>
                         <div class="input-group col-md-8">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">$</span>
                             </div>
-                            <input id="costo" type="number" readonly="readonly"
+                            <input id="valor" type="number" readonly="readonly"
                                    class="form-control"
-                                   name="costo" required autocomplete="costo">
+                                   name="valor" required autocomplete="valor">
                         </div>
                     </div>
                 </form>
@@ -136,25 +136,24 @@
 
                 <br>
                 <div class="row btn-toolbar justify-content-center">
-
+                    <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 py-2">
+                        <input id="registrarypagar" type="button" value="Registrar y pagar"
+                               class="btn btn-info container-fluid"/>
+                    </div>
                     <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 py-2">
                         <input id="registrar" type="button" value="Registrar"
                                class="btn btn-primary container-fluid"/>
                     </div>
                     <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 py-2">
-                        <input id="pagar" type="button" value="Pagar"
+                        <input id="pagar" type="button" disabled value="Pagar"
                                class="btn btn-success container-fluid"/>
                     </div>
                     <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 py-2">
-                        <input id="registrar" type="button" value="Registrar y pagar"
-                               class="btn btn-info container-fluid"/>
-                    </div>
-                    <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 py-2">
-                        <input id="limpiar" type="button" value="Limpiar"
+                        <input id="limpiar" type="button" disabled value="Limpiar"
                                class="btn btn-light text-dark container-fluid"/>
                     </div>
                     <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 py-2">
-                        <input id="eliminar" type="button" value="Eliminar" class="btn btn-danger container-fluid"/>
+                        <input id="eliminar" type="button" disabled value="Eliminar" class="btn btn-danger container-fluid"/>
                     </div>
 
                 </div>

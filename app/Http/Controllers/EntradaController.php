@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Caja;
 use App\Entrada;
+use App\Exceptions\FondosInsuficientesException;
 use App\Producto;
 use App\ProductoTipo;
 use App\Proveedor;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
-use DB;
 
 class EntradaController extends Controller
 {
@@ -80,12 +81,10 @@ class EntradaController extends Controller
             $productoActual->save();
             $costo += $producto["costo"];
         }
-
-        $entrada->costo = $costo;
+        $entrada->valor = $costo;
         $entrada->save();
         return response()->json([
-            'mensaje' => 'Operación realizada',
-            'descripcion' => '¡Entrada registrada!',
+            'msg' => '¡Entrada registrada!',
         ]);
     }
 
@@ -95,20 +94,50 @@ class EntradaController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function pay(Request $request)
+    public function pagar(Request $request)
     {
-
+        $request->validate($this->validationIdRule);
+        $entrada = Entrada::findOrFail($request->id);
+        if ($request->parteCrediticia + $request->parteEfectiva != $entrada->valor) {
+            throw ValidationException::withMessages(["valor" => "La suma de los montos a pagar no coincide con el valor de la entrada"]);
+        }
+        try {
+            Caja::findOrFail(1)->pagar($entrada, $request->parteEfectiva, $request->parteCrediticia);
+        } catch (FondosInsuficientesException $e) {
+            throw ValidationException::withMessages(["valor" => $e->getMessage()]);
+        }
+        return response()->json([
+            'msg' => '¡Pago de entrada realizado!',
+        ]);
     }
 
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Entrada $entrada
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function undoPay(Entrada $entrada)
+    public function anular(Request $request)
     {
-        //
+        $request->validate($this->validationIdRule);
+        $entrada = Entrada::find($request->id);
+
+        foreach ($entrada->productos as $producto) {
+            if ($producto->stock >= $producto->pivot->cantidad) {
+                $producto->stock = $producto->stock - $producto->pivot->cantidad;
+                $producto->save();
+            } else {
+                throw ValidationException::withMessages(["id" => "No se cuenta con las existencias suficientes de " . $producto->nombre . " (" . $producto->id . ") para anular la entrada"]);
+            }
+        }
+        if ($entrada->fechapagado != null) {
+            $movimiento = $entrada->movimientos->first();
+            Caja::findOrFail(1)->anularPago($entrada, $movimiento->parteEfectiva, $movimiento->parteCrediticia);
+        }
+        $entrada->delete();
+        return response()->json([
+            'msg' => '¡Pago de nomina anulado!',
+        ]);
     }
 }

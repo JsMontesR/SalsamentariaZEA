@@ -15,7 +15,7 @@ $(document).ready(function () {
 
     let table = $('#recurso').DataTable($.extend({
         serverSide: true,
-        ajax: 'api/listarnominas',
+        ajax: 'api/nominas/listar',
         columns: [
             {data: 'id', title: 'Id', className: "text-center"},
             {data: 'empleado.id', title: 'Id del empleado', visible: false, searchable: false},
@@ -58,7 +58,7 @@ $(document).ready(function () {
 
     let empleados_table = $('#empleados').DataTable($.extend({
         serverSide: true,
-        ajax: 'api/listarempleados',
+        ajax: 'api/empleados/listar',
         columns: [
             {data: 'id', title: 'Id', className: "text-center"},
             {data: 'name', title: 'Nombre'},
@@ -95,7 +95,7 @@ $(document).ready(function () {
     });
 
     $("#pagar").click(function () {
-        $.post('api/pagarnomina', $('#form').serialize(), function (data) {
+        $.post('api/nominas/pagar', $('#form').serialize(), function (data) {
             swal("¡Operación exitosa!", data.msg, "success");
             limpiarFormulario()
             table.ajax.reload();
@@ -121,7 +121,7 @@ $(document).ready(function () {
         })
             .then((willDelete) => {
                 if (willDelete) {
-                    $.post('api/anularnomina', $('#form').serialize(), function (data) {
+                    $.post('api/nominas/anular', $('#form').serialize(), function (data) {
                         swal("¡Operación exitosa!", data.msg, "success");
                         limpiarFormulario()
                         table.ajax.reload();

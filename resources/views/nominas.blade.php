@@ -66,7 +66,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-md-4 col-form-label text-md-left">Valor a pagar desde el efectivo:</label>
+                        <label class="col-md-4 col-form-label text-md-left">Valor a pagar con efectivo:</label>
                         <div class="input-group col-md-8">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">💵</span>
@@ -77,7 +77,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-md-4 col-form-label text-md-left">Valor a pagar desde la tarjeta:</label>
+                        <label class="col-md-4 col-form-label text-md-left">Valor a pagar con tarjeta:</label>
                         <div class="input-group col-md-8">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">💳</span>

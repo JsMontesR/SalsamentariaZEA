@@ -17,7 +17,7 @@ class CreateEntradasTable extends Migration
             $table->id();
             $table->date('fechapago');
             $table->date('fechapagado')->nullable();
-            $table->unsignedBigInteger('costo')->nullable();
+            $table->unsignedBigInteger('valor')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

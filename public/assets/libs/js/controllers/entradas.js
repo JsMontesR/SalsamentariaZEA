@@ -31,7 +31,7 @@ $(document).ready(function () {
     }
 
     $.ajax({
-        url: "api/listarentradas",
+        url: "api/entradas/listar",
         type: "get",
         success: function (data) {
             console.log(data);
@@ -43,23 +43,28 @@ $(document).ready(function () {
 
     let table = $('#recurso').DataTable($.extend({
         serverSide: true,
-        ajax: "api/listarentradas",
+        ajax: "api/entradas/listar",
         columns: [
-            {data: 'id', title: 'Id'},
+            {data: 'id', title: 'Id', className: "text-center"},
             {data: 'proveedor.id', title: 'Id del proveedor', visible: false, searchable: false},
-            {data: 'proveedor.nombre', title: 'Nombre del proveedor'},
-            {data: 'empleado.name', title: 'Nombre del empleado'},
-            {data: 'fechapago', title: 'Fecha de pago'},
-            {data: 'fechapagado', title: 'Fecha límite de pago'},
-            {data: 'costo', title: 'Costo', render: $.fn.dataTable.render.number(',', '.', 0, '$ ')},
-            {data: 'created_at', title: 'Fecha de creación'},
-            {data: 'updated_at', title: 'Fecha de actualización'},
+            {data: 'proveedor.nombre', title: 'Nombre del proveedor', className: "text-center"},
+            {data: 'empleado.name', title: 'Nombre del empleado', className: "text-center"},
+            {data: 'fechapagado', title: 'Fecha de pago', className: "text-center"},
+            {data: 'fechapago', title: 'Fecha límite de pago', className: "text-center"},
+            {
+                data: 'valor',
+                title: 'Valor',
+                className: "text-center",
+                render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
+            },
+            {data: 'created_at', title: 'Fecha de creación', className: "text-center"},
+            {data: 'updated_at', title: 'Fecha de actualización', className: "text-center"},
         ]
     }, options));
 
     let productos_table = $('#productos_table').DataTable($.extend({
         serverSide: true,
-        ajax: 'api/listarproductos',
+        ajax: 'api/productos/listar',
         columns: [
             {data: 'id', title: 'Id', className: "text-center"},
             {
@@ -109,7 +114,7 @@ $(document).ready(function () {
 
     let tablaProveedores = $('#proveedores').DataTable($.extend({
         serverSide: true,
-        ajax: 'api/listarproveedores',
+        ajax: 'api/proveedores/listar',
         columns: [
             {data: 'id', title: 'Id', className: "text-center"},
             {data: 'nombre', title: 'Nombre del proveedor', className: "text-center"},
@@ -152,12 +157,16 @@ $(document).ready(function () {
         limpiarFormulario();
         $(this).addClass('selected');
         document.getElementById('registrar').disabled = true;
+        document.getElementById('registrarypagar').disabled = true;        document.getElementById('pagar').disabled = true;
+        document.getElementById('pagar').disabled = false;
+        document.getElementById('limpiar').disabled = false;
+        document.getElementById('eliminar').disabled = false;
         let data = table.row(this).data();
         document.getElementById('id').value = data['id'];
         document.getElementById('proveedor_id').value = data['proveedor']['id'];
         document.getElementById('fechapago').value = data['fechapago'];
         document.getElementById('fechapagado').value = data['fechapagado'];
-        document.getElementById('costo').value = data['costo'];
+        document.getElementById('valor').value = data['valor'];
 
     });
 
@@ -217,14 +226,14 @@ $(document).ready(function () {
 
     $(document).on('keyup', '[id^="precio_producto_entrada"]', function () {
         let alreadyUsed = {};
-        let costo = 0;
+        let valor = 0;
         $('[id^="precio_producto_entrada"]').each(function (index, value) {
             if (!alreadyUsed[$(this).attr("id")]) {
-                costo += isNaN(parseInt(value.value, 10)) ? 0 : parseInt(value.value, 10)
+                valor += isNaN(parseInt(value.value, 10)) ? 0 : parseInt(value.value, 10)
             }
             alreadyUsed[$(this).attr("id")] = true;
         })
-        document.getElementById("costo").value = costo;
+        document.getElementById("valor").value = valor;
     });
 
     function crearEstructuraDeProductos() {
@@ -248,13 +257,13 @@ $(document).ready(function () {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        $.post('api/pagarentrada',
+        $.post('api/entradas/pagar',
             {
-                proveedor_id: $("#proveedor_id").val(),
-                fechapago: $("#fechapago").val(),
-                productos_entrada: crearEstructuraDeProductos()
+                id: $("#id").val(),
+                parteCrediticia: $("#parteCrediticia").val(),
+                parteEfectiva: $("#parteEfectiva").val()
             }, function (data) {
-                swal(data.mensaje, data.descripcion, "success");
+                swal("¡Operación exitosa!", data.msg, "success");
                 limpiarFormulario()
                 table.ajax.reload();
             }).fail(function (err) {
@@ -271,13 +280,13 @@ $(document).ready(function () {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        $.post('api/crearentrada',
+        $.post('api/entradas/crear',
             {
                 proveedor_id: $("#proveedor_id").val(),
                 fechapago: $("#fechapago").val(),
                 productos_entrada: crearEstructuraDeProductos()
             }, function (data) {
-                swal(data.mensaje, data.descripcion, "success");
+                swal("¡Operación exitosa!", data.msg, "success");
                 limpiarFormulario()
                 table.ajax.reload();
             }).fail(function (err) {
@@ -294,10 +303,14 @@ $(document).ready(function () {
         document.getElementById('proveedor_id').value = "";
         document.getElementById('fechapagado').value = "";
         document.getElementById('fechapago').value = "";
-        document.getElementById('costo').value = "";
+        document.getElementById('valor').value = "";
         $('#recurso tr').removeClass("selected");
         vacearTablaDeProductosEntrada();
-        document.getElementById('pagar').disabled = false;
+        document.getElementById('pagar').disabled = true;
+        document.getElementById('registrarypagar').disabled = false;
+        document.getElementById('registrar').disabled = false;
+        document.getElementById('limpiar').disabled = true;
+        document.getElementById('eliminar').disabled = true;
     }
 
     $("#limpiar").click(function () {
@@ -314,7 +327,7 @@ $(document).ready(function () {
         })
             .then((willDelete) => {
                 if (willDelete) {
-                    $.post('api/anularentrada', $('#form').serialize(), function (data) {
+                    $.post('api/entradas/anular', $('#form').serialize(), function (data) {
                         swal("¡Operación exitosa!", data.msg, "success");
                         limpiarFormulario()
                         table.ajax.reload();

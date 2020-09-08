@@ -11,7 +11,7 @@ $(document).ready(function () {
 
     let table = $('#recurso').DataTable($.extend({
         serverSide: true,
-        ajax: 'api/listarproveedores',
+        ajax: 'api/proveedores/listar',
         columns: [
             {data: 'id', title: 'Id', className: "text-center"},
             {data: 'nombre', title: 'Nombre del proveedor', className: "text-center"},
@@ -35,7 +35,7 @@ $(document).ready(function () {
 
 
     $("#registrar").click(function () {
-        $.post('api/crearproveedor', $('#form').serialize(), function (data) {
+        $.post('api/proveedores/crear', $('#form').serialize(), function (data) {
             swal("¡Operación exitosa!", data.msg, "success");
             limpiarFormulario()
             table.ajax.reload();
@@ -53,7 +53,7 @@ $(document).ready(function () {
     });
 
     $("#modificar").click(function () {
-        $.post('api/modificarproveedor', $('#form').serialize(), function (data) {
+        $.post('api/proveedores/modificar', $('#form').serialize(), function (data) {
             swal("¡Operación exitosa!", data.msg, "success");
             limpiarFormulario()
             table.ajax.reload();
@@ -75,7 +75,7 @@ $(document).ready(function () {
         })
             .then((willDelete) => {
                 if (willDelete) {
-                    $.post('api/borrarproveedor', $('#form').serialize(), function (data) {
+                    $.post('api/proveedores/borrar', $('#form').serialize(), function (data) {
                         swal("¡Operación exitosa!", data.msg, "success");
                         limpiarFormulario()
                         table.ajax.reload();

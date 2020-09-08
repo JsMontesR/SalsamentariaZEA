@@ -14,7 +14,7 @@ $(document).ready(function () {
 
     let table = $('#recurso').DataTable($.extend({
         serverSide: true,
-        ajax: 'api/listarclientes',
+        ajax: 'api/clientes/listar',
         columns: [
             {data: 'id', title: 'Id', className: "text-center"},
             {data: 'name', title: 'Nombre'},
@@ -48,7 +48,7 @@ $(document).ready(function () {
     });
 
     $("#registrar").click(function () {
-        $.post('api/crearcliente', $('#form').serialize(), function (data) {
+        $.post('api/clientes/crear', $('#form').serialize(), function (data) {
             swal("¡Operación exitosa!", data.msg, "success");
             limpiarFormulario()
             table.ajax.reload();
@@ -65,7 +65,7 @@ $(document).ready(function () {
     });
 
     $("#modificar").click(function () {
-        $.post('api/modificarcliente', $('#form').serialize(), function (data) {
+        $.post('api/clientes/modificar', $('#form').serialize(), function (data) {
             swal("¡Operación exitosa!", data.msg, "success");
             limpiarFormulario()
             table.ajax.reload();
@@ -87,7 +87,7 @@ $(document).ready(function () {
         })
             .then((willDelete) => {
                 if (willDelete) {
-                    $.post('api/borrarcliente', $('#form').serialize(), function (data) {
+                    $.post('api/clientes/borrar', $('#form').serialize(), function (data) {
                         swal("¡Operación exitosa!", data.msg, "success");
                         limpiarFormulario()
                         table.ajax.reload();

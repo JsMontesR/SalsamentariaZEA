@@ -1,6 +1,6 @@
 $(document).ready(function () {
     $.ajax({
-        url: "api/listarmovimientos",
+        url: "api/movimientos/listar",
         type: "get",
         success: function (data) {
             console.log(data);
@@ -12,7 +12,7 @@ $(document).ready(function () {
 
     let table = $('#movimiento').DataTable($.extend({
         serverSide: true,
-        ajax: 'api/listarmovimientos',
+        ajax: 'api/movimientos/listar',
         columns: [
             {data: 'id', title: 'Id', className: "text-center"},
             {
@@ -31,11 +31,11 @@ $(document).ready(function () {
                 render: function (data, type, row) {
                     switch (data) {
                         case "App\\Entrada":
-                            return '<i class="fas fa-hand-holding-usd"></i><br>Entrada a inventario';
+                            return '<i class="fas fa-dolly"></i><br>Entrada a inventario';
                         case "App\\Retiro":
-                            return '<i class="fas fa-hand-holding-usd"></i><br>Retiro de inventario';
+                            return '<i class="fas fa-sign-out-alt"></i><br>Retiro de inventario';
                         case "App\\Venta":
-                            return '<i class="fas fa-hand-holding-usd"></i><br>Venta';
+                            return '<i class="fas fa-shopping-cart"></i><br>Venta';
                         case "App\\Nomina":
                             return '<i class="fas fa-hand-holding-usd"></i><br>Pago de nómina';
                     }

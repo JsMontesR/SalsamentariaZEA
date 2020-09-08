@@ -40,7 +40,7 @@ $(document).ready(function () {
 
     let table = $('#recurso').DataTable($.extend({
         serverSide: true,
-        ajax: 'api/listarproductos',
+        ajax: 'api/productos/listar',
         columns: [
             {data: 'id', title: 'Id', className: "text-center"},
             {data: 'nombre', title: 'Nombre', className: "text-center"},
@@ -99,7 +99,7 @@ $(document).ready(function () {
     });
 
     $("#registrar").click(function () {
-        $.post('api/crearproducto', $('#form').serialize(), function (data) {
+        $.post('api/productos/crear', $('#form').serialize(), function (data) {
             swal("¡Operación exitosa!", data.msg, "success");
             limpiarFormulario()
             table.ajax.reload();
@@ -116,7 +116,7 @@ $(document).ready(function () {
     });
 
     $("#modificar").click(function () {
-        $.post('api/modificarproducto', $('#form').serialize(), function (data) {
+        $.post('api/productos/modificar', $('#form').serialize(), function (data) {
             swal("¡Operación exitosa!", data.msg, "success");
             limpiarFormulario()
             table.ajax.reload();
@@ -138,7 +138,7 @@ $(document).ready(function () {
         })
             .then((willDelete) => {
                 if (willDelete) {
-                    $.post('api/borrarproducto', $('#form').serialize(), function (data) {
+                    $.post('api/productos/borrar', $('#form').serialize(), function (data) {
                         swal("¡Operación exitosa!", data.msg, "success");
                         limpiarFormulario()
                         table.ajax.reload();
