@@ -75,8 +75,8 @@ Route::prefix('api')->group(function(){
     // Procesamiento de entradas
     Route::prefix('entradas')->group(function(){
         Route::get('listar', 'EntradaController@list')->middleware('auth');
-        Route::get('{id}/productos', 'EntradaController@listProductos')->middleware('auth');
         Route::post('crear', 'EntradaController@store')->middleware('auth');
+        Route::post('crearpagar', 'EntradaController@crearPagar')->middleware('auth');
         Route::post('pagar', 'EntradaController@pagar')->middleware('auth');
         Route::post('anular', 'EntradaController@anular')->middleware('auth');
     });
@@ -84,7 +84,6 @@ Route::prefix('api')->group(function(){
     // Procesamiento de ventas
     Route::prefix('ventas')->group(function(){
         Route::get('listar', 'VentaController@list')->middleware('auth');
-        Route::get('{id}/productos', 'VentasController@listProductos')->middleware('auth');
         Route::post('crear', 'VentasController@store')->middleware('auth');
         Route::post('cargar', 'VentasController@cargar')->middleware('auth');
         Route::post('anular', 'VentasController@anular')->middleware('auth');

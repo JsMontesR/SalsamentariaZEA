@@ -7,6 +7,7 @@ use DateTimeInterface;
 
 class Producto extends Model
 {
+    protected $with = ["tipo"];
     protected $guarded = ["id"];
 
     public function entradas()

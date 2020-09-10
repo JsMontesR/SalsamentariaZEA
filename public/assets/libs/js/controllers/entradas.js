@@ -68,7 +68,7 @@ $(document).ready(function () {
         columns: [
             {data: 'id', title: 'Id', className: "text-center"},
             {
-                data: null, title: 'Agregar', className: "text-center", render: function () {
+                data: null, title: 'Agregar', className: "text-center", searchable: false, render: function () {
                     return btnAgregar;
                 }
             },
@@ -129,7 +129,7 @@ $(document).ready(function () {
     let productos_entrada_table = $('#productos_entrada_table').DataTable($.extend({
         columns: [
             {data: 'id', title: 'Id', className: "text-center"},
-            {data: 'btnEliminar', title: 'Eliminar', className: "text-center"},
+            {data: 'btnEliminar', title: 'Eliminar', className: "text-center", searchable: false,},
             {data: 'nombre', title: 'Nombre', className: "text-center text-wrap"},
             {data: 'categoria', title: 'Categoría', className: "text-center"},
             {data: 'tipo.nombre', title: 'Tipo', className: "text-center"},
@@ -153,11 +153,40 @@ $(document).ready(function () {
         responsive: true
     }, options));
 
+    function crearFilaDeEntrada(data) {
+        let tipoDeCantidad = "";
+        if (data['categoria'] == "Unitario") {
+            tipoDeCantidad = "Cantidad en unidades";
+        } else {
+            tipoDeCantidad = "Cantidad en kilos";
+        }
+        let cantidad = "";
+        let costo = "";
+        if (data['pivot'] != undefined) {
+            cantidad = "readonly value=" + data['pivot']['cantidad']
+            costo = "readonly value=" + data['pivot']['costo'];
+        }
+        return $.extend({
+            'btnEliminar': "<input name='btn_eliminar_productos_entrada_table' type='button' value='Eliminar' class='btn btn-warning container-fluid'/>",
+            'cantidad': "<div class='form-group mb-1'><input " + cantidad + " id='cantidad_producto_entrada" + cantidad + "' class='form-control' type='number' placeholder='" + tipoDeCantidad + "'/></div>",
+            'costoTotal': "<div class='form-group mb-1'><input " + costo + " id='precio_producto_entrada" + data['id'] + "' class='form-control' type='number' placeholder='Costo total'/></div>"
+        }, data)
+    }
+
+    function cargarProductosEntrada(productos) {
+        for (i in productos) {
+            let newRow = crearFilaDeEntrada(productos[i]);
+            productos_entrada_table.row.add(newRow).draw();
+            productos_entrada_table.responsive.rebuild();
+            productos_entrada_table.responsive.recalc();
+        }
+    }
+
     $('#recurso tbody').on('click', 'tr', function () {
         limpiarFormulario();
         $(this).addClass('selected');
         document.getElementById('registrar').disabled = true;
-        document.getElementById('registrarypagar').disabled = true;        document.getElementById('pagar').disabled = true;
+        document.getElementById('registrarypagar').disabled = true;
         document.getElementById('pagar').disabled = false;
         document.getElementById('limpiar').disabled = false;
         document.getElementById('eliminar').disabled = false;
@@ -167,7 +196,9 @@ $(document).ready(function () {
         document.getElementById('fechapago').value = data['fechapago'];
         document.getElementById('fechapagado').value = data['fechapagado'];
         document.getElementById('valor').value = data['valor'];
-
+        console.log(data);
+        $('#productos_container').hide();
+        cargarProductosEntrada(data['productos']);
     });
 
     $('#proveedores tbody').on('click', 'tr', function () {
@@ -204,17 +235,7 @@ $(document).ready(function () {
     $(document).on('click', '[name="btn_agregar_productos_tabla"]', function () {
         let row = productos_table.row($(this).closest('tr'));
         let data = productos_table.row(row).data();
-        let tipoDeCantidad = "";
-        if (data['categoria'] == "Unitario") {
-            tipoDeCantidad = "Cantidad en unidades";
-        } else {
-            tipoDeCantidad = "Cantidad en kilos";
-        }
-        let newRow = $.extend({
-            'btnEliminar': "<input name='btn_eliminar_productos_entrada_table' type='button' value='Eliminar' class='btn btn-warning container-fluid'/>",
-            'cantidad': "<div class='form-group mb-1'><input id='cantidad_producto_entrada" + data['id'] + "' class='form-control' type='number' placeholder='" + tipoDeCantidad + "'/></div>",
-            'costoTotal': "<div class='form-group mb-1'><input id='precio_producto_entrada" + data['id'] + "' class='form-control' type='number' placeholder='Costo total'/></div>"
-        }, data)
+        let newRow = crearFilaDeEntrada(data);
         if (!productos_entrada_table.row(newRow).any()) {
             productos_entrada_table.row.add(newRow).draw();
             productos_entrada_table.responsive.rebuild();
@@ -297,6 +318,29 @@ $(document).ready(function () {
         })
     });
 
+    $("#registrarypagar").click(function () {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.post('api/entradas/crear',
+            {
+                proveedor_id: $("#proveedor_id").val(),
+                fechapago: $("#fechapago").val(),
+                productos_entrada: crearEstructuraDeProductos()
+            }, function (data) {
+                swal("¡Operación exitosa!", data.msg, "success");
+                limpiarFormulario()
+                table.ajax.reload();
+            }).fail(function (err) {
+            $.each(err.responseJSON.errors, function (i, error) {
+                toastr.error(error[0]);
+            });
+            console.error(err);
+        })
+    });
+
 
     function limpiarFormulario() {
         document.getElementById('id').value = "";
@@ -306,6 +350,7 @@ $(document).ready(function () {
         document.getElementById('valor').value = "";
         $('#recurso tr').removeClass("selected");
         vacearTablaDeProductosEntrada();
+        $('#productos_container').show();
         document.getElementById('pagar').disabled = true;
         document.getElementById('registrarypagar').disabled = false;
         document.getElementById('registrar').disabled = false;

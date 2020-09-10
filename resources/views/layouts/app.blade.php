@@ -27,7 +27,7 @@
     <script src="{{ asset('assets/libs/js/sweetalert.min.js') }}"></script>
     <script src="{{ asset('assets/libs/js/toastr.min.js') }}"></script>
 
-    <link rel="shortcut icon" href="favicon.png">
+    <link rel="shortcut icon" href="{{asset('favicon.png')}}">
     <title>{{ config('app.name', 'Laravel') }}</title>
 </head>
 <body>

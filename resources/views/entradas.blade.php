@@ -45,7 +45,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 p-3">
+                        <div id="productos_container" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 p-3">
                             <div class="card shadow mb-4 form-control">
                                 <div class="card-header py-3">
                                     <h3 class="m-0 font-weight-bold text-primary text-center">Productos disponibles</h3>

@@ -28,42 +28,6 @@ class Caja extends Model
         return $this->hasMany('App\Movimiento');
     }
 
-    public function pagar($movimientoable, $parteEfectiva = 0, $parteCrediticia = 0)
-    {
-        if ($parteEfectiva > $this->saldo) {
-            throw new FondosInsuficientesException("Operación no realizable, saldo en caja insuficiente");
-        } else {
-            $nuevoMovimiento = new Movimiento();
-            $nuevoMovimiento->parteEfectiva = $parteEfectiva == null ? 0 : $parteEfectiva;
-            $nuevoMovimiento->tipo = Movimiento::EGRESO;
-            $nuevoMovimiento->parteCrediticia = $parteCrediticia == null ? 0 : $parteCrediticia;
-            $this->saldo = $this->saldo - $parteEfectiva;
-            $this->save();
-            $this->refresh();
-            if($movimientoable instanceof Entrada){
-                $movimientoable->fechapagado = now();
-            }
-            $movimientoable->save();
-            $movimientoable->refresh();
-            $nuevoMovimiento->caja()->associate($this);
-            $nuevoMovimiento->movimientoable()->associate($movimientoable);
-            $nuevoMovimiento->save();
-        }
-    }
 
-
-    public function anularPago($movimientoable, $parteEfectiva, $parteCrediticia)
-    {
-        $nuevoMovimiento = new Movimiento();
-        $nuevoMovimiento->parteEfectiva = $parteEfectiva == null ? 0 : $parteEfectiva;
-        $nuevoMovimiento->tipo = Movimiento::INGRESO;
-        $nuevoMovimiento->parteCrediticia = $parteCrediticia == null ? 0 : $parteCrediticia;
-        $this->saldo = $this->saldo + $parteEfectiva;
-        $this->save();
-        $this->refresh();
-        $nuevoMovimiento->caja()->associate($this);
-        $nuevoMovimiento->movimientoable()->associate($movimientoable);
-        $nuevoMovimiento->save();
-    }
 
 }

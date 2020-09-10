@@ -71,7 +71,7 @@ class ProductoController extends Controller
      */
 
     public function list(){
-        return datatables()->eloquent(Producto::query()->with('tipo'))->toJson();
+        return datatables()->eloquent(Producto::query())->toJson();
     }
 
     /**

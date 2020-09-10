@@ -2,9 +2,9 @@
 
 namespace App\Exceptions;
 
-use Exception;
+use Illuminate\Validation\ValidationException;
 
-class FondosInsuficientesException extends Exception
+class FondosInsuficientesException extends ValidationException
 {
     //
 }

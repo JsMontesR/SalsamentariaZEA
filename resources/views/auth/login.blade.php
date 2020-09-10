@@ -11,6 +11,7 @@
     <link href="{{ asset('assets/vendor/fonts/circular-std/style.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/libs/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/fonts/fontawesome/css/fontawesome-all.css') }}">
+    <link rel="shortcut icon" href="{{asset('favicon.png')}}">
     <style>
         html,
         body {
@@ -46,7 +47,7 @@
 
                     <input class="form-control form-control-lg @error('email') is-invalid @enderror" name="email"
                            value="{{ old('email') }}" required autocomplete="email" autofocus id="email" type="text"
-                           placeholder="{{ __('E-Mail Address') }}" autocomplete="off">
+                           placeholder="{{ __('E-Mail Address') }}">
 
                     @error('email')
                     <span class="invalid-feedback" role="alert">

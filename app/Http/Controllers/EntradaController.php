@@ -7,12 +7,22 @@ use App\Entrada;
 use App\Exceptions\FondosInsuficientesException;
 use App\Producto;
 use App\ProductoTipo;
-use App\Proveedor;
+use App\Repositories\Cajas;
+use App\Repositories\Entradas;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
 
 class EntradaController extends Controller
 {
+
+    protected $entradas;
+    protected $cajas;
+
+    public function __construct(Entradas $entradas, Cajas $cajas)
+    {
+        $this->entradas = $entradas;
+        $this->cajas = $cajas;
+    }
 
     public $validationRules = [
         'proveedor_id' => 'required|integer|min:1',
@@ -57,32 +67,15 @@ class EntradaController extends Controller
      */
     public function store(Request $request)
     {
+        //Validación de la factibilidad de la transacción
         $request->validate($this->validationRules, $this->customMessages);
-        $entrada = new Entrada();
-        $entrada->fechapago = $request->fechapago;
-        $entrada->proveedor()->associate(Proveedor::findOrFail($request->proveedor_id));
-        $entrada->empleado()->associate(auth()->user());
-        $entrada->save();
-        $costo = 0;
         foreach ($request->productos_entrada as $producto) {
             if (empty($producto["cantidad"]) || empty($producto["costo"])) {
-                throw ValidationException::withMessages(['productos_entrada' => 'La tabla de productos de la entrada debe contener productos con sus respectivas cantidades y costos',]);
+                throw ValidationException::withMessages(['productos_entrada' => 'La tabla de productos de la entrada debe contener productos con sus respectivas cantidades y costos']);
             }
-            $entrada->productos()->attach($producto["id"], ['cantidad' => $producto["cantidad"], 'costo' => $producto["costo"]]);
-            $productoActual = Producto::findOrFail($producto["id"]);
-            $productoActual->costo = $producto["costo"] / $producto["cantidad"];
-            $precio = $productoActual->costo * (1 + $productoActual->utilidad / 100);
-            $productoActual->precio = $precio;
-            if ($productoActual->categoria == ProductoTipo::UNITARIO) {
-                $productoActual->stock = $productoActual->stock + $producto["cantidad"];
-            } elseif ($productoActual->categoria == ProductoTipo::GRANEL) {
-                $productoActual->stock = $productoActual->stock + ($producto["cantidad"] * 1000);
-            }
-            $productoActual->save();
-            $costo += $producto["costo"];
         }
-        $entrada->valor = $costo;
-        $entrada->save();
+        // Ejecución de la transacción
+        $this->entradas->store($request);
         return response()->json([
             'msg' => '¡Entrada registrada!',
         ]);
@@ -96,18 +89,53 @@ class EntradaController extends Controller
      */
     public function pagar(Request $request)
     {
+        //Validación de la factibilidad de la transacción
         $request->validate($this->validationIdRule);
         $entrada = Entrada::findOrFail($request->id);
-        if ($request->parteCrediticia + $request->parteEfectiva != $entrada->valor) {
+        if (!$this->cajas->isMontosPagoValidos($request->parteEfectiva, $request->parteCrediticia, $entrada->valor)) {
             throw ValidationException::withMessages(["valor" => "La suma de los montos a pagar no coincide con el valor de la entrada"]);
         }
-        try {
-            Caja::findOrFail(1)->pagar($entrada, $request->parteEfectiva, $request->parteCrediticia);
-        } catch (FondosInsuficientesException $e) {
-            throw ValidationException::withMessages(["valor" => $e->getMessage()]);
+        $caja = Caja::findOrFail(1);
+        if (!$this->cajas->isPagable($caja, $request->parteEfectiva)) {
+            throw FondosInsuficientesException::withMessages(["valor" => "Operación no realizable, saldo en caja insuficiente"]);
         }
+        // Ejecución de la transacción
+        $this->cajas->pagar($caja, $entrada, $request->parteEfectiva, $request->parteCrediticia);
         return response()->json([
             'msg' => '¡Pago de entrada realizado!',
+        ]);
+    }
+
+
+    /**
+     * Registra y paga una entrada
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function crearPagar(Request $request)
+    {
+        $request->validate($this->validationRules, $this->customMessages);
+        $valor = 0;
+        foreach ($request->productos_entrada as $producto) {
+            if (empty($producto["cantidad"]) || empty($producto["costo"])) {
+                throw ValidationException::withMessages(['productos_entrada' => 'La tabla de productos de la entrada debe contener productos con sus respectivas cantidades y costos']);
+            } else {
+                $valor += $producto["costo"];
+            }
+        }
+        if (!$this->cajas->isMontosPagoValidos($request->parteEfectiva, $request->parteCrediticia, $valor)) {
+            throw ValidationException::withMessages(["valor" => "La suma de los montos a pagar no coincide con el valor de la entrada"]);
+        }
+        $caja = Caja::findOrFail(1);
+        if (!$this->cajas->isPagable($caja, $request->parteEfectiva)) {
+            throw FondosInsuficientesException::withMessages(["valor" => "Operación no realizable, saldo en caja insuficiente"]);
+        }
+
+        $entrada = $this->entradas->store($request);
+        $this->cajas->pagar($caja, $entrada, $request->parteEfectiva, $request->parteCrediticia);
+
+        return response()->json([
+            'msg' => '¡Entrada registrada y pagada!',
         ]);
     }
 
@@ -120,20 +148,17 @@ class EntradaController extends Controller
      */
     public function anular(Request $request)
     {
+        //Validación de la factibilidad de la transacción
         $request->validate($this->validationIdRule);
         $entrada = Entrada::find($request->id);
-
-        foreach ($entrada->productos as $producto) {
-            if ($producto->stock >= $producto->pivot->cantidad) {
-                $producto->stock = $producto->stock - $producto->pivot->cantidad;
-                $producto->save();
-            } else {
-                throw ValidationException::withMessages(["id" => "No se cuenta con las existencias suficientes de " . $producto->nombre . " (" . $producto->id . ") para anular la entrada"]);
-            }
+        if (($problem = $this->entradas->getNoDescontable($entrada)) != null) {
+            throw ValidationException::withMessages(["id" => "No se cuenta con las existencias suficientes de " . $problem . "para anular la entrada"]);
         }
+        // Ejecución de la transacción
+        $this->entradas->anular($entrada);
         if ($entrada->fechapagado != null) {
             $movimiento = $entrada->movimientos->first();
-            Caja::findOrFail(1)->anularPago($entrada, $movimiento->parteEfectiva, $movimiento->parteCrediticia);
+            $this->cajas->anularPago($movimiento->caja, $entrada, $movimiento->parteEfectiva, $movimiento->parteCrediticia);
         }
         $entrada->delete();
         return response()->json([
