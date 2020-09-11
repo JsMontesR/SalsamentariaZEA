@@ -72,7 +72,7 @@ $(document).ready(function () {
                     return btnAgregar;
                 }
             },
-            {data: 'nombre', title: 'Nombre', className: "text-center"},
+            {data: 'nombre', title: 'Nombre', className: "text-center font-weight-bold"},
             {data: 'categoria', title: 'Categoría', className: "text-center"},
             {
                 data: 'costo',
@@ -130,12 +130,12 @@ $(document).ready(function () {
         columns: [
             {data: 'id', title: 'Id', className: "text-center"},
             {data: 'btnEliminar', title: 'Eliminar', className: "text-center", searchable: false,},
-            {data: 'nombre', title: 'Nombre', className: "text-center text-wrap"},
+            {data: 'nombre', title: 'Nombre', className: "text-center font-weight-bold"},
             {data: 'categoria', title: 'Categoría', className: "text-center"},
             {data: 'tipo.nombre', title: 'Tipo', className: "text-center"},
             {
                 data: 'cantidad',
-                title: 'Cantidad (Unidades/Kg)',
+                title: 'Cantidad (Un/Kg)',
                 className: "text-center",
                 render: function (data, type, row, meta) {
                     return renderChange(data, type, row, meta);
@@ -155,21 +155,27 @@ $(document).ready(function () {
 
     function crearFilaDeEntrada(data) {
         let tipoDeCantidad = "";
-        if (data['categoria'] == "Unitario") {
-            tipoDeCantidad = "Cantidad en unidades";
-        } else {
-            tipoDeCantidad = "Cantidad en kilos";
-        }
+        let emoji = "";
+        let activated = "";
         let cantidad = "";
         let costo = "";
+
+        if (data['categoria'] == "Unitario") {
+            tipoDeCantidad = "# de unidades";
+            emoji = "📦";
+        } else {
+            tipoDeCantidad = "# de kilos";
+            emoji = "🌾";
+        }
         if (data['pivot'] != undefined) {
             cantidad = "readonly value=" + data['pivot']['cantidad']
             costo = "readonly value=" + data['pivot']['costo'];
+            activated = "disabled";
         }
         return $.extend({
-            'btnEliminar': "<input name='btn_eliminar_productos_entrada_table' type='button' value='Eliminar' class='btn btn-warning container-fluid'/>",
-            'cantidad': "<div class='form-group mb-1'><input " + cantidad + " id='cantidad_producto_entrada" + cantidad + "' class='form-control' type='number' placeholder='" + tipoDeCantidad + "'/></div>",
-            'costoTotal': "<div class='form-group mb-1'><input " + costo + " id='precio_producto_entrada" + data['id'] + "' class='form-control' type='number' placeholder='Costo total'/></div>"
+            'btnEliminar': "<input " + activated + " name='btn_eliminar_productos_entrada_table' type='button' value='Eliminar' class='btn btn-warning container-fluid'/>",
+            'cantidad': "<div class='input-group mb-1'><div class='input-group-prepend'><span class='input-group-text'>" + emoji + "</span></div><input " + cantidad + " id='cantidad_producto_entrada" + data['id'] + "' class='form-control' type='number' placeholder='" + tipoDeCantidad + "'/></div>",
+            'costoTotal': "<div class='input-group mb-1'><div class='input-group-prepend'><span class='input-group-text'>💵</span></div><input " + costo + " id='precio_producto_entrada" + data['id'] + "' class='form-control' type='number' placeholder='Costo total'/></div>"
         }, data)
     }
 
@@ -185,18 +191,17 @@ $(document).ready(function () {
     $('#recurso tbody').on('click', 'tr', function () {
         limpiarFormulario();
         $(this).addClass('selected');
-        document.getElementById('registrar').disabled = true;
-        document.getElementById('registrarypagar').disabled = true;
-        document.getElementById('pagar').disabled = false;
-        document.getElementById('limpiar').disabled = false;
-        document.getElementById('eliminar').disabled = false;
+        document.getElementById('registrar').hidden = true;
+        document.getElementById('registrarypagar').hidden = true;
+        document.getElementById('pagar').hidden = false;
+        document.getElementById('eliminar').hidden = false;
         let data = table.row(this).data();
         document.getElementById('id').value = data['id'];
         document.getElementById('proveedor_id').value = data['proveedor']['id'];
         document.getElementById('fechapago').value = data['fechapago'];
         document.getElementById('fechapagado').value = data['fechapagado'];
         document.getElementById('valor').value = data['valor'];
-        console.log(data);
+        document.getElementById('fechapago').disabled = true;
         $('#productos_container').hide();
         cargarProductosEntrada(data['productos']);
     });
@@ -232,11 +237,23 @@ $(document).ready(function () {
         productos_entrada_table.row(row).remove().draw();
     }
 
+    function isFilaEnEntrada(newRow) {
+        let data = productos_entrada_table.rows().data();
+        let existe = false;
+        data.each(function (value) {
+            if (value["id"] == newRow["id"]) {
+                existe = true;
+                return false;
+            }
+        });
+        return existe;
+    }
+
     $(document).on('click', '[name="btn_agregar_productos_tabla"]', function () {
         let row = productos_table.row($(this).closest('tr'));
         let data = productos_table.row(row).data();
         let newRow = crearFilaDeEntrada(data);
-        if (!productos_entrada_table.row(newRow).any()) {
+        if (!isFilaEnEntrada(newRow)) {
             productos_entrada_table.row.add(newRow).draw();
             productos_entrada_table.responsive.rebuild();
             productos_entrada_table.responsive.recalc();
@@ -268,7 +285,6 @@ $(document).ready(function () {
                 costo: $('#precio_producto_entrada' + id).val()
             });
         });
-        console.log(arr);
         return arr;
     }
 
@@ -324,11 +340,13 @@ $(document).ready(function () {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        $.post('api/entradas/crear',
+        $.post('api/entradas/crearpagar',
             {
                 proveedor_id: $("#proveedor_id").val(),
                 fechapago: $("#fechapago").val(),
-                productos_entrada: crearEstructuraDeProductos()
+                productos_entrada: crearEstructuraDeProductos(),
+                parteCrediticia: $("#parteCrediticia").val(),
+                parteEfectiva: $("#parteEfectiva").val()
             }, function (data) {
                 swal("¡Operación exitosa!", data.msg, "success");
                 limpiarFormulario()
@@ -351,11 +369,11 @@ $(document).ready(function () {
         $('#recurso tr').removeClass("selected");
         vacearTablaDeProductosEntrada();
         $('#productos_container').show();
-        document.getElementById('pagar').disabled = true;
-        document.getElementById('registrarypagar').disabled = false;
-        document.getElementById('registrar').disabled = false;
-        document.getElementById('limpiar').disabled = true;
-        document.getElementById('eliminar').disabled = true;
+        document.getElementById('pagar').hidden = true;
+        document.getElementById('registrarypagar').hidden = false;
+        document.getElementById('registrar').hidden = false;
+        document.getElementById('eliminar').hidden = true;
+        document.getElementById('fechapago').disabled = false;
     }
 
     $("#limpiar").click(function () {
@@ -385,4 +403,5 @@ $(document).ready(function () {
                 }
             });
     });
+
 });

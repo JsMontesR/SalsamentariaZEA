@@ -136,26 +136,28 @@
 
                 <br>
                 <div class="row btn-toolbar justify-content-center">
-                    <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 py-2">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 py-2">
                         <input id="registrarypagar" type="button" value="Registrar y pagar"
                                class="btn btn-info container-fluid"/>
                     </div>
-                    <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 py-2">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 py-2">
                         <input id="registrar" type="button" value="Registrar"
                                class="btn btn-primary container-fluid"/>
                     </div>
-                    <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 py-2">
-                        <input id="pagar" type="button" disabled value="Pagar"
+                </div>
+                <div class="row btn-toolbar justify-content-center">
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 py-2">
+                        <input id="pagar" type="button" hidden value="Pagar"
                                class="btn btn-success container-fluid"/>
                     </div>
-                    <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 py-2">
-                        <input id="limpiar" type="button" disabled value="Limpiar"
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 py-2">
+                        <input id="limpiar" type="button" value="Limpiar"
                                class="btn btn-light text-dark container-fluid"/>
                     </div>
-                    <div class="col-xl-2 col-lg-6 col-md-6 col-sm-6 py-2">
-                        <input id="eliminar" type="button" disabled value="Eliminar" class="btn btn-danger container-fluid"/>
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 py-2">
+                        <input id="eliminar" type="button"hidden value="Eliminar"
+                               class="btn btn-danger container-fluid"/>
                     </div>
-
                 </div>
 
             </div>

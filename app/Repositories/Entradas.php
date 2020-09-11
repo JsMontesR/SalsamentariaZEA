@@ -55,7 +55,7 @@ class Entradas
     {
         foreach ($entrada->productos as $producto) {
             if ($producto->stock < $producto->pivot->cantidad) {
-                return $producto->nombre . " (" . $producto->id . ")";
+                return $producto->nombre . " (Con el id: " . $producto->id . ")";
             }
         }
         return null;
@@ -68,9 +68,18 @@ class Entradas
     public function anular(Entrada $entrada)
     {
         foreach ($entrada->productos as $producto) {
-            $producto->stock = $producto->stock - $producto->pivot->cantidad;
+            if ($producto->categoria == ProductoTipo::UNITARIO) {
+                $producto->stock = $producto->stock - $producto->pivot->cantidad;
+            } elseif ($producto->categoria == ProductoTipo::GRANEL) {
+                $producto->stock = $producto->stock - ($producto->pivot->cantidad * 1000);
+            }
             $producto->save();
         }
+    }
+
+    public function isEntradaPagable(Entrada $entrada)
+    {
+        return $entrada->fechapagado == null;
     }
 }
 

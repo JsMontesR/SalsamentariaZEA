@@ -92,6 +92,9 @@ class EntradaController extends Controller
         //Validación de la factibilidad de la transacción
         $request->validate($this->validationIdRule);
         $entrada = Entrada::findOrFail($request->id);
+        if(!$this->entradas->isEntradaPagable($entrada)){
+            throw ValidationException::withMessages(["valor" => "La entrada seleccionada ya fue pagada"]);
+        }
         if (!$this->cajas->isMontosPagoValidos($request->parteEfectiva, $request->parteCrediticia, $entrada->valor)) {
             throw ValidationException::withMessages(["valor" => "La suma de los montos a pagar no coincide con el valor de la entrada"]);
         }
@@ -152,7 +155,7 @@ class EntradaController extends Controller
         $request->validate($this->validationIdRule);
         $entrada = Entrada::find($request->id);
         if (($problem = $this->entradas->getNoDescontable($entrada)) != null) {
-            throw ValidationException::withMessages(["id" => "No se cuenta con las existencias suficientes de " . $problem . "para anular la entrada"]);
+            throw ValidationException::withMessages(["id" => "No se cuenta con las existencias suficientes de " . $problem . " para anular la entrada"]);
         }
         // Ejecución de la transacción
         $this->entradas->anular($entrada);
@@ -162,7 +165,7 @@ class EntradaController extends Controller
         }
         $entrada->delete();
         return response()->json([
-            'msg' => '¡Pago de nomina anulado!',
+            'msg' => '¡Entrada anulada!',
         ]);
     }
 }
