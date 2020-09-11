@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Caja;
 use App\Entrada;
 use App\Exceptions\FondosInsuficientesException;
-use App\Producto;
-use App\ProductoTipo;
+use App\Movimiento;
 use App\Repositories\Cajas;
 use App\Repositories\Entradas;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
 
@@ -60,6 +60,19 @@ class EntradaController extends Controller
     }
 
     /**
+     * Return list of pagos associated to the resource in storage.
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+
+    public function pagos($id)
+    {
+        return datatables(Movimiento::query()->whereHasMorph('movimientoable', ['App\Entrada'], function (Builder $query) use ($id) {
+            $query->where('movimientoable_id', '=', $id);
+        }))->toJson();
+    }
+
+    /**
      * Registra una entrada.
      *
      * @param \Illuminate\Http\Request $request
@@ -92,7 +105,7 @@ class EntradaController extends Controller
         //Validación de la factibilidad de la transacción
         $request->validate($this->validationIdRule);
         $entrada = Entrada::findOrFail($request->id);
-        if(!$this->entradas->isEntradaPagable($entrada)){
+        if (!$this->entradas->isEntradaPagable($entrada)) {
             throw ValidationException::withMessages(["valor" => "La entrada seleccionada ya fue pagada"]);
         }
         if (!$this->cajas->isMontosPagoValidos($request->parteEfectiva, $request->parteCrediticia, $entrada->valor)) {
@@ -117,6 +130,7 @@ class EntradaController extends Controller
      */
     public function crearPagar(Request $request)
     {
+        //Validación de la factibilidad de la transacción
         $request->validate($this->validationRules, $this->customMessages);
         $valor = 0;
         foreach ($request->productos_entrada as $producto) {
@@ -133,7 +147,7 @@ class EntradaController extends Controller
         if (!$this->cajas->isPagable($caja, $request->parteEfectiva)) {
             throw FondosInsuficientesException::withMessages(["valor" => "Operación no realizable, saldo en caja insuficiente"]);
         }
-
+        // Ejecución de la transacción
         $entrada = $this->entradas->store($request);
         $this->cajas->pagar($caja, $entrada, $request->parteEfectiva, $request->parteCrediticia);
 
@@ -158,12 +172,11 @@ class EntradaController extends Controller
             throw ValidationException::withMessages(["id" => "No se cuenta con las existencias suficientes de " . $problem . " para anular la entrada"]);
         }
         // Ejecución de la transacción
-        $this->entradas->anular($entrada);
         if ($entrada->fechapagado != null) {
             $movimiento = $entrada->movimientos->first();
             $this->cajas->anularPago($movimiento->caja, $entrada, $movimiento->parteEfectiva, $movimiento->parteCrediticia);
         }
-        $entrada->delete();
+        $this->entradas->anular($entrada);
         return response()->json([
             'msg' => '¡Entrada anulada!',
         ]);

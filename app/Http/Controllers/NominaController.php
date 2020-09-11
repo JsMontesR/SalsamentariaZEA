@@ -5,14 +5,22 @@ namespace App\Http\Controllers;
 use App\Caja;
 use App\Exceptions\FondosInsuficientesException;
 use App\Nomina;
-use App\User;
+use App\Repositories\Cajas;
+use App\Repositories\Nominas;
 use Illuminate\Http\Request;
-use DB;
-use Exception;
-use Illuminate\Validation\ValidationException;
 
 class NominaController extends Controller
 {
+
+    protected $nominas;
+    protected $cajas;
+
+    public function __construct(Nominas $nominas, Cajas $cajas)
+    {
+        $this->nominas = $nominas;
+        $this->cajas = $cajas;
+    }
+
 
     public $validationRules = [
         'empleado_id' => 'required|integer|min:1',
@@ -38,15 +46,18 @@ class NominaController extends Controller
      */
     public function pay(Request $request)
     {
+
+        //Validación de la factibilidad de la transacción
         $request->validate($this->validationRules);
-        $nomina = new Nomina();
-        $nomina->empleado()->associate(User::findOrFail($request->empleado_id));
-        $nomina->valor = $request->parteCrediticia + $request->parteEfectiva;
-        try {
-            Caja::findOrFail(1)->pagar($nomina, $request->parteEfectiva, $request->parteCrediticia);
-        } catch (FondosInsuficientesException $e) {
-            throw ValidationException::withMessages(["valor" => $e->getMessage()]);
+        $caja = Caja::findOrFail(1);
+        if (!$this->cajas->isPagable($caja, $request->parteEfectiva)) {
+            throw FondosInsuficientesException::withMessages(["valor" => "Operación no realizable, saldo en caja insuficiente"]);
         }
+
+        // Ejecución de la transacción
+        $nomina = $this->nominas->store($request);
+        $this->cajas->pagar($caja, $nomina, $request->parteEfectiva, $request->parteCrediticia);
+
         return response()->json([
             'msg' => '¡Pago de nómina realizado!',
         ]);
@@ -71,11 +82,15 @@ class NominaController extends Controller
      */
     public function undoPay(Request $request)
     {
+        //Validación de la factibilidad de la transacción
         $request->validate($this->validationRules);
+
+        // Ejecución de la transacción
         $nomina = Nomina::find($request->id);
         $movimiento = $nomina->movimientos->first();
-        Caja::findOrFail(1)->anularPago($nomina, $movimiento->parteEfectiva, $movimiento->parteCrediticia);
-        $nomina->delete();
+        $this->cajas->anularPago($movimiento->caja, $nomina, $movimiento->parteEfectiva, $movimiento->parteCrediticia);
+        $this->nominas->anular($nomina);
+
         return response()->json([
             'msg' => '¡Pago de nomina anulado!',
         ]);

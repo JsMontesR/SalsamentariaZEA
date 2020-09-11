@@ -17,7 +17,7 @@ class Cajas
      */
     public function isMontosPagoValidos($parteEfectiva, $parteCrediticia, $valor)
     {
-        return $parteCrediticia + $parteEfectiva == $valor;
+        return $parteCrediticia + $parteEfectiva <= $valor;
     }
 
     /**
@@ -36,14 +36,23 @@ class Cajas
         $caja->saldo = $caja->saldo - $parteEfectiva;
         $caja->save();
         $caja->refresh();
-        if ($movimientoable instanceof Entrada) {
+        if ($movimientoable instanceof Entrada && $this->isDeudaAPaz($movimientoable, $nuevoMovimiento)) {
             $movimientoable->fechapagado = now();
+            $movimientoable->save();
+            $movimientoable->refresh();
         }
-        $movimientoable->save();
-        $movimientoable->refresh();
         $nuevoMovimiento->caja()->associate($caja);
         $nuevoMovimiento->movimientoable()->associate($movimientoable);
         $nuevoMovimiento->save();
+    }
+
+    public function isDeudaAPaz($movimientoable, Movimiento $nuevoMovimiento)
+    {
+        $ponderado = 0;
+        foreach ($movimientoable->movimientos as $movimiento) {
+            $ponderado += $movimiento->parteEfectiva + $movimiento->parteCrediticia;
+        }
+        return $ponderado + $nuevoMovimiento->parteEfectiva + $nuevoMovimiento->parteCrediticia == $movimientoable->valor;
     }
 
     /**

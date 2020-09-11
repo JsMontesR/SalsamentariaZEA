@@ -6,7 +6,6 @@ use App\Entrada;
 use App\Producto;
 use App\ProductoTipo;
 use App\Proveedor;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
 
 class Entradas
@@ -47,7 +46,7 @@ class Entradas
 
 
     /**
-     * Verifica cual producto de una entrada no es descontabel del inventario
+     * Verifica cual producto de una entrada no es descontable del inventario
      * @param Entrada $entrada
      * @return bool|string
      */
@@ -75,6 +74,7 @@ class Entradas
             }
             $producto->save();
         }
+        $entrada->delete();
     }
 
     public function isEntradaPagable(Entrada $entrada)

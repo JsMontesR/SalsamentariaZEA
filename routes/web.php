@@ -75,6 +75,7 @@ Route::prefix('api')->group(function(){
     // Procesamiento de entradas
     Route::prefix('entradas')->group(function(){
         Route::get('listar', 'EntradaController@list')->middleware('auth');
+        Route::get('{id}/pagos', 'EntradaController@pagos')->middleware('auth');
         Route::post('crear', 'EntradaController@store')->middleware('auth');
         Route::post('crearpagar', 'EntradaController@crearPagar')->middleware('auth');
         Route::post('pagar', 'EntradaController@pagar')->middleware('auth');

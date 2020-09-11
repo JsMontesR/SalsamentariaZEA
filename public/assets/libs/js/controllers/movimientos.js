@@ -24,20 +24,42 @@ $(document).ready(function () {
                     }
                 }
             },
+            {data: 'movimientoable_id', title: 'No. de movimiento', className: "text-center"},
             {
                 data: 'movimientoable_type',
                 title: 'Operación realizada',
                 className: "text-center",
-                render: function (data) {
+                render: function (data, type, row) {
+                    let msg = "";
                     switch (data) {
                         case "App\\Entrada":
-                            return '<i class="fas fa-dolly"></i><br>Entrada a inventario';
+                            if (row["tipo"] == "Ingreso") {
+                                msg = "Devolución de entrada";
+                            } else if (row["tipo"] == "Egreso") {
+                                msg = "Entrada a inventario";
+                            }
+                            return '<i class="fas fa-dolly"></i><br>' + msg;
                         case "App\\Retiro":
-                            return '<i class="fas fa-sign-out-alt"></i><br>Retiro de inventario';
+                            if (row["tipo"] == "Ingreso") {
+                                msg = "Devolución de retiro";
+                            } else if (row["tipo"] == "Egreso") {
+                                msg = "Retiro de inventario";
+                            }
+                            return '<i class="fas fa-sign-out-alt"></i><br>' + msg;
                         case "App\\Venta":
-                            return '<i class="fas fa-shopping-cart"></i><br>Venta';
+                            if (row["tipo"] == "Ingreso") {
+                                msg = "Venta";
+                            } else if (row["tipo"] == "Egreso") {
+                                msg = "Devolución de venta";
+                            }
+                            return '<i class="fas fa-shopping-cart"></i><br>' + msg;
                         case "App\\Nomina":
-                            return '<i class="fas fa-hand-holding-usd"></i><br>Pago de nómina';
+                            if (row["tipo"] == "Ingreso") {
+                                msg = "Devolución de nómina";
+                            } else if (row["tipo"] == "Egreso") {
+                                msg = "Pago de nómina";
+                            }
+                            return '<i class="fas fa-hand-holding-usd"></i><br>' + msg;
                     }
                 }
             },
@@ -61,7 +83,8 @@ $(document).ready(function () {
                 render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
             },
             {data: 'created_at', title: 'Fecha de creación', className: "text-center"}
-        ]
+        ],
+        order: [[0, "desc"]]
     }, options));
 
 });

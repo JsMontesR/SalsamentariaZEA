@@ -193,14 +193,14 @@ $(document).ready(function () {
         $(this).addClass('selected');
         document.getElementById('registrar').hidden = true;
         document.getElementById('registrarypagar').hidden = true;
-        document.getElementById('pagar').hidden = false;
+        document.getElementById('verpagos').hidden = false;
         document.getElementById('eliminar').hidden = false;
         let data = table.row(this).data();
         document.getElementById('id').value = data['id'];
         document.getElementById('proveedor_id').value = data['proveedor']['id'];
         document.getElementById('fechapago').value = data['fechapago'];
         document.getElementById('fechapagado').value = data['fechapagado'];
-        document.getElementById('valor').value = data['valor'];
+        $('[name="valor"]').val(data['valor'])
         document.getElementById('fechapago').disabled = true;
         $('#productos_container').hide();
         cargarProductosEntrada(data['productos']);
@@ -288,28 +288,28 @@ $(document).ready(function () {
         return arr;
     }
 
-    $("#pagar").click(function () {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.post('api/entradas/pagar',
-            {
-                id: $("#id").val(),
-                parteCrediticia: $("#parteCrediticia").val(),
-                parteEfectiva: $("#parteEfectiva").val()
-            }, function (data) {
-                swal("¡Operación exitosa!", data.msg, "success");
-                limpiarFormulario()
-                table.ajax.reload();
-            }).fail(function (err) {
-            $.each(err.responseJSON.errors, function (i, error) {
-                toastr.error(error[0]);
-            });
-            console.error(err);
-        })
-    });
+    // $("#pagar").click(function () {
+    //     $.ajaxSetup({
+    //         headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //         }
+    //     });
+    //     $.post('api/entradas/pagar',
+    //         {
+    //             id: $("#id").val(),
+    //             parteCrediticia: $("#parteCrediticia").val(),
+    //             parteEfectiva: $("#parteEfectiva").val()
+    //         }, function (data) {
+    //             swal("¡Operación exitosa!", data.msg, "success");
+    //             limpiarFormulario()
+    //             table.ajax.reload();
+    //         }).fail(function (err) {
+    //         $.each(err.responseJSON.errors, function (i, error) {
+    //             toastr.error(error[0]);
+    //         });
+    //         console.error(err);
+    //     })
+    // });
 
     $("#registrar").click(function () {
         $.ajaxSetup({
@@ -334,30 +334,30 @@ $(document).ready(function () {
         })
     });
 
-    $("#registrarypagar").click(function () {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.post('api/entradas/crearpagar',
-            {
-                proveedor_id: $("#proveedor_id").val(),
-                fechapago: $("#fechapago").val(),
-                productos_entrada: crearEstructuraDeProductos(),
-                parteCrediticia: $("#parteCrediticia").val(),
-                parteEfectiva: $("#parteEfectiva").val()
-            }, function (data) {
-                swal("¡Operación exitosa!", data.msg, "success");
-                limpiarFormulario()
-                table.ajax.reload();
-            }).fail(function (err) {
-            $.each(err.responseJSON.errors, function (i, error) {
-                toastr.error(error[0]);
-            });
-            console.error(err);
-        })
-    });
+    // $("#registrarypagar").click(function () {
+    //     $.ajaxSetup({
+    //         headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //         }
+    //     });
+    //     $.post('api/entradas/crearpagar',
+    //         {
+    //             proveedor_id: $("#proveedor_id").val(),
+    //             fechapago: $("#fechapago").val(),
+    //             productos_entrada: crearEstructuraDeProductos(),
+    //             parteCrediticia: $("#parteCrediticia").val(),
+    //             parteEfectiva: $("#parteEfectiva").val()
+    //         }, function (data) {
+    //             swal("¡Operación exitosa!", data.msg, "success");
+    //             limpiarFormulario()
+    //             table.ajax.reload();
+    //         }).fail(function (err) {
+    //         $.each(err.responseJSON.errors, function (i, error) {
+    //             toastr.error(error[0]);
+    //         });
+    //         console.error(err);
+    //     })
+    // });
 
 
     function limpiarFormulario() {
@@ -369,7 +369,7 @@ $(document).ready(function () {
         $('#recurso tr').removeClass("selected");
         vacearTablaDeProductosEntrada();
         $('#productos_container').show();
-        document.getElementById('pagar').hidden = true;
+        document.getElementById('verpagos').hidden = true;
         document.getElementById('registrarypagar').hidden = false;
         document.getElementById('registrar').hidden = false;
         document.getElementById('eliminar').hidden = true;
