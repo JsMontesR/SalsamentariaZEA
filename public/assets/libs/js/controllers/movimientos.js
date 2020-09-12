@@ -27,7 +27,7 @@ $(document).ready(function () {
             {data: 'movimientoable_id', title: 'No. de movimiento', className: "text-center"},
             {
                 data: 'movimientoable_type',
-                title: 'Operación realizada',
+                title: 'Operación asociada',
                 className: "text-center",
                 render: function (data, type, row) {
                     let msg = "";

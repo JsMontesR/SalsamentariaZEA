@@ -229,8 +229,7 @@
                     </div>
                     <div class="modal-footer">
                         <input id="pagar" type="button" value="Pagar"
-                               class="btn btn-success container-fluid" data-toggle="modal"
-                               data-target="#modalMovimientos"/>
+                               class="btn btn-success container-fluid"/>
                         <input id="anularpago" type="button" value="Reversar"
                                class="btn btn-danger container-fluid"/>
                         <input id="limpiarmodal" type="button" value="Limpiar"
