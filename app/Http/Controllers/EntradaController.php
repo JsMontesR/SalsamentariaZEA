@@ -56,7 +56,24 @@ class EntradaController extends Controller
 
     public function list()
     {
-        return datatables(Entrada::query()->with(['empleado', 'proveedor', 'productos']))->toJson();
+        return datatables(Entrada::query()->with(['empleado', 'proveedor', 'productos'])
+        )->addColumn("saldo", function (Entrada $entrada) {
+            $abonos = 0;
+            foreach ($entrada->movimientos as $movimiento) {
+                if ($movimiento->tipo == Movimiento::EGRESO)
+                    $abonos += $movimiento->parteEfectiva + $movimiento->parteCrediticia;
+            }
+            return $entrada->valor - $abonos;
+        })
+//        ->filterColumn('saldo', function ($query, $keyword){
+//            $abonos = 0;
+//            foreach ($entrada->movimientos as $movimiento) {
+//                if ($movimiento->tipo == Movimiento::EGRESO)
+//                    $abonos += $movimiento->parteEfectiva + $movimiento->parteCrediticia;
+//            }
+//            $query->where($v, 'like', '%' . $keyword . '%');
+//        })
+            ->toJson();
     }
 
     /**
@@ -69,7 +86,9 @@ class EntradaController extends Controller
     {
         return datatables(Movimiento::query()->whereHasMorph('movimientoable', ['App\Entrada'], function (Builder $query) use ($id) {
             $query->where('movimientoable_id', '=', $id);
-        }))->toJson();
+        }))->addColumn("total", function (Movimiento $movimiento) {
+            return $movimiento->parteEfectiva + $movimiento->parteCrediticia;
+        })->toJson();
     }
 
     /**

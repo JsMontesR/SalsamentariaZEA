@@ -50,7 +50,8 @@ class Cajas
     {
         $ponderado = 0;
         foreach ($movimientoable->movimientos as $movimiento) {
-            $ponderado += $movimiento->parteEfectiva + $movimiento->parteCrediticia;
+            if ($movimiento->tipo == Movimiento::EGRESO)
+                $ponderado += $movimiento->parteEfectiva + $movimiento->parteCrediticia;
         }
         return $ponderado + $nuevoMovimiento->parteEfectiva + $nuevoMovimiento->parteCrediticia == $movimientoable->valor;
     }

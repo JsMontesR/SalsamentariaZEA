@@ -52,8 +52,14 @@ $(document).ready(function () {
             {data: 'fechapagado', title: 'Fecha de pago', className: "text-center"},
             {data: 'fechapago', title: 'Fecha límite de pago', className: "text-center"},
             {
+                data: 'saldo',
+                title: 'Saldo por pagar',
+                className: "text-center",
+                render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
+            },
+            {
                 data: 'valor',
-                title: 'Valor',
+                title: 'Valor de la entrada',
                 className: "text-center",
                 render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
             },
@@ -460,7 +466,7 @@ $(document).ready(function () {
                 parteEfectiva: $("#parteEfectiva").val()
             }, function (data) {
                 pagos_table.ajax.reload();
-                $("#recurso").ajax.reload();
+                table.ajax.reload();
                 limpiarFormularioModal()
                 swal("¡Operación exitosa!", data.msg, "success");
             }).fail(function (err) {

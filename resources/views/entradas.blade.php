@@ -244,6 +244,5 @@
         </div>
     </div>
     <script src="{{ asset('assets/libs/js/controllers/entradas.js') }}"></script>
-    <script src="{{ asset('assets/libs/js/controllers/pagos.js') }}"></script>
 @endsection
 
