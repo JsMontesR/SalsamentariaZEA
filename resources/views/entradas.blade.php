@@ -163,6 +163,17 @@
 
                     <div class="container-fluid">
                         <div class="form-group row py-2">
+                            <label class="col-form-label text-md-left">Id del movimiento:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">#</span>
+                                </div>
+                                <input id="idpago" type="number" readonly="readonly"
+                                       class="form-control"
+                                       name="idpago">
+                            </div>
+                        </div>
+                        <div class="form-group row py-2">
                             <label class="col-form-label text-md-left">Valor total:</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
@@ -214,7 +225,7 @@
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 p-3">
                         <div class="card shadow mb-4 form-control">
                             <table id="pagos_table"
-                                   class="table table-bordered dt-responsive table-hover"
+                                   class="table table-bordered dt-responsive table-hover row-cursor-hand"
                                    style="width:100%">
                                 <tbody>
                                 </tbody>

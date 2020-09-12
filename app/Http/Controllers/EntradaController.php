@@ -106,10 +106,10 @@ class EntradaController extends Controller
         $request->validate($this->validationIdRule);
         $entrada = Entrada::findOrFail($request->id);
         if (!$this->entradas->isEntradaPagable($entrada)) {
-            throw ValidationException::withMessages(["valor" => "La entrada seleccionada ya fue pagada"]);
+            throw ValidationException::withMessages(["valor" => "La entrada seleccionada ya fue pagada en su totalidad"]);
         }
         if (!$this->cajas->isMontosPagoValidos($request->parteEfectiva, $request->parteCrediticia, $entrada->valor)) {
-            throw ValidationException::withMessages(["valor" => "La suma de los montos a pagar no coincide con el valor de la entrada"]);
+            throw ValidationException::withMessages(["valor" => "La suma de los montos a pagar es superior al valor a pagar"]);
         }
         $caja = Caja::findOrFail(1);
         if (!$this->cajas->isPagable($caja, $request->parteEfectiva)) {
