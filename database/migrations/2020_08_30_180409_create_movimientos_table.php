@@ -20,7 +20,8 @@ class CreateMovimientosTable extends Migration
             $table->unsignedBigInteger('movimientoable_id');
             $table->string('tipo')->default("Ingreso");
             $table->string('movimientoable_type');
-            $table->timestamps();
+            $table->softDeletes();
+            $table->timestamp('created_at');
         });
     }
 

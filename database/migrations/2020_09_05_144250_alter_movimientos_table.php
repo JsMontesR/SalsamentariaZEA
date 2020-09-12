@@ -16,6 +16,9 @@ class AlterMovimientosTable extends Migration
         Schema::table('movimientos', function (Blueprint $table) {
             $table->unsignedBigInteger('caja_id');
             $table->foreign('caja_id')->references('id')->on('cajas')->onDelete('cascade');
+            $table->unsignedBigInteger('empleado_id');
+            $table->foreign('empleado_id')->references('id')->on('users')->onDelete('cascade');
+
         });
     }
 
@@ -29,7 +32,8 @@ class AlterMovimientosTable extends Migration
         Schema::table('movimientos', function (Blueprint $table) {
             $table->dropForeign(['caja_id']);
             $table->dropColumn('caja_id');
+            $table->dropForeign(['empleado_id']);
+            $table->dropColumn('empleado_id');
         });
     }
-
 }

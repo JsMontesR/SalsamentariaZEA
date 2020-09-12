@@ -63,6 +63,11 @@ class User extends Authenticatable
         return $this->hasMany('App\Nomina','empleado_id');
     }
 
+    public function movimientos()
+    {
+        return $this->hasMany('App\Movimiento','empleado_id');
+    }
+
     /**
      * Prepare a date for array / JSON serialization.
      *

@@ -15,9 +15,9 @@ class Cajas
      * @param $valor
      * @return bool
      */
-    public function isMontosPagoValidos($parteEfectiva, $parteCrediticia, $valor)
+    public function isMontosPagoValidos($parteEfectiva, $parteCrediticia, $saldo)
     {
-        return $parteCrediticia + $parteEfectiva <= $valor;
+        return $parteCrediticia + $parteEfectiva <= $saldo;
     }
 
     /**
@@ -33,11 +33,15 @@ class Cajas
         $nuevoMovimiento->parteEfectiva = $parteEfectiva == null ? 0 : $parteEfectiva;
         $nuevoMovimiento->parteCrediticia = $parteCrediticia == null ? 0 : $parteCrediticia;
         $nuevoMovimiento->tipo = Movimiento::EGRESO;
+        $nuevoMovimiento->empleado()->associate(auth()->user());
         $caja->saldo = $caja->saldo - $parteEfectiva;
         $caja->save();
         $caja->refresh();
-        if ($movimientoable instanceof Entrada && $this->isDeudaAPaz($movimientoable, $nuevoMovimiento)) {
-            $movimientoable->fechapagado = now();
+        if ($movimientoable instanceof Entrada) {
+            $this->actualizarSaldo($movimientoable, $nuevoMovimiento);
+            if ($movimientoable->saldo == 0) {
+                $movimientoable->fechapagado = now();
+            };
             $movimientoable->save();
             $movimientoable->refresh();
         }
@@ -46,14 +50,34 @@ class Cajas
         $nuevoMovimiento->save();
     }
 
-    public function isDeudaAPaz($movimientoable, Movimiento $nuevoMovimiento)
+    /**
+     * Actualiza el saldo de una entrada sin guardarlo en BD
+     * @param Entrada $entrada
+     */
+
+    public function actualizarSaldo($movimientoable, $nuevoMovimiento)
     {
         $ponderado = 0;
         foreach ($movimientoable->movimientos as $movimiento) {
-            if ($movimiento->tipo == Movimiento::EGRESO)
+            if ($movimiento->tipo == Movimiento::EGRESO) {
                 $ponderado += $movimiento->parteEfectiva + $movimiento->parteCrediticia;
+            } else if ($movimiento->tipo == Movimiento::INGRESO) {
+                $ponderado -= $movimiento->parteEfectiva + $movimiento->parteCrediticia;
+            }
         }
-        return $ponderado + $nuevoMovimiento->parteEfectiva + $nuevoMovimiento->parteCrediticia == $movimientoable->valor;
+        if ($nuevoMovimiento->tipo == Movimiento::EGRESO) {
+            $movimientoable->saldo = $movimientoable->valor - ($ponderado + $nuevoMovimiento->parteEfectiva + $nuevoMovimiento->parteCrediticia);
+        } else if ($nuevoMovimiento->tipo == Movimiento::INGRESO) {
+            $movimientoable->saldo = $movimientoable->valor - ($ponderado - $nuevoMovimiento->parteEfectiva - $nuevoMovimiento->parteCrediticia);
+        }
+
+    }
+
+    public function anularTodosLosPagos($movimientoable)
+    {
+        foreach ($movimientoable->movimientos as $movimiento) {
+            $this->anularPago($movimiento);
+        }
     }
 
     /**
@@ -63,18 +87,31 @@ class Cajas
      * @param $parteEfectiva
      * @param $parteCrediticia
      */
-    public function anularPago(Caja $caja, $movimientoable, $parteEfectiva, $parteCrediticia)
+    public function anularPago($movimiento, $parteEfectiva = null, $parteCrediticia = null)
     {
+        $movimientoable = $movimiento->movimientoable;
+        $caja = $movimiento->caja;
         $nuevoMovimiento = new Movimiento();
-        $nuevoMovimiento->parteEfectiva = $parteEfectiva == null ? 0 : $parteEfectiva;
+        $nuevoMovimiento->parteEfectiva = $parteEfectiva == null ? $movimiento->parteEfectiva : $parteEfectiva;
+        $nuevoMovimiento->parteCrediticia = $parteCrediticia == null ? $movimiento->parteCrediticia : $parteCrediticia;
         $nuevoMovimiento->tipo = Movimiento::INGRESO;
-        $nuevoMovimiento->parteCrediticia = $parteCrediticia == null ? 0 : $parteCrediticia;
+        $nuevoMovimiento->empleado()->associate(auth()->user());
         $caja->saldo = $caja->saldo + $parteEfectiva;
         $caja->save();
         $caja->refresh();
+        if ($movimientoable instanceof Entrada) {
+            if ($movimientoable->saldo == 0) {
+                $movimientoable->fechapagado = null;
+            };
+            $this->actualizarSaldo($movimientoable, $nuevoMovimiento);
+            $movimientoable->save();
+            $movimientoable->refresh();
+        }
         $nuevoMovimiento->caja()->associate($caja);
         $nuevoMovimiento->movimientoable()->associate($movimientoable);
         $nuevoMovimiento->save();
+        $movimiento->delete();
+
     }
 
     public function isPagable($caja, $parteEfectiva)

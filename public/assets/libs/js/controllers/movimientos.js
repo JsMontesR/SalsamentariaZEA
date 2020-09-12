@@ -63,7 +63,7 @@ $(document).ready(function () {
                     }
                 }
             },
-            {data: 'empleado', title: 'Empleado que realizó el movimiento', className: "text-center"},
+            {data: 'empleado.name', title: 'Empleado que realizó el movimiento', className: "text-center"},
             {
                 data: 'parteEfectiva',
                 title: 'Parte efectiva',

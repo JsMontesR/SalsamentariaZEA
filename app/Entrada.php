@@ -10,27 +10,33 @@ class Entrada extends Model
 {
     use SoftDeletes;
 
+    protected $guarded = ["id"];
+
+
     public function productos()
     {
-        return $this->belongsToMany('App\Producto')->withPivot('cantidad','costo');
+        return $this->belongsToMany('App\Producto')->withPivot('cantidad', 'costo');
     }
+
     public function empleado()
     {
         return $this->belongsTo('App\User');
     }
+
     public function proveedor()
     {
         return $this->belongsTo('App\Proveedor');
     }
 
-    public function movimientos(){
-        return $this->morphMany(Movimiento::class,'movimientoable');
+    public function movimientos()
+    {
+        return $this->morphMany(Movimiento::class, 'movimientoable');
     }
 
     /**
      * Prepare a date for array / JSON serialization.
      *
-     * @param  \DateTimeInterface  $date
+     * @param \DateTimeInterface $date
      * @return string
      */
     protected function serializeDate(DateTimeInterface $date)

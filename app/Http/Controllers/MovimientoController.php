@@ -2,16 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Entrada;
+
 use App\Movimiento;
-use App\Nomina;
-use App\Retiro;
-use App\Venta;
+use App\Repositories\Cajas;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Http\Request;
+
 
 class MovimientoController extends Controller
 {
+    protected $cajas;
+
+    public function __construct(Cajas $cajas)
+    {
+        $this->cajas = $cajas;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -23,27 +29,37 @@ class MovimientoController extends Controller
     }
 
     /**
+     * Registra una entrada.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function anularPago(Request $request)
+    {
+        //Validación de la factibilidad de la transacción
+        $movimiento = Movimiento::findOrFail($request->id);
+
+        // Ejecución de la transacción
+        $this->cajas->anularPago($movimiento);
+        return response()->json([
+            'msg' => '¡Pago anulado!',
+        ]);
+    }
+
+
+    /**
      * Retrive a list of the resource in storage.
      *
      * @return \Illuminate\Http\JsonResponse
      */
     public function list()
     {
-        return datatables()->eloquent(Movimiento::query()
+        return datatables()->eloquent(Movimiento::query()->with('empleado')->withTrashed()
         )->addColumn('valor', function (Movimiento $movimiento) {
             return $movimiento->movimientoable->valor;
-        })->addColumn('empleado', function (Movimiento $movimiento) {
-            return $movimiento->movimientoable->empleado->name;
         })->filterColumn('valor', function ($query, $keyword) {
             $movimientos = Movimiento::whereHasMorph('movimientoable', "*", function ($subquery) use ($keyword) {
                 $subquery->where('valor', 'like', '%' . $keyword . '%')->withTrashed();
-            })->get()->pluck('id')->toArray();
-            $query->whereIn('id', $movimientos);
-        })->filterColumn('empleado', function ($query, $keyword) {
-            $movimientos = Movimiento::whereHasMorph('movimientoable', "*", function (Builder $subquery) use ($keyword) {
-                $subquery
-                    ->join('users','users.id','=','empleado_id')
-                    ->where('users.name', 'like', '%' . $keyword . '%')->withTrashed();
             })->get()->pluck('id')->toArray();
             $query->whereIn('id', $movimientos);
         })->toJson();

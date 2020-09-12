@@ -40,6 +40,7 @@ class Entradas
             $costo += $producto["costo"];
         }
         $entrada->valor = $costo;
+        $entrada->saldo = $costo;
         $entrada->save();
         return $entrada;
     }
@@ -59,6 +60,8 @@ class Entradas
         }
         return null;
     }
+
+
 
     /**
      * Descuenta del inventario los productos de la entrada correspondiente

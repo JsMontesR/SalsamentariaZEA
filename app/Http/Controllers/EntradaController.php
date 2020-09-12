@@ -56,23 +56,7 @@ class EntradaController extends Controller
 
     public function list()
     {
-        return datatables(Entrada::query()->with(['empleado', 'proveedor', 'productos'])
-        )->addColumn("saldo", function (Entrada $entrada) {
-            $abonos = 0;
-            foreach ($entrada->movimientos as $movimiento) {
-                if ($movimiento->tipo == Movimiento::EGRESO)
-                    $abonos += $movimiento->parteEfectiva + $movimiento->parteCrediticia;
-            }
-            return $entrada->valor - $abonos;
-        })
-//        ->filterColumn('saldo', function ($query, $keyword){
-//            $abonos = 0;
-//            foreach ($entrada->movimientos as $movimiento) {
-//                if ($movimiento->tipo == Movimiento::EGRESO)
-//                    $abonos += $movimiento->parteEfectiva + $movimiento->parteCrediticia;
-//            }
-//            $query->where($v, 'like', '%' . $keyword . '%');
-//        })
+        return datatables(Entrada::query()->with(['empleado', 'proveedor', 'productos']))
             ->toJson();
     }
 
@@ -84,11 +68,10 @@ class EntradaController extends Controller
 
     public function pagos($id)
     {
-        return datatables(Movimiento::query()->whereHasMorph('movimientoable', ['App\Entrada'], function (Builder $query) use ($id) {
+        return datatables(Movimiento::query()->with('empleado')->whereHasMorph('movimientoable', ['App\Entrada'], function (Builder $query) use ($id) {
             $query->where('movimientoable_id', '=', $id);
-        }))->addColumn("total", function (Movimiento $movimiento) {
-            return $movimiento->parteEfectiva + $movimiento->parteCrediticia;
-        })->toJson();
+            $query->where('tipo', '=', Movimiento::EGRESO);
+        }))->toJson();
     }
 
     /**
@@ -127,8 +110,8 @@ class EntradaController extends Controller
         if (!$this->entradas->isEntradaPagable($entrada)) {
             throw ValidationException::withMessages(["valor" => "La entrada seleccionada ya fue pagada en su totalidad"]);
         }
-        if (!$this->cajas->isMontosPagoValidos($request->parteEfectiva, $request->parteCrediticia, $entrada->valor)) {
-            throw ValidationException::withMessages(["valor" => "La suma de los montos a pagar es superior al valor a pagar"]);
+        if (!$this->cajas->isMontosPagoValidos($request->parteEfectiva, $request->parteCrediticia, $entrada->saldo)) {
+            throw ValidationException::withMessages(["valor" => "La suma de los montos a pagar es superior al saldo pendiente"]);
         }
         $caja = Caja::findOrFail(1);
         if (!$this->cajas->isPagable($caja, $request->parteEfectiva)) {
@@ -140,41 +123,6 @@ class EntradaController extends Controller
             'msg' => '¡Pago de entrada realizado!',
         ]);
     }
-
-
-    /**
-     * Registra y paga una entrada
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function crearPagar(Request $request)
-    {
-        //Validación de la factibilidad de la transacción
-        $request->validate($this->validationRules, $this->customMessages);
-        $valor = 0;
-        foreach ($request->productos_entrada as $producto) {
-            if (empty($producto["cantidad"]) || empty($producto["costo"])) {
-                throw ValidationException::withMessages(['productos_entrada' => 'La tabla de productos de la entrada debe contener productos con sus respectivas cantidades y costos']);
-            } else {
-                $valor += $producto["costo"];
-            }
-        }
-        if (!$this->cajas->isMontosPagoValidos($request->parteEfectiva, $request->parteCrediticia, $valor)) {
-            throw ValidationException::withMessages(["valor" => "La suma de los montos a pagar no coincide con el valor de la entrada"]);
-        }
-        $caja = Caja::findOrFail(1);
-        if (!$this->cajas->isPagable($caja, $request->parteEfectiva)) {
-            throw FondosInsuficientesException::withMessages(["valor" => "Operación no realizable, saldo en caja insuficiente"]);
-        }
-        // Ejecución de la transacción
-        $entrada = $this->entradas->store($request);
-        $this->cajas->pagar($caja, $entrada, $request->parteEfectiva, $request->parteCrediticia);
-
-        return response()->json([
-            'msg' => '¡Entrada registrada y pagada!',
-        ]);
-    }
-
 
     /**
      * Remove the specified resource from storage.
@@ -192,8 +140,7 @@ class EntradaController extends Controller
         }
         // Ejecución de la transacción
         if ($entrada->fechapagado != null) {
-            $movimiento = $entrada->movimientos->first();
-            $this->cajas->anularPago($movimiento->caja, $entrada, $movimiento->parteEfectiva, $movimiento->parteCrediticia);
+            $this->cajas->anularTodosLosPagos();
         }
         $this->entradas->anular($entrada);
         return response()->json([

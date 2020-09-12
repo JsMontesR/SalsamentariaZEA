@@ -197,16 +197,17 @@ $(document).ready(function () {
     $('#recurso tbody').on('click', 'tr', function () {
         limpiarFormulario();
         $(this).addClass('selected');
-        document.getElementById('registrar').hidden = true;
-        document.getElementById('registrarypagar').hidden = true;
-        document.getElementById('verpagos').hidden = false;
-        document.getElementById('eliminar').hidden = false;
+        document.getElementById('registrar').disabled = true;
+        document.getElementById('verpagos').disabled = false;
+        document.getElementById('eliminar').disabled = false;
         let data = table.row(this).data();
         document.getElementById('id').value = data['id'];
         document.getElementById('proveedor_id').value = data['proveedor']['id'];
         document.getElementById('fechapago').value = data['fechapago'];
         document.getElementById('fechapagado').value = data['fechapagado'];
-        $('[name="valor"]').val(data['valor'])
+        $('[name="valor"]').val(data['valor']);
+        $('[name="saldo"]').val(data['saldo']);
+        $('[name="valorpagado"]').val(data['valor'] - data['saldo']);
         document.getElementById('fechapago').disabled = true;
         $('#productos_container').hide();
         cargarProductosEntrada(data['productos']);
@@ -340,32 +341,6 @@ $(document).ready(function () {
         })
     });
 
-    // $("#registrarypagar").click(function () {
-    //     $.ajaxSetup({
-    //         headers: {
-    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //         }
-    //     });
-    //     $.post('api/entradas/crearpagar',
-    //         {
-    //             proveedor_id: $("#proveedor_id").val(),
-    //             fechapago: $("#fechapago").val(),
-    //             productos_entrada: crearEstructuraDeProductos(),
-    //             parteCrediticia: $("#parteCrediticia").val(),
-    //             parteEfectiva: $("#parteEfectiva").val()
-    //         }, function (data) {
-    //             swal("¡Operación exitosa!", data.msg, "success");
-    //             limpiarFormulario()
-    //             table.ajax.reload();
-    //         }).fail(function (err) {
-    //         $.each(err.responseJSON.errors, function (i, error) {
-    //             toastr.error(error[0]);
-    //         });
-    //         console.error(err);
-    //     })
-    // });
-
-
     function limpiarFormulario() {
         document.getElementById('id').value = "";
         document.getElementById('proveedor_id').value = "";
@@ -375,10 +350,9 @@ $(document).ready(function () {
         $('#recurso tr').removeClass("selected");
         vacearTablaDeProductosEntrada();
         $('#productos_container').show();
-        document.getElementById('verpagos').hidden = true;
-        document.getElementById('registrarypagar').hidden = false;
-        document.getElementById('registrar').hidden = false;
-        document.getElementById('eliminar').hidden = true;
+        document.getElementById('verpagos').disabled = true;
+        document.getElementById('registrar').disabled = false;
+        document.getElementById('eliminar').disabled = true;
         document.getElementById('fechapago').disabled = false;
     }
 
@@ -435,6 +409,7 @@ $(document).ready(function () {
             ajax: 'api/entradas/' + $("#id").val() + '/pagos',
             columns: [
                 {data: 'id', title: 'Id', className: "text-center"},
+                {data: 'empleado.name', title: 'Nombre del empleado', className: "text-center"},
                 {
                     data: 'parteEfectiva',
                     title: 'Parte efectiva',
@@ -468,6 +443,30 @@ $(document).ready(function () {
                 pagos_table.ajax.reload();
                 table.ajax.reload();
                 limpiarFormularioModal()
+                limpiarFormulario();
+                swal("¡Operación exitosa!", data.msg, "success");
+            }).fail(function (err) {
+            $.each(err.responseJSON.errors, function (i, error) {
+                toastr.error(error[0]);
+            });
+            console.error(err);
+        })
+    })
+
+    $("#anularpago").click(function () {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.post('api/movimientos/anularPago',
+            {
+                id: $("#idpago").val(),
+            }, function (data) {
+                pagos_table.ajax.reload();
+                table.ajax.reload();
+                limpiarFormularioModal()
+                limpiarFormulario();
                 swal("¡Operación exitosa!", data.msg, "success");
             }).fail(function (err) {
             $.each(err.responseJSON.errors, function (i, error) {
@@ -485,7 +484,7 @@ $(document).ready(function () {
         $("#idpago").val("");
         $("#parteEfectiva").val("");
         $("#parteCrediticia").val("");
-        $('#recurso tr').removeClass("selected");
+        $('#pagos_table tr').removeClass("selected");
     }
 
     $('#pagos_table tbody').on('click', 'tr', function () {

@@ -4,9 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use DateTimeInterface;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Movimiento extends Model
 {
+    use SoftDeletes;
+
+    const UPDATED_AT = null;
+
     protected $fillable = ["parteCrediticia", "parteEfectiva"];
 
     const INGRESO = "Ingreso";
@@ -15,6 +20,11 @@ class Movimiento extends Model
     public function movimientoable()
     {
         return $this->morphTo()->withTrashed();
+    }
+
+    public function empleado()
+    {
+        return $this->belongsTo('App\User', 'empleado_id');
     }
 
     public function caja()

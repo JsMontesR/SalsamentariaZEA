@@ -10,8 +10,9 @@ $factory->define(Movimiento::class, function (Faker $faker) {
         'parteCrediticia' => $faker->randomNumber(),
         'parteEfectiva' => $faker->randomNumber(),
         'movimientoable_id' => 1,
-        'ingreso' => $faker->numberBetween($min = 0, $max = 1),
-        'movimientoable_type' => "App\Nomina",
+        'empleado_id' => 1,
+        'tipo' => $faker->randomElement(["Ingreso", "Egreso"]),
+        'movimientoable_type' => "App\Entrada",
         'caja_id' => 1
     ];
 });
