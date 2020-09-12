@@ -21,7 +21,7 @@ class CreateMovimientosTable extends Migration
             $table->string('tipo')->default("Ingreso");
             $table->string('movimientoable_type');
             $table->softDeletes();
-            $table->timestamp('created_at');
+            $table->timestamps();
         });
     }
 

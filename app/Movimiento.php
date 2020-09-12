@@ -10,8 +10,6 @@ class Movimiento extends Model
 {
     use SoftDeletes;
 
-    const UPDATED_AT = null;
-
     protected $fillable = ["parteCrediticia", "parteEfectiva"];
 
     const INGRESO = "Ingreso";
