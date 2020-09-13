@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <meta name="csrf-token" content="{{ csrf_token() }}"/>
     <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/fonts/circular-std/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/css/style.css') }}">
@@ -41,7 +41,8 @@
     <div class="dashboard-header">
         <nav class="navbar navbar-expand-lg bg-white fixed-top">
             <a class="navbar-brand" href="{{route('home')}}">{{config('app.name', 'Laravel')}}</a>
-            <button class="navbar-toggler px-4" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            <button class="navbar-toggler px-4" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon d-inline"><i class="fas fa-caret-square-down mr-2"></i></span>
             </button>
@@ -76,10 +77,15 @@
                             </li>
                         </ul>
                     </li>
+                    <li class="nav-item dropdown nav-user"s>
+                        <a class="nav-link dropdown-toggle" role="button"
+                           aria-haspopup="true" aria-expanded="false"
+                           id="navbarDropdownMenuLink2">{{ Auth::user()->name }}</a>
+                    </li>
                     <li class="nav-item dropdown nav-user">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false"
-                           id="navbarDropdownMenuLink2">{{ Auth::user()->name }}</a>
+                           id="navbarDropdownMenuLink2"><i class="fas fa-fw fa-cog"></i></a>
                         <div class="dropdown-menu dropdown-menu-right nav-user-dropdown"
                              aria-labelledby="navbarDropdownMenuLink2">
                             <a class="dropdown-item" href="{{ route('logout') }}"
@@ -122,6 +128,7 @@
                             <div id="submenu-3" class="collapse submenu" style="">
                                 <ul class="nav flex-column">
                                     <li class="nav-item">
+                                        <a class="nav-link" href="#">Ventas</a>
                                         <a class="nav-link" href="#">Ventas</a>
                                     </li>
                                 </ul>
