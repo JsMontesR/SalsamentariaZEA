@@ -18,11 +18,11 @@
                             <div class="d-inline-block ">
                                 <h3 class="text-dark">Ventas</h3>
                             </div>
-                            <div class="float-right icon-circle-medium  icon-box-lg  bg-info mt-1">
+                            <div class="float-right icon-circle-medium  icon-box-lg  bg-danger mt-1">
                                 <i class="fa fa-shopping-cart fa-fw fa-sm text-light"></i>
                             </div>
                         </div>
-                        <a class="card-footer text-light bg-info clearfix small z-1" href="#">
+                        <a class="card-footer text-light bg-danger clearfix small z-1" href="#">
                             <span class="float-left">Ver ventas</span>
                             <span class="float-right">
                   <em class="fas fa-angle-right"></em>
@@ -55,11 +55,11 @@
                             <div class="d-inline-block ">
                                 <h3 class="text-dark">Productos</h3>
                             </div>
-                            <div class="float-right icon-circle-medium  icon-box-lg bg-danger mt-1">
+                            <div class="float-right icon-circle-medium  icon-box-lg bg-warning mt-1">
                                 <i class="fa fa-cube fa-fw fa-sm text-light"></i>
                             </div>
                         </div>
-                        <a class="card-footer bg-danger text-light clearfix small z-1" href="{{route("productos")}}">
+                        <a class="card-footer bg-warning text-dark clearfix small z-1" href="{{route("productos")}}">
                             <span class="float-left">Ver productos</span>
                             <span class="float-right">
                   <em class="fas fa-angle-right"></em>
@@ -92,11 +92,11 @@
                             <div class="d-inline-block ">
                                 <h3 class="text-dark">Clientes</h3>
                             </div>
-                            <div class="float-right icon-circle-medium  icon-box-lg  bg-primary mt-1">
+                            <div class="float-right icon-circle-medium  icon-box-lg  bg-info mt-1">
                                 <i class="fa fa-users fa-fw fa-sm text-light"></i>
                             </div>
                         </div>
-                        <a class="card-footer text-light bg-primary clearfix small z-1" href="{{route('clientes')}}">
+                        <a class="card-footer text-light bg-info clearfix small z-1" href="{{route('clientes')}}">
                             <span class="float-left">Ver clientes</span>
                             <span class="float-right">
                   <em class="fas fa-angle-right"></em>
@@ -110,11 +110,11 @@
                             <div class="d-inline-block ">
                                 <h3 class="text-dark">Proveedores</h3>
                             </div>
-                            <div class="float-right icon-circle-medium  icon-box-lg  bg-success-light mt-1">
-                                <i class="fa fa-people-carry fa-fw fa-sm text-dark"></i>
+                            <div class="float-right icon-circle-medium  icon-box-lg  bg-primary mt-1">
+                                <i class="fa fa-people-carry fa-fw fa-sm text-light"></i>
                             </div>
                         </div>
-                        <a class="card-footer text-dark bg-success-light clearfix small z-1"
+                        <a class="card-footer text-light bg-primary clearfix small z-1"
                            href="{{route('proveedores')}}">
                             <span class="float-left">Ver proveedores</span>
                             <span class="float-right">
@@ -129,11 +129,11 @@
                             <div class="d-inline-block ">
                                 <h3 class="text-dark">Empleados</h3>
                             </div>
-                            <div class="float-right icon-circle-medium  icon-box-lg  bg-dark mt-1">
+                            <div class="float-right icon-circle-medium  icon-box-lg  bg-danger mt-1">
                                 <i class="fa fa-id-badge fa-fw fa-sm text-light"></i>
                             </div>
                         </div>
-                        <a class="card-footer text-light bg-dark clearfix small z-1" href="{{route('empleados')}}">
+                        <a class="card-footer text-light bg-danger clearfix small z-1" href="{{route('empleados')}}">
                             <span class="float-left">Ver empleados</span>
                             <span class="float-right">
                   <em class="fas fa-angle-right"></em>
@@ -147,11 +147,11 @@
                             <div class="d-inline-block ">
                                 <h3 class="text-dark">Nómina</h3>
                             </div>
-                            <div class="float-right icon-circle-medium  icon-box-lg  bg-warning mt-1">
+                            <div class="float-right icon-circle-medium  icon-box-lg  bg-secondary mt-1">
                                 <i class="fa fa-calendar fa-fw fa-sm text-light"></i>
                             </div>
                         </div>
-                        <a class="card-footer text-dark bg-warning clearfix small z-1" href="{{route('nominas')}}">
+                        <a class="card-footer text-light bg-secondary clearfix small z-1" href="{{route('nominas')}}">
                             <span class="float-left">Ver nómina</span>
                             <span class="float-right">
                   <em class="fas fa-angle-right"></em>
@@ -165,11 +165,11 @@
                             <div class="d-inline-block ">
                                 <h3 class="text-dark">Movimientos</h3>
                             </div>
-                            <div class="float-right icon-circle-medium  icon-box-lg  bg-success mt-1">
+                            <div class="float-right icon-circle-medium  icon-box-lg  bg-warning mt-1">
                                 <i class="fa fa-cogs fa-fw fa-sm text-light"></i>
                             </div>
                         </div>
-                        <a class="card-footer text-light bg-success clearfix small z-1" href=""{{ route('movimientos') }}"">
+                        <a class="card-footer text-dark bg-warning clearfix small z-1" href=""{{ route('movimientos') }}"">
                             <span class="float-left">Ver movimientos</span>
                             <span class="float-right">
                   <em class="fas fa-angle-right"></em>
