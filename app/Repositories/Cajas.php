@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Caja;
 use App\Entrada;
 use App\Movimiento;
+use Illuminate\Support\Facades\Log;
 
 class Cajas
 {
@@ -58,7 +59,8 @@ class Cajas
     public function actualizarSaldo($movimientoable, $nuevoMovimiento)
     {
         $ponderado = 0;
-        foreach ($movimientoable->movimientos as $movimiento) {
+        foreach ($movimientoable->movimientos()->withTrashed()->get() as $movimiento) {
+            Log::info($movimiento);
             if ($movimiento->tipo == Movimiento::EGRESO) {
                 $ponderado += $movimiento->parteEfectiva + $movimiento->parteCrediticia;
             } else if ($movimiento->tipo == Movimiento::INGRESO) {
@@ -68,7 +70,7 @@ class Cajas
         if ($nuevoMovimiento->tipo == Movimiento::EGRESO) {
             $movimientoable->saldo = $movimientoable->valor - ($ponderado + $nuevoMovimiento->parteEfectiva + $nuevoMovimiento->parteCrediticia);
         } else if ($nuevoMovimiento->tipo == Movimiento::INGRESO) {
-            $movimientoable->saldo = $movimientoable->valor - ($ponderado - $nuevoMovimiento->parteEfectiva - $nuevoMovimiento->parteCrediticia);
+            $movimientoable->saldo = $movimientoable->valor - ($ponderado - ($nuevoMovimiento->parteEfectiva + $nuevoMovimiento->parteCrediticia));
         }
 
     }
@@ -76,7 +78,8 @@ class Cajas
     public function anularTodosLosPagos($movimientoable)
     {
         foreach ($movimientoable->movimientos as $movimiento) {
-            $this->anularPago($movimiento);
+            if ($movimiento->tipo == Movimiento::EGRESO)
+                $this->anularPago($movimiento);
         }
     }
 

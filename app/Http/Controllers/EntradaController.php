@@ -139,9 +139,7 @@ class EntradaController extends Controller
             throw ValidationException::withMessages(["id" => "No se cuenta con las existencias suficientes de " . $problem . " para anular la entrada"]);
         }
         // Ejecución de la transacción
-        if ($entrada->fechapagado != null) {
-            $this->cajas->anularTodosLosPagos();
-        }
+        $this->cajas->anularTodosLosPagos($entrada);
         $this->entradas->anular($entrada);
         return response()->json([
             'msg' => '¡Entrada anulada!',

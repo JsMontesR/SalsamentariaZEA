@@ -228,9 +228,9 @@
                     </div>
                     <div class="modal-footer">
                         <input id="pagar" type="button" value="Pagar"
-                               class="btn btn-success container-fluid"/>
+                               class="btn btn-success container-fluid" data-dismiss="modal"/>
                         <input id="anularpago" type="button" value="Reversar"
-                               class="btn btn-danger container-fluid"/>
+                               class="btn btn-danger container-fluid" data-dismiss="modal"/>
                         <input id="limpiarmodal" type="button" value="Limpiar"
                                class="btn btn-light container-fluid"/>
                     </div>
