@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Entrada;
+use App\Repositories\Entradas;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Log;
@@ -27,7 +29,11 @@ class Kernel extends ConsoleKernel
     {
         $schedule->call(function () {
             Log::info("HELLO FROM SCHEDULE!");
-        })->everyFiveMinutes();
+            $entradas = Entrada::query()->whereNull('fechapagado')->where('fechapago', '<');
+            foreach ($entradas as $entrada) {
+
+            }
+        })->everyMinute();
     }
 
     /**
