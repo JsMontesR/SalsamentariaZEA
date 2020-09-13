@@ -27,7 +27,7 @@
                                    name="proveedor_id" required="required">
                         </div>
                     </div>
-                    <div class="card mb-3">
+                    <div class="card mb-3 border border-dark">
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table id="proveedores"
@@ -39,7 +39,7 @@
                             </div>
                         </div>
                     </div>
-
+                    <hr>
                     <div class="form-group row">
                         <label class="col-md-4 col-form-label text-md-left">Productos:</label>
                     </div>
@@ -80,6 +80,17 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label class="col-md-4 col-form-label text-md-left">Valor total:</label>
+                        <div class="input-group col-md-8">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">$</span>
+                            </div>
+                            <input id="valor" type="number" readonly="readonly"
+                                   class="form-control"
+                                   name="valor" required autocomplete="valor">
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label class="col-md-4 col-form-label text-md-left">Fecha límite de pago:</label>
                         <div class="col-md-8">
                             <input id="fechapago" type="date"
@@ -98,18 +109,6 @@
                         </div>
                     </div>
 
-                    <hr>
-                    <div class="form-group row">
-                        <label class="col-md-4 col-form-label text-md-left">Valor total:</label>
-                        <div class="input-group col-md-8">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">$</span>
-                            </div>
-                            <input id="valor" type="number" readonly="readonly"
-                                   class="form-control"
-                                   name="valor" required autocomplete="valor">
-                        </div>
-                    </div>
                 </form>
                 <br>
                 <div class="row btn-toolbar justify-content-center">
@@ -132,15 +131,15 @@
                     </div>
                 </div>
             </div>
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h3 class="m-0 font-weight-bold text-primary text-center">Entradas registradas</h3>
-                </div>
-                <div class="card-body">
-                    <table id="recurso" class="table table-bordered dt-responsive table-hover row-cursor-hand"
-                           style="width:100%">
-                    </table>
-                </div>
+        </div>
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h3 class="m-0 font-weight-bold text-primary text-center">Entradas registradas</h3>
+            </div>
+            <div class="card-body">
+                <table id="recurso" class="table table-bordered dt-responsive table-hover row-cursor-hand"
+                       style="width:100%">
+                </table>
             </div>
         </div>
         {{--    Dialogo modal de los pagos--}}
