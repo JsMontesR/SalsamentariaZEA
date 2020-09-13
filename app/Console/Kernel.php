@@ -25,10 +25,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('inspire')->everyMinute();
         $schedule->call(function () {
             Log::info("HELLO FROM SCHEDULE!");
-        })->everyMinute();
+        })->everyFiveMinutes();
     }
 
     /**
