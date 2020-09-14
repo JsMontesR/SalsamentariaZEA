@@ -15,7 +15,10 @@ class CreateVentasTable extends Migration
     {
         Schema::create('ventas', function (Blueprint $table) {
             $table->id();
+            $table->date('fechapago');
+            $table->date('fechapagado')->nullable();
             $table->unsignedBigInteger('valor')->nullable();
+            $table->unsignedBigInteger('saldo')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

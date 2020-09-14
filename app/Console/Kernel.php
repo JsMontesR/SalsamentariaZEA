@@ -3,7 +3,11 @@
 namespace App\Console;
 
 use App\Entrada;
-use App\Repositories\Entradas;
+use App\Jobs\GenerarRecordatorios;
+use App\Nomina;
+use App\Notifications\CuentaPorPagarNotification;
+use App\Notifications\NominaPorPagarNotification;
+use App\User;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Log;
@@ -27,13 +31,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call(function () {
-            Log::info("HELLO FROM SCHEDULE!");
-            $entradas = Entrada::query()->whereNull('fechapagado')->where('fechapago', '<');
-            foreach ($entradas as $entrada) {
-
-            }
-        })->everyMinute();
+        $schedule->job(new GenerarRecordatorios())->everyMinute();
     }
 
     /**
