@@ -38,7 +38,7 @@ class GenerarRecordatoriosPagoEntradas implements ShouldQueue
         foreach ($entradas as $entrada) {
             foreach ($this->empleados as $empleado) {
                 $empleado->notify(
-                    new CuentaPorPagarNotification("Recuerde pagar al proveedor " . $entrada->proveedor->nombre . " la entrada #" . $entrada->id . ", el saldo pendiente es de $" . number_format($entrada->saldo, 0)));
+                    new CuentaPorPagarNotification("Pagar al proveedor " . $entrada->proveedor->nombre . " la entrada #" . $entrada->id . ", el saldo pendiente es de $" . number_format($entrada->saldo, 0)));
             }
         }
     }

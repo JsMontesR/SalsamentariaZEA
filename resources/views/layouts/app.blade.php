@@ -48,39 +48,52 @@
             </button>
             <div class="collapse navbar-collapse " id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto navbar-right-top">
+                    <li class="nav-item dropdown nav-user" s>
+                        <a class="nav-link dropdown-toggle" role="button"
+                           aria-haspopup="true" aria-expanded="false"
+                           id="navbarDropdownMenuLink2">{{ Auth::user()->name }}</a>
+                    </li>
                     <li class="nav-item dropdown notification">
                         <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown"
-                           aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i> <span
-                                class="indicator"></span></a>
+                           aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-fw fa-bell"></i>
+                            @if(Auth::user()->notifications->count() > 0)
+                                <span class="indicator"></span>
+                            @endif
+                        </a>
                         <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
                             <li>
-                                <div class="notification-title"> Notificaciones</div>
+                                <div class="notification-title">Notificaciones</div>
                                 <div class="notification-list">
                                     <div class="list-group">
-                                        <a href="#" class="list-group-item list-group-item-action">
-                                            <div class="notification-info">
-                                                <div class="notification-list-user-img"><img
-                                                        src="assets/images/avatar-5.jpg" alt=""
-                                                        class="user-avatar-md rounded-circle"></div>
-                                                <div class="notification-list-user-block"><span
-                                                        class="notification-list-user-name">Jessica Caruso</span>accepted
-                                                    your invitation to join the team.
-                                                    <div class="notification-date">2 min ago</div>
+                                        @forelse(Auth::user()->notifications as $notification)
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <div
+                                                    class="notification-list-user-img float-left icon-circle-medium icon-box-md mt-1">
+                                                    <i class="fa fa-exclamation-circle fa-fw"></i>
                                                 </div>
-                                            </div>
-                                        </a>
+                                                <div class="notification-info">
+                                                    <div class="notification-list-user-block">
+                                                        {{ $notification->data }}
+                                                        <div
+                                                            class="notification-date">{{$notification->created_at}}</div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        @empty
+
+                                        @endforelse
                                     </div>
                                 </div>
                             </li>
                             <li>
-                                <div class="list-footer"><a href="#">View all notifications</a></div>
+                                <a href="#">
+                                    <div class="list-footer">View all notifications
+                                    </div>
+                                </a>
+
                             </li>
                         </ul>
-                    </li>
-                    <li class="nav-item dropdown nav-user"s>
-                        <a class="nav-link dropdown-toggle" role="button"
-                           aria-haspopup="true" aria-expanded="false"
-                           id="navbarDropdownMenuLink2">{{ Auth::user()->name }}</a>
                     </li>
                     <li class="nav-item dropdown nav-user">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
@@ -128,7 +141,6 @@
                             <div id="submenu-3" class="collapse submenu" style="">
                                 <ul class="nav flex-column">
                                     <li class="nav-item">
-                                        <a class="nav-link" href="#">Ventas</a>
                                         <a class="nav-link" href="#">Ventas</a>
                                     </li>
                                 </ul>

@@ -9,6 +9,7 @@ Route::get('/inicio', 'HomeController@index')->name('home');
 Route::get('/index', 'HomeController@index')->name('home');
 Route::get('/home', 'HomeController@index')->name('home');
 
+
 Route::get('/proveedores', 'ProveedorController@index')->name('proveedores')->middleware('auth');
 Route::get('/tiposproductos', 'ProductoTipoController@index')->name('tiposproductos')->middleware('auth');
 Route::get('/productos', 'ProductoController@index')->name('productos')->middleware('auth');
@@ -18,6 +19,7 @@ Route::get('/nominas', 'NominaController@index')->name('nominas')->middleware('a
 Route::get('/entradas', 'EntradaController@index')->name('entradas')->middleware('auth');
 Route::get('/ventas', 'VentasController@index')->name('ventas')->middleware('auth');
 Route::get('/movimientos','MovimientoController@index')->name('movimientos')->middleware('auth');
+Route::get('/notificaciones', 'NotificacionController@index')->name('notificaciones')->middleware('auth');
 
 /*
  * OPERACIONES CRUD Y CORE DEL NEGOCIO
