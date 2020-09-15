@@ -29,7 +29,6 @@
             document.getElementById('registrar').disabled = false;
             document.getElementById('eliminar').disabled = true;
             document.getElementById('fechapago').disabled = false;
-            table.ajax.reload()
             productos_table.ajax.reload()
             tablaProveedores.ajax.reload()
         }
@@ -137,20 +136,21 @@
             cargarProductosEntrada(data['productos']);
         }
 
-        //
-        // $.ajax({
-        //     url: "/api/entradas/listar",
-        //     type: "get",
-        //     success: function (data) {
-        //         console.log(data);
-        //     },
-        //     error: function (err) {
-        //         console.warn(err);
-        //     }
-        // })
+
+        $.ajax({
+            url: "/api/entradas/listar",
+            type: "get",
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (err) {
+                console.warn(err);
+            }
+        })
         let specific = @json($id);
         let table = $('#recurso').DataTable($.extend({
             serverSide: true,
+            processing: true,
             ajax: "/api/entradas/listar",
             columns: [
                 {data: 'id', title: 'Id', className: "text-center"},
@@ -174,17 +174,37 @@
                 {data: 'created_at', title: 'Fecha de creación', className: "text-center"},
                 {data: 'updated_at', title: 'Fecha de actualización', className: "text-center"},
             ],
-            initComplete: function () {
-                console.log(specific);
-                if (specific != null) {
-                    console.log(table.row(0).data());
-                    console.log("Separador");
-                    table.column(0).search(specific).draw();
-                    console.log(table.rows().nodes());
-                    cargarEntrada(table.rows({search: "applied"}).nodes()[0])
-                }
-            }
+            order: [[0, 'desc']],
         }, options));
+
+        $('#recurso thead th').each(function () {
+            var title = $(this).text();
+            let id = "";
+            if (title == "Id") {
+                id = 'id = "specific"'
+            }
+            $(this).html(title + ' <input ' + id + 'type="text" class="col-search-input form-control-sm" placeholder="Buscar" />');
+        });
+
+        table.columns().every(function (index) {
+            var col = this;
+            $('input', this.header()).on('keyup', function () {
+                if (col.search() !== this.value) {
+                    col.search(this.value).draw();
+                }
+            });
+        });
+
+        $('#recurso')
+            .on('init.dt', function () {
+                let specific = @json($id);
+                if (specific != null) {
+                    $("#specific").val(specific);
+                    $("#specific").keyup();
+                    $("#specific").click();
+                }
+            })
+
 
         let productos_table = $('#productos_table').DataTable($.extend({
             serverSide: true,
@@ -501,6 +521,5 @@
             $("#parteEfectiva").val(data["parteEfectiva"]);
             $("#parteCrediticia").val(data["parteCrediticia"]);
         });
-
     });
 </script>

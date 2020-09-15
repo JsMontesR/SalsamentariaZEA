@@ -139,6 +139,7 @@
             <div class="card-body">
                 <table id="recurso" class="table table-bordered dt-responsive table-hover row-cursor-hand"
                        style="width:100%">
+                    <tfoot></tfoot>
                 </table>
             </div>
         </div>
@@ -257,6 +258,6 @@
                 </div>
             </div>
         </div>
-        @include("js.entradas")
+    @include("js.entradas")
 @endsection
 

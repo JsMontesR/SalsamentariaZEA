@@ -1,6 +1,15 @@
 <script>
     $(document).ready(function () {
-
+        $.ajax({
+            url: 'api/productos/listar',
+            type: "get",
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (err) {
+                console.warn(err);
+            }
+        });
 
         function caracterizarFormulario(tipo) {
             if (tipo == undefined) {
@@ -43,17 +52,19 @@
             serverSide: true,
             ajax: 'api/productos/listar',
             columns: [
-                {data: 'id', title: 'Id', className: "text-center"},
-                {data: 'nombre', title: 'Nombre', className: "text-center"},
+                {data: 'id', name: 'id', title: 'Id', className: "text-center"},
+                {data: 'nombre', name: 'nombre', title: 'Nombre', className: "text-center"},
                 {data: 'categoria', title: 'Categoría', className: "text-center"},
                 {
                     data: 'costo',
+                    name: 'costo',
                     title: 'Costo Unitario/Kg',
                     render: $.fn.dataTable.render.number(',', '.', 0, '$ '),
                     className: "text-center"
                 },
                 {
                     data: 'utilidad',
+                    name: 'utilidad',
                     title: 'Utilidad Unitaria/Kg',
                     className: "text-center",
                     render: function (data, type, full, meta) {
@@ -62,12 +73,13 @@
                 },
                 {
                     data: 'precio',
+                    name: 'precio',
                     title: 'Precio Unitario/Kg',
                     render: $.fn.dataTable.render.number(',', '.', 0, '$ '),
                     className: "text-center"
                 },
                 {
-                    data: 'stock', title: 'Unidades/g en stock', render: function (data, type, row) {
+                    data: 'stock', name: 'stock', title: 'Unidades/g en stock', render: function (data, type, row) {
                         if (row["categoria"] == "Granel") {
                             return +data + ' gramos';
                         } else if (row["categoria"] == "Unitario") {
@@ -76,10 +88,17 @@
 
                     }, className: "text-center"
                 },
-                {data: 'tipo.id', title: 'Id de tipo', visible: false, searchable: false, className: "text-center"},
-                {data: 'tipo.nombre', title: 'Tipo de producto', className: "text-center"},
-                {data: 'created_at', title: 'Fecha de creación', className: "text-center"},
-                {data: 'updated_at', title: 'Fecha de actualización', className: "text-center"},
+                {
+                    data: 'tipo.id',
+                    name: 'tipo.id',
+                    title: 'Id de tipo',
+                    visible: false,
+                    searchable: false,
+                    className: "text-center"
+                },
+                {data: 'tipo.nombre', name: 'tipo.nombre', title: 'Tipo de producto', className: "text-center"},
+                {data: 'created_at', name: 'created_at', title: 'Fecha de creación', className: "text-center"},
+                {data: 'updated_at', name: 'updated_at', title: 'Fecha de actualización', className: "text-center"},
             ]
         }, options));
 
@@ -160,5 +179,6 @@
                 document.getElementById('precio').value = Math.round(costo * (1 + utilidad / 100));
             }
         });
-    });
+    })
+    ;
 </script>

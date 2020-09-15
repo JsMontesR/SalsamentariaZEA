@@ -10,6 +10,10 @@ class Producto extends Model
     protected $with = ["tipo"];
     protected $guarded = ["id"];
 
+    public function tipo(){
+        return $this->belongsTo('App\ProductoTipo');
+    }
+
     public function entradas()
     {
         return $this->belongsToMany('App\Entrada');
@@ -20,9 +24,7 @@ class Producto extends Model
         return $this->belongsToMany('App\Venta');
     }
 
-    public function tipo(){
-        return $this->belongsTo('App\ProductoTipo');
-    }
+
 
     /**
      * Prepare a date for array / JSON serialization.
