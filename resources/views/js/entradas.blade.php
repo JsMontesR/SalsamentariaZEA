@@ -147,7 +147,10 @@
                 console.warn(err);
             }
         })
+
+        let ft = true;
         let specific = @json($id);
+        let rowSpecific;
         let table = $('#recurso').DataTable($.extend({
             serverSide: true,
             processing: true,
@@ -175,6 +178,15 @@
                 {data: 'updated_at', title: 'Fecha de actualización', className: "text-center"},
             ],
             order: [[0, 'desc']],
+            drawCallback: function () {
+                if (specific) {
+                    rowSpecific = table.row({search: 'applied'});
+                    let foundId = rowSpecific.data().id;
+                    if (foundId == specific) {
+                        cargarEntrada(rowSpecific.node());
+                    }
+                }
+            }
         }, options));
 
         $('#recurso thead th').each(function () {
@@ -195,15 +207,17 @@
             });
         });
 
-        $('#recurso')
-            .on('init.dt', function () {
-                let specific = @json($id);
-                if (specific != null) {
-                    $("#specific").val(specific);
-                    $("#specific").keyup();
-                    $("#specific").click();
-                }
-            })
+        $('#recurso').on('init.dt', function () {
+            if (specific != null && ft) {
+                $("#specific").val(specific);
+                $("#specific").keyup();
+                $("#specific").click();
+                // setTimeout(() => {
+                //     console.log(table.row({search: 'applied'}).node());
+                // }, 2000);
+                ft = false;
+            }
+        })
 
 
         let productos_table = $('#productos_table').DataTable($.extend({
