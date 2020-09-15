@@ -135,6 +135,6 @@
             </div>
         </div>
     </div>
-    <script src="{{ asset('assets/libs/js/controllers/empleados.js') }}"></script>
+    @include("js.empleados")
 @endsection
 

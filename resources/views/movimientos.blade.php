@@ -17,6 +17,6 @@
             </div>
         </div>
     </div>
-    <script src="{{ asset('assets/libs/js/controllers/movimientos.js') }}"></script>
+    @include("js.movimientos")
 @endsection
 

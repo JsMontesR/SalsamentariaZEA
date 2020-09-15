@@ -102,6 +102,6 @@
             </div>
         </div>
     </div>
-    <script src="{{ asset('assets/libs/js/controllers/clientes.js') }}"></script>
+    @include("js.clientes")
 @endsection
 

@@ -78,6 +78,6 @@
             </div>
         </div>
     </div>
-    <script src="{{ asset('assets/libs/js/controllers/proveedores.js') }}"></script>
+    @include("js.proveedores")
 @endsection
 

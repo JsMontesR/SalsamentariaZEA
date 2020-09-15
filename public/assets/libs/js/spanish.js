@@ -1,5 +1,5 @@
 let options = {
-
+    "aLengthMenu": [[5, 10, 25, 50, 100 - 1], [5, 10, 25, 50, 100, "Todos"]],
     "language": {
         "sProcessing": "Procesando...",
         "sLengthMenu": "Mostrar _MENU_ registros",

@@ -61,6 +61,6 @@
             </div>
         </div>
     </div>
-    <script src="{{ asset('assets/libs/js/controllers/producto_tipos.js') }}"></script>
+    @include("js.producto_tipos")
 @endsection
 

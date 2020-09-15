@@ -125,6 +125,6 @@
             </div>
         </div>
     </div>
-    <script src="{{ asset('assets/libs/js/controllers/productos.js') }}"></script>
+    @include("js.productos")
 @endsection
 

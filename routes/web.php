@@ -16,7 +16,8 @@ Route::get('/productos', 'ProductoController@index')->name('productos')->middlew
 Route::get('/clientes', 'ClienteController@index')->name('clientes')->middleware('auth');
 Route::get('/empleados', 'EmpleadoController@index')->name('empleados')->middleware('auth');
 Route::get('/nominas', 'NominaController@index')->name('nominas')->middleware('auth');
-Route::get('/entradas', 'EntradaController@index')->name('entradas')->middleware('auth');
+//Route::get('/entradas', 'EntradaController@index')->name('entradas')->middleware('auth');
+Route::get('/entradas/{id?}', 'EntradaController@index')->name('entradas')->middleware('auth');
 Route::get('/ventas', 'VentasController@index')->name('ventas')->middleware('auth');
 Route::get('/movimientos','MovimientoController@index')->name('movimientos')->middleware('auth');
 Route::get('/notificaciones', 'NotificacionController@index')->name('notificaciones')->middleware('auth');

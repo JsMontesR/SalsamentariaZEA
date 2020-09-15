@@ -6,7 +6,8 @@
             <div class="card-body">
                 <div class="list-group">
                     @forelse(Auth::user()->notifications as $notification)
-                        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                        <a href="{{route('entradas',['id' => $notification->notifiable_id])}}"
+                           class="list-group-item list-group-item-action flex-column align-items-start">
                             <div class="d-flex w-100 justify-content-between">
                                 <h5 class="mb-1 text-dark">Nueva notificación</h5>
                                 <small> {{ $notification->created_at }}</small>

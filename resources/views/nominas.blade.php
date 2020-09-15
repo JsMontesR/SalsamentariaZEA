@@ -131,6 +131,6 @@
             </div>
         </div>
     </div>
-    <script src="{{ asset('assets/libs/js/controllers/nomina.js') }}"></script>
+    @include("js.nominas")
 @endsection
 

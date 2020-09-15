@@ -87,8 +87,8 @@
                                 </div>
                             </li>
                             <li>
-                                <a href="#">
-                                    <div class="list-footer">View all notifications
+                                <a href="{{ route('notificaciones') }}">
+                                    <div class="list-footer">Ver todas las notificaciones
                                     </div>
                                 </a>
 

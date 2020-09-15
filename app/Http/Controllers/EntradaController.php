@@ -40,12 +40,12 @@ class EntradaController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index()
+    public function index($id = null)
     {
-        return view("entradas");
+        return view("entradas", compact("id"));
     }
 
     /**

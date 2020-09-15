@@ -257,6 +257,6 @@
                 </div>
             </div>
         </div>
-        <script src="{{ asset('assets/libs/js/controllers/entradas.js') }}"></script>
+        @include("js.entradas")
 @endsection
 
