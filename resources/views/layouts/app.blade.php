@@ -63,7 +63,7 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
                             <li>
-                                <div class="notification-title">Notificaciones</div>
+                                <div class="notification-title font-bold">Notificaciones</div>
                                 <div class="notification-list">
                                     <div class="list-group">
                                         @forelse(Auth::user()->notifications as $notification)
@@ -74,14 +74,20 @@
                                                 </div>
                                                 <div class="notification-info">
                                                     <div class="notification-list-user-block">
-                                                        {{ $notification->data }}
+                                                        {{ $notification->data["mensaje"] }}
                                                         <div
                                                             class="notification-date">{{$notification->created_at}}</div>
                                                     </div>
                                                 </div>
                                             </a>
                                         @empty
-
+                                            <a class="list-group-item">
+                                                <div class="notification-info">
+                                                    <div class="notification-list-user-block">
+                                                        No hay nada pendiente hasta el momento.
+                                                    </div>
+                                                </div>
+                                            </a>
                                         @endforelse
                                     </div>
                                 </div>

@@ -28,7 +28,11 @@
             document.getElementById('verpagos').disabled = true;
             document.getElementById('registrar').disabled = false;
             document.getElementById('eliminar').disabled = true;
+            document.getElementById('modificar').disabled = true;
             document.getElementById('fechapago').disabled = false;
+            $("#specific").val("");
+            $("#specific").keyup();
+            $("#specific").click();
             productos_table.ajax.reload()
             tablaProveedores.ajax.reload()
         }
@@ -119,10 +123,6 @@
 
         function cargarEntrada(row) {
             limpiarFormulario();
-            $(row).addClass("selected");
-            document.getElementById('registrar').disabled = true;
-            document.getElementById('verpagos').disabled = false;
-            document.getElementById('eliminar').disabled = false;
             let data = table.row(row).data();
             document.getElementById('id').value = data['id'];
             document.getElementById('proveedor_id').value = data['proveedor']['id'];
@@ -131,9 +131,14 @@
             $('[name="valor"]').val(data['valor']);
             $('[name="saldo"]').val(data['saldo']);
             $('[name="valorpagado"]').val(data['valor'] - data['saldo']);
-            document.getElementById('fechapago').disabled = true;
             $('#productos_container').hide();
             cargarProductosEntrada(data['productos']);
+            $(row).addClass("selected");
+            document.getElementById('fechapago').disabled = true;
+            document.getElementById('registrar').disabled = true;
+            document.getElementById('verpagos').disabled = false;
+            document.getElementById('eliminar').disabled = false;
+            document.getElementById('modificar').disabled = false;
         }
 
 
@@ -179,12 +184,13 @@
             ],
             order: [[0, 'desc']],
             drawCallback: function () {
-                if (specific) {
+                if (specific && ft) {
                     rowSpecific = table.row({search: 'applied'});
                     let foundId = rowSpecific.data().id;
                     if (foundId == specific) {
                         cargarEntrada(rowSpecific.node());
                     }
+                    fi = false;
                 }
             }
         }, options));
@@ -212,9 +218,6 @@
                 $("#specific").val(specific);
                 $("#specific").keyup();
                 $("#specific").click();
-                // setTimeout(() => {
-                //     console.log(table.row({search: 'applied'}).node());
-                // }, 2000);
                 ft = false;
             }
         })

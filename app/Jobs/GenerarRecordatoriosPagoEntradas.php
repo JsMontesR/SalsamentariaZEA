@@ -4,9 +4,11 @@ namespace App\Jobs;
 
 use App\Entrada;
 use App\Notifications\CuentaPorPagarNotification;
+use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
@@ -15,16 +17,13 @@ class GenerarRecordatoriosPagoEntradas implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $empleados;
-
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($empleados)
+    public function __construct()
     {
-        $this->empleados = $empleados;
     }
 
     /**
@@ -35,11 +34,14 @@ class GenerarRecordatoriosPagoEntradas implements ShouldQueue
     public function handle()
     {
         $entradas = Entrada::query()->whereNull('fechapagado')->whereRaw('DATEDIFF(fechapago,NOW()) = ' . GenerarRecordatorios::DIASANTICIPACION)->get();
+
+        Log::info("Generando notificaciones de cuentas por pagar");
         foreach ($entradas as $entrada) {
-            foreach ($this->empleados as $empleado) {
-                $empleado->notify(
-                    new CuentaPorPagarNotification("Pagar al proveedor " . $entrada->proveedor->nombre . " la entrada #" . $entrada->id . ", el saldo pendiente es de $" . number_format($entrada->saldo, 0)));
-            }
+            $empleadosANotificar = User::query()->where('rol_id', '<>', 3)->whereDoesntHave('notifications', function ($query) {
+                $query->whereRaw("JSON_EXTRACT(data,'$.id') = 1");
+            })->get();
+            Notification::send($empleadosANotificar, new CuentaPorPagarNotification($entrada, "Pagar al proveedor " . $entrada->proveedor->nombre . " la entrada #" . $entrada->id . ", el saldo pendiente es de $" . number_format($entrada->saldo, 0)));
         }
+        Log::info("Notificaciones de cuentas por pagar generadas satisfactoriamente");
     }
 }

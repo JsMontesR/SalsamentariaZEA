@@ -97,6 +97,27 @@ class EntradaController extends Controller
     }
 
     /**
+     * Registra una entrada.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request)
+    {
+        //Validación de la factibilidad de la transacción
+        $request->validate(['fechapago' => 'required|date']);
+        $entrada = Entrada::findOrFail($request->id);
+
+        // Ejecución de la transacción
+        $entrada->fechapago = $request->fechapago;
+        $entrada->save();
+
+        return response()->json([
+            'msg' => '¡Datos de la entrada actualizados!',
+        ]);
+    }
+
+    /**
      * Procesa el pago de una entrada.
      *
      * @param \Illuminate\Http\Request $request

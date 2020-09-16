@@ -14,7 +14,17 @@ use Prophecy\Doubler\Generator\TypeHintReference;
 class GenerarRecordatorios implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    const DIASANTICIPACION = 7;
+
+    const DIASANTICIPACION = 5;
+
+    /*
+     * Definición de tipos de modelos asociados a una notifiación
+     */
+    const ENTRADA = "entradas";
+    const VENTA = "ventas";
+    const NOMINA = "nomina";
+
+
     /**
      * Create a new job instance.
      *
@@ -34,10 +44,9 @@ class GenerarRecordatorios implements ShouldQueue
     {
         Log::info("Generando notificaciones a usuarios");
         Log::info("Las notificaciones se generan con " . GenerarRecordatorios::DIASANTICIPACION . " días de anticipación");
-        $usuarios = User::query()->where('rol_id', '<>', 3)->get();
-        dispatch(new GenerarRecordatoriosPagoEntradas($usuarios));
-        dispatch(new GenerarRecordatoriosCobroVentas($usuarios));
-        dispatch(new GenerarRecordatoriosPagoNominas($usuarios));
+        dispatch(new GenerarRecordatoriosPagoEntradas());
+//        dispatch(new GenerarRecordatoriosCobroVentas($usuarios));
+//        dispatch(new GenerarRecordatoriosPagoNominas($usuarios));
 
     }
 }

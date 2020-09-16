@@ -2,6 +2,8 @@
 
 namespace App\Notifications;
 
+use App\Entrada;
+use App\Jobs\GenerarRecordatorios;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -12,15 +14,18 @@ class CuentaPorPagarNotification extends Notification
     use Queueable;
 
     protected $message;
+    protected $entrada;
 
     /**
      * Create a new notification instance.
      *
-     * @return void
+     * @param Entrada $entrada
+     * @param $message
      */
-    public function __construct($message)
+    public function __construct(Entrada $entrada, $message)
     {
         $this->message = $message;
+        $this->entrada = $entrada;
     }
 
     /**
@@ -56,6 +61,10 @@ class CuentaPorPagarNotification extends Notification
      */
     public function toArray($notifiable)
     {
-        return $this->data->toArray();
+        return [
+            "id" => $this->entrada->id,
+            "endpoint" => GenerarRecordatorios::ENTRADA,
+            "mensaje" => $this->message
+        ];
     }
 }
