@@ -84,8 +84,8 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">$</span>
                             </div>
-                            <input id="valor" type="number" readonly="readonly"
-                                   class="form-control"
+                            <input id="valor" type="text" readonly="readonly"
+                                   class="form-control money"
                                    name="valor" required autocomplete="valor">
                         </div>
                     </div>
