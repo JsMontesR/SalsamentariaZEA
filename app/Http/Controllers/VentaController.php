@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Caja;
-use App\Entrada;
 use App\Exceptions\FondosInsuficientesException;
 use App\Movimiento;
 use App\Repositories\Cajas;
-use App\Repositories\Entradas;
 use App\Repositories\Ventas;
 use App\Venta;
 use Illuminate\Database\Eloquent\Builder;
@@ -76,7 +74,7 @@ class VentaController extends Controller
     }
 
     /**
-     * Registra una entrada.
+     * Registra una venta.
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
@@ -85,19 +83,19 @@ class VentaController extends Controller
     {
         //Validación de la factibilidad de la transacción
         $request->validate($this->validationRules, $this->customMessages);
-        foreach ($request->productos_entrada as $producto) {
+        foreach ($request->productos_venta as $producto) {
             if (empty($producto["cantidad"]) || empty($producto["costo"])) {
-                throw ValidationException::withMessages(['productos_entrada' => 'La tabla de productos de la entrada debe contener productos con sus respectivas cantidades y costos']);
+                throw ValidationException::withMessages(['productos_venta' => 'La tabla de productos de la venta debe contener productos con sus respectivas cantidades y costos']);
             }
         }
         if (($problem = $this->ventas->getNoDescontable($request)) != null) {
-            throw ValidationException::withMessages(["productos_entrada" => "No se cuenta con las existencias suficientes de " . $problem . " para realizar la venta"]);
+            throw ValidationException::withMessages(["productos_venta" => "No se cuenta con las existencias suficientes de " . $problem . " para realizar la venta"]);
         }
 
         // Ejecución de la transacción
-        $this->entradas->store($request);
+        $this->ventas->store($request);
         return response()->json([
-            'msg' => '¡Entrada registrada!',
+            'msg' => '¡Venta registrada!',
         ]);
     }
 
@@ -118,12 +116,12 @@ class VentaController extends Controller
         $venta->save();
 
         return response()->json([
-            'msg' => '¡Datos de la entrada actualizados!',
+            'msg' => '¡Datos de la venta actualizados!',
         ]);
     }
 
     /**
-     * Procesa el pago de una entrada.
+     * Procesa el cobro de una venta.
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
@@ -132,7 +130,7 @@ class VentaController extends Controller
     {
         //Validación de la factibilidad de la transacción
         $request->validate($this->validationIdRule);
-        $venta = Entrada::findOrFail($request->id);
+        $venta = Venta::findOrFail($request->id);
         if (!$this->ventas->isVentaCobrable($venta)) {
             throw ValidationException::withMessages(["valor" => "La venta seleccionada ya fue pagada en su totalidad"]);
         }
@@ -159,12 +157,12 @@ class VentaController extends Controller
         $request->validate($this->validationIdRule);
         $venta = Venta::find($request->id);
         if (($problem = $this->cajas->getCobroNoAnulable($venta)) != null) {
-            throw ValidationException::withMessages(["id" => "No se puede anular " . $problem . " el saldo en caja es insuficiente"]);
+            throw FondosInsuficientesException::withMessages(["id" => "No se puede anular " . $problem . " el saldo en caja es insuficiente"]);
         }
 
         // Ejecución de la transacción
         $this->cajas->anularTodosLosPagos($venta);
-        $this->entradas->anular($venta);
+        $this->ventas->anular($venta);
         return response()->json([
             'msg' => '¡Venta anulada!',
         ]);

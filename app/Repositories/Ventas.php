@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Producto;
 use App\ProductoTipo;
-use App\Proveedor;
+use App\User;
 use App\Venta;
 use Illuminate\Http\Request;
 
@@ -21,7 +21,7 @@ class Ventas
     {
         $venta = new Venta();
         $venta->fechapago = $request->fechapago;
-        $venta->cliente()->associate(Cliente::findOrFail($request->cliente_id));
+        $venta->cliente()->associate(User::findOrFail($request->cliente_id));
         $venta->empleado()->associate(auth()->user());
         $venta->save();
         $costo = 0;
@@ -45,12 +45,12 @@ class Ventas
 
     /**
      * Verifica cual producto de una venta no es descontable del inventario
-     * @param Venta $entrada
+     * @param Request $request
      * @return bool|string
      */
     public function getNoDescontable(Request $request)
     {
-        foreach ($request->productos_entrada as $producto) {
+        foreach ($request->productos_venta as $producto) {
             $productoActual = Producto::findOrFail($producto["id"]);
             if ($producto["cantidad"] > $productoActual->stock) {
                 return $productoActual->nombre . " (Con el id: " . $productoActual->id . ")";

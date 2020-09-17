@@ -9,8 +9,8 @@
                 let id = data['id'];
                 arr.push({
                     id: id,
-                    cantidad: $('#cantidad_producto_carrito' + id).val(),
-                    costo: $('#precio_producto_carrito' + id).val()
+                    cantidad: $('#cantidad_producto_carrito' + id).cleanVal(),
+                    costo: $('#precio_producto_carrito' + id).cleanVal()
                 });
             });
             return arr;
@@ -114,6 +114,7 @@
                     }).attr('selected', 'selected');
                 }
                 data = $html.html();
+
             }
             return data;
         }
@@ -168,8 +169,8 @@
                     orderable: false
                 },
                 {
-                    data: 'cliente.nombre',
-                    name: 'cliente.nombre',
+                    data: 'cliente.name',
+                    name: 'cliente.name',
                     title: 'Nombre del cliente',
                     className: "text-center",
                     orderable: false
@@ -429,6 +430,7 @@
 
 
         $(document).on('keyup change', '[id^="cantidad_producto_carrito"]', function () {
+            $('.money').mask('000.000.000.000.000', {reverse: true});
             let valor = $(this).cleanVal();
             let precio = parseInt($(this).attr("precio"));
             let idPrecio = $(this).attr("id").replace("cantidad", "precio");
