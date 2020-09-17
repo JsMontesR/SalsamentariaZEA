@@ -75,7 +75,7 @@
             }
             return $.extend({
                 'btnEliminar': "<input " + activated + " name='btn_eliminar_productos_carrito' type='button' value='Eliminar' class='btn btn-warning container-fluid'/>",
-                'cantidad': "<div class='input-group mb-1'><div class='input-group-prepend'><span class='input-group-text'>" + emoji + "</span></div><input " + cantidad + " id='cantidad_producto_carrito" + data['id'] + "' class='form-control' type='number' placeholder='" + tipoDeCantidad + "'/></div>",
+                'cantidad': "<div class='input-group mb-1'><div class='input-group-prepend'><span class='input-group-text'>" + emoji + "</span></div><input " + cantidad + " id='cantidad_producto_carrito" + data['id'] + "'  precio=" + data['precio'] + " class='form-control' type='number' placeholder='" + tipoDeCantidad + "'/></div>",
                 'costoTotal': "<div class='input-group mb-1'><div class='input-group-prepend'><span class='input-group-text'>💵</span></div><input " + costo + " id='precio_producto_carrito" + data['id'] + "' class='form-control' type='number' placeholder='Costo total'/></div>"
             }, data)
         }
@@ -410,6 +410,10 @@
         });
 
         $(document).on('keyup', '[id^="precio_producto_carrito"]', function () {
+            calcularTotal();
+        });
+
+        function calcularTotal() {
             let alreadyUsed = {};
             let valor = 0;
             $('[id^="precio_producto_carrito"]').each(function (index, value) {
@@ -419,6 +423,17 @@
                 alreadyUsed[$(this).attr("id")] = true;
             })
             document.getElementById("valor").value = valor;
+        }
+
+
+        $(document).on('keyup change', '[id^="cantidad_producto_carrito"]', function () {
+            let alreadyUsed = {};
+            let valor = this.value;
+            let precio = parseInt($(this).attr("precio"));
+            let idPrecio = $(this).attr("id").replace("cantidad", "precio");
+            let total = isNaN(parseInt(valor * precio, 10)) ? 0 : parseInt(valor * precio, 10)
+            $("#" + idPrecio).val(total);
+            calcularTotal();
         });
 
         $("#registrar").click(function () {
