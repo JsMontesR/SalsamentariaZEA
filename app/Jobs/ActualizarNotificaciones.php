@@ -9,13 +9,13 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use Prophecy\Doubler\Generator\TypeHintReference;
 
-class GenerarRecordatorios implements ShouldQueue
+class ActualizarNotificaciones implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    const DIASANTICIPACION = 5;
+    const DIASANTICIPACION = 7;
+    const DIASDEVENCIMIENTO = 60;
 
     /*
      * Definición de tipos de modelos asociados a una notifiación
@@ -43,10 +43,13 @@ class GenerarRecordatorios implements ShouldQueue
     public function handle()
     {
         Log::info("Generando notificaciones a usuarios");
-        Log::info("Las notificaciones se generan con " . GenerarRecordatorios::DIASANTICIPACION . " días de anticipación");
+        Log::info("Las notificaciones se generan con " . ActualizarNotificaciones::DIASANTICIPACION . " días de anticipación");
         dispatch(new GenerarRecordatoriosPagoEntradas());
+
 //        dispatch(new GenerarRecordatoriosCobroVentas($usuarios));
 //        dispatch(new GenerarRecordatoriosPagoNominas($usuarios));
+        dispatch(new LimpiarNotificacionesAntiguas());
+
 
     }
 }

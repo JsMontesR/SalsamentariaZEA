@@ -14,8 +14,12 @@ class CreateVentaProductoTable extends Migration
     public function up()
     {
         Schema::create('venta_producto', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->unsignedBigInteger('venta_id');
+            $table->foreign('venta_id')->references('id')->on('ventas')->onDelete('cascade');
+            $table->unsignedBigInteger('producto_id');
+            $table->foreign('producto_id')->references('id')->on('productos')->onDelete('cascade');
+            $table->unsignedBigInteger('cantidad')->nullable();
+            $table->unsignedBigInteger('costo');
         });
     }
 

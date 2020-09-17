@@ -12,7 +12,6 @@ class Entrada extends Model
 
     protected $guarded = ["id"];
 
-
     public function productos()
     {
         return $this->belongsToMany('App\Producto')->withPivot('cantidad', 'costo');

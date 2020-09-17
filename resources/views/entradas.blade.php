@@ -138,18 +138,19 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h3 class="m-0 font-weight-bold text-primary text-center">Entradas registradas</h3>
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h3 class="m-0 font-weight-bold text-primary text-center">Entradas registradas</h3>
+            </div>
+            <div class="card-body">
+                <table id="recurso" class="table table-bordered dt-responsive table-hover row-cursor-hand"
+                       style="width:100%">
+                    <tfoot></tfoot>
+                </table>
+            </div>
         </div>
-        <div class="card-body">
-            <table id="recurso" class="table table-bordered dt-responsive table-hover row-cursor-hand"
-                   style="width:100%">
-                <tfoot></tfoot>
-            </table>
-        </div>
     </div>
+
     {{--    Dialogo modal de los pagos--}}
     <div class="modal fade" id="modalMovimientos" tabindex="-1" role="dialog"
          aria-labelledby="exampleModalLabel" aria-hidden="true">

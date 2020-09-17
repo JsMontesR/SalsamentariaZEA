@@ -13,7 +13,7 @@
             </div>
             <div class="row">
                 <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
-                    <a href="#">
+                    <a href="{{ route('ventas') }}">
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-inline-block ">

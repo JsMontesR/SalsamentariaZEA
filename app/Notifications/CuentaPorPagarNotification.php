@@ -3,7 +3,7 @@
 namespace App\Notifications;
 
 use App\Entrada;
-use App\Jobs\GenerarRecordatorios;
+use App\Jobs\ActualizarNotificaciones;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -63,7 +63,7 @@ class CuentaPorPagarNotification extends Notification
     {
         return [
             "id" => $this->entrada->id,
-            "endpoint" => GenerarRecordatorios::ENTRADA,
+            "endpoint" => ActualizarNotificaciones::ENTRADA,
             "mensaje" => $this->message
         ];
     }

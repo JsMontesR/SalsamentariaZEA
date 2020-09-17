@@ -6,8 +6,7 @@
             <div class="card-body">
                 <div class="list-group">
                     @forelse(Auth::user()->notifications as $notification)
-                        <a href="{{route("entradas",['id' =>  $notification->data['id']])}}"
-                           class="list-group-item list-group-item-action flex-column align-items-start">
+                        <a class="list-group-item list-group-item-action flex-column align-items-start">
                             <div class="d-flex w-100 justify-content-between">
                                 @if($notification->data["endpoint"] == "entradas")
                                     <h5 class="mb-1 text-dark">Notificación de pago de factura</h5>

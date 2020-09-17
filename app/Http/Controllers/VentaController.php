@@ -2,84 +2,171 @@
 
 namespace App\Http\Controllers;
 
+use App\Caja;
+use App\Entrada;
+use App\Exceptions\FondosInsuficientesException;
+use App\Movimiento;
+use App\Repositories\Cajas;
+use App\Repositories\Entradas;
+use App\Repositories\Ventas;
 use App\Venta;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
 
 class VentaController extends Controller
 {
+
+    protected $ventas;
+    protected $cajas;
+
+    public function __construct(Ventas $ventas, Cajas $cajas)
+    {
+        $this->ventas = $ventas;
+        $this->cajas = $cajas;
+    }
+
+    public $validationRules = [
+        'cliente_id' => 'required|integer|min:1',
+        'fechapago' => 'required|date',
+        'productos_venta' => 'required',
+    ];
+
+    public $customMessages = [
+        'productos_venta.required' => 'La tabla de productos de la venta debe contener productos',
+        'fechapago.required' => 'Por favor ingrese la fecha límite del pago',
+        'cliente_id.required' => 'Por favor seleccione un cliente de la tabla'
+    ];
+
+    public $validationIdRule = ['id' => 'required|integer|min:1'];
+
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
-        //
+        return view("ventas");
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Return list of the resource in storage.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function create()
+
+    public function list()
     {
-        //
+        return datatables(Venta::query()->with(['empleado', 'cliente', 'productos']))
+            ->toJson();
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Return list of pagos associated to the resource in storage.
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+
+    public function cobros($id)
+    {
+        return datatables(Movimiento::query()->with('empleado')->whereHasMorph('movimientoable', ['App\Venta'], function (Builder $query) use ($id) {
+            $query->where('movimientoable_id', '=', $id);
+            $query->where('tipo', '=', Movimiento::INGRESO);
+        }))->toJson();
+    }
+
+    /**
+     * Registra una entrada.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
+        //Validación de la factibilidad de la transacción
+        $request->validate($this->validationRules, $this->customMessages);
+        foreach ($request->productos_entrada as $producto) {
+            if (empty($producto["cantidad"]) || empty($producto["costo"])) {
+                throw ValidationException::withMessages(['productos_entrada' => 'La tabla de productos de la entrada debe contener productos con sus respectivas cantidades y costos']);
+            }
+        }
+        if (($problem = $this->ventas->getNoDescontable($request)) != null) {
+            throw ValidationException::withMessages(["productos_entrada" => "No se cuenta con las existencias suficientes de " . $problem . " para realizar la venta"]);
+        }
+
+        // Ejecución de la transacción
+        $this->entradas->store($request);
+        return response()->json([
+            'msg' => '¡Entrada registrada!',
+        ]);
     }
 
     /**
-     * Display the specified resource.
+     * Actualiza una venta.
      *
-     * @param  \App\Venta  $venta
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function show(Venta $venta)
+    public function update(Request $request)
     {
-        //
+        //Validación de la factibilidad de la transacción
+        $request->validate(['fechapago' => 'required|date']);
+        $venta = Venta::findOrFail($request->id);
+
+        // Ejecución de la transacción
+        $venta->fechapago = $request->fechapago;
+        $venta->save();
+
+        return response()->json([
+            'msg' => '¡Datos de la entrada actualizados!',
+        ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Procesa el pago de una entrada.
      *
-     * @param  \App\Venta  $venta
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function edit(Venta $venta)
+    public function cobrar(Request $request)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Venta  $venta
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Venta $venta)
-    {
-        //
+        //Validación de la factibilidad de la transacción
+        $request->validate($this->validationIdRule);
+        $venta = Entrada::findOrFail($request->id);
+        if (!$this->ventas->isVentaCobrable($venta)) {
+            throw ValidationException::withMessages(["valor" => "La venta seleccionada ya fue pagada en su totalidad"]);
+        }
+        if (!$this->cajas->isMontosPagoValidos($request->parteEfectiva, $request->parteCrediticia, $venta->saldo)) {
+            throw ValidationException::withMessages(["valor" => "La suma de los montos a pagar es superior al saldo pendiente"]);
+        }
+        $caja = Caja::findOrFail(1);
+        // Ejecución de la transacción
+        $this->cajas->cobrar($caja, $venta, $request->parteEfectiva, $request->parteCrediticia);
+        return response()->json([
+            'msg' => '¡Pago de venta realizado!',
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Venta  $venta
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Venta $venta)
+    public function anular(Request $request)
     {
-        //
+        //Validación de la factibilidad de la transacción
+        $request->validate($this->validationIdRule);
+        $venta = Venta::find($request->id);
+        if (($problem = $this->cajas->getCobroNoAnulable($venta)) != null) {
+            throw ValidationException::withMessages(["id" => "No se puede anular " . $problem . " el saldo en caja es insuficiente"]);
+        }
+
+        // Ejecución de la transacción
+        $this->cajas->anularTodosLosPagos($venta);
+        $this->entradas->anular($venta);
+        return response()->json([
+            'msg' => '¡Venta anulada!',
+        ]);
     }
 }

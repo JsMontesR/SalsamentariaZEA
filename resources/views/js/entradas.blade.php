@@ -23,16 +23,13 @@
             document.getElementById('fechapago').value = "";
             document.getElementById('valor').value = "";
             $('#recurso tr').removeClass("selected");
+            $('#proveedores tr').removeClass("selected");
             vacearTablaDeProductosEntrada();
             $('#productos_container').show();
             document.getElementById('verpagos').disabled = true;
             document.getElementById('registrar').disabled = false;
             document.getElementById('eliminar').disabled = true;
             document.getElementById('modificar').disabled = true;
-            document.getElementById('fechapago').disabled = false;
-            $("#specific").val("");
-            $("#specific").keyup();
-            $("#specific").click();
             productos_table.ajax.reload()
             tablaProveedores.ajax.reload()
         }
@@ -121,6 +118,8 @@
             return data;
         }
 
+        let proveedorId;
+
         function cargarEntrada(row) {
             limpiarFormulario();
             let data = table.row(row).data();
@@ -133,40 +132,74 @@
             $('[name="valorpagado"]').val(data['valor'] - data['saldo']);
             $('#productos_container').hide();
             cargarProductosEntrada(data['productos']);
+            proveedorId = data['proveedor']['id'];
+            tablaProveedores.columns(0).search(data['proveedor']['id']).draw();
             $(row).addClass("selected");
-            document.getElementById('fechapago').disabled = true;
             document.getElementById('registrar').disabled = true;
             document.getElementById('verpagos').disabled = false;
             document.getElementById('eliminar').disabled = false;
             document.getElementById('modificar').disabled = false;
         }
 
+        // $.ajax({
+        //     url: "/api/entradas/listar",
+        //     type: "get",
+        //     success: function (data) {
+        //         console.log(data);
+        //     },
+        //     error: function (err) {
+        //         console.warn(err);
+        //     }
+        // })
 
-        $.ajax({
-            url: "/api/entradas/listar",
-            type: "get",
-            success: function (data) {
-                console.log(data);
-            },
-            error: function (err) {
-                console.warn(err);
-            }
-        })
-
-        let ft = true;
-        let specific = @json($id);
-        let rowSpecific;
+        let proveedorSpecific;
         let table = $('#recurso').DataTable($.extend({
             serverSide: true,
             processing: true,
             ajax: "/api/entradas/listar",
             columns: [
-                {data: 'id', title: 'Id', className: "text-center"},
-                {data: 'proveedor.id', title: 'Id del proveedor', visible: false, searchable: false},
-                {data: 'proveedor.nombre', title: 'Nombre del proveedor', className: "text-center"},
-                {data: 'empleado.name', title: 'Nombre del empleado', className: "text-center"},
-                {data: 'fechapagado', title: 'Fecha de pago', className: "text-center"},
-                {data: 'fechapago', title: 'Fecha límite de pago', className: "text-center"},
+                {data: 'id', name: 'entradas.id', title: 'Id', className: "text-center font-weight-bold"},
+                {
+                    data: 'proveedor.id',
+                    name: 'proveedor.id',
+                    title: 'Id del proveedor',
+                    visible: false,
+                    searchable: false,
+                    orderable: false
+                },
+                {
+                    data: 'proveedor.nombre',
+                    name: 'proveedor.nombre',
+                    title: 'Nombre del proveedor',
+                    className: "text-center",
+                    orderable: false
+                },
+                {
+                    data: 'empleado.name',
+                    name: 'empleado.name',
+                    title: 'Nombre del empleado',
+                    className: "text-center",
+                    orderable: false
+                },
+                {
+                    data: 'fechapagado',
+                    name: 'entradas.fechapagado',
+                    title: 'Fecha de pago',
+                    className: "text-center",
+                    render: function (data) {
+                        if (data) {
+                            return '<a class="text-success">' + data + '</a>';
+                        } else {
+                            return '<a class="text-danger">Sin pagar</a>';
+                        }
+                    }
+                },
+                {
+                    data: 'fechapago',
+                    name: 'entradas.fechapago',
+                    title: 'Fecha límite de pago',
+                    className: "text-center"
+                },
                 {
                     data: 'saldo',
                     title: 'Saldo por pagar',
@@ -179,20 +212,18 @@
                     className: "text-center",
                     render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
                 },
-                {data: 'created_at', title: 'Fecha de creación', className: "text-center"},
-                {data: 'updated_at', title: 'Fecha de actualización', className: "text-center"},
+                {
+                    data: 'created_at',
+                    title: 'Fecha de creación',
+                    className: "text-center"
+                },
+                {
+                    data: 'updated_at',
+                    title: 'Fecha de actualización',
+                    className: "text-center"
+                },
             ],
-            order: [[0, 'desc']],
-            drawCallback: function () {
-                if (specific && ft) {
-                    rowSpecific = table.row({search: 'applied'});
-                    let foundId = rowSpecific.data().id;
-                    if (foundId == specific) {
-                        cargarEntrada(rowSpecific.node());
-                    }
-                    fi = false;
-                }
-            }
+            order: [[0, 'desc']]
         }, options));
 
         $('#recurso thead th').each(function () {
@@ -203,7 +234,6 @@
             }
             $(this).html(title + ' <input ' + id + 'type="text" class="col-search-input form-control-sm" placeholder="Buscar" />');
         });
-
         table.columns().every(function (index) {
             var col = this;
             $('input', this.header()).on('keyup', function () {
@@ -212,15 +242,6 @@
                 }
             });
         });
-
-        $('#recurso').on('init.dt', function () {
-            if (specific != null && ft) {
-                $("#specific").val(specific);
-                $("#specific").keyup();
-                $("#specific").click();
-                ft = false;
-            }
-        })
 
 
         let productos_table = $('#productos_table').DataTable($.extend({
@@ -294,7 +315,17 @@
                 {data: 'created_at', title: 'Fecha de creación', className: "text-center"},
                 {data: 'updated_at', title: 'Fecha de actualización', className: "text-center"},
             ],
-            responsive: true
+            responsive: true,
+            drawCallback: function () {
+                if (proveedorId) {
+                    proveedorSpecific = tablaProveedores.row({search: 'applied'});
+                    let foundId = proveedorSpecific.data().id;
+                    if (foundId == proveedorId) {
+                        cargarProveedor(proveedorSpecific.node());
+                    }
+                    proveedorId = null;
+                }
+            }
         }, options));
 
         let productos_entrada_table = $('#productos_entrada_table').DataTable($.extend({
@@ -329,9 +360,15 @@
         });
 
         $('#proveedores tbody').on('click', 'tr', function () {
-            let data = tablaProveedores.row(this).data();
-            document.getElementById('proveedor_id').value = data['id'];
+            cargarProveedor(this)
         });
+
+        function cargarProveedor(row) {
+            let data = tablaProveedores.row(row).data();
+            $('#proveedores tr').removeClass("selected");
+            $(row).addClass("selected");
+            document.getElementById('proveedor_id').value = data['id'];
+        }
 
         $('#productos_entrada_table tbody').on('keyup change', '.child input, .child select, .child textarea', function (e) {
             let $el = $(this);
@@ -389,7 +426,7 @@
                     productos_entrada: crearEstructuraDeProductos()
                 }, function (data) {
                     swal("¡Operación exitosa!", data.msg, "success");
-                    limpiarFormulario()
+                    limpiarFormulario();
                     table.ajax.reload();
                 }).fail(function (err) {
                 $.each(err.responseJSON.errors, function (i, error) {
@@ -416,7 +453,7 @@
                         $.post('/api/entradas/anular', $('#form').serialize(), function (data) {
                             swal("¡Operación exitosa!", data.msg, "success");
                             limpiarFormulario()
-                            table.ajax.reload();
+                            table.ajax.reload()
                         }).fail(function (err) {
                             $.each(err.responseJSON.errors, function (i, error) {
                                 toastr.error(error[0]);
@@ -426,6 +463,28 @@
                     }
                 });
         });
+
+        $("#modificar").click(function () {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.post('/api/entradas/modificar',
+                {
+                    id: $("#id").val(),
+                    fechapago: $("#fechapago").val(),
+                }, function (data) {
+                    table.ajax.reload();
+                    limpiarFormulario();
+                    swal("¡Operación exitosa!", data.msg, "success");
+                }).fail(function (err) {
+                $.each(err.responseJSON.errors, function (i, error) {
+                    toastr.error(error[0]);
+                });
+                console.error(err);
+            })
+        })
 
         /*
             SECCION MODAL
@@ -483,7 +542,6 @@
                     parteCrediticia: $("#parteCrediticia").val(),
                     parteEfectiva: $("#parteEfectiva").val()
                 }, function (data) {
-                    pagos_table.ajax.reload();
                     table.ajax.reload();
                     limpiarFormularioModal()
                     limpiarFormulario();
@@ -508,7 +566,7 @@
                 }, function (data) {
                     pagos_table.ajax.reload();
                     table.ajax.reload();
-                    limpiarFormularioModal()
+                    limpiarFormularioModal();
                     limpiarFormulario();
                     swal("¡Operación exitosa!", data.msg, "success");
                 }).fail(function (err) {

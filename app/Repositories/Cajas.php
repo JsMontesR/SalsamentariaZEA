@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Caja;
 use App\Entrada;
 use App\Movimiento;
+use App\Venta;
 use Illuminate\Support\Facades\Log;
 
 class Cajas
@@ -52,6 +53,71 @@ class Cajas
     }
 
     /**
+     * Genera un cobro y su movimiento asociado
+     * @param Caja $caja
+     * @param $movimientoable
+     * @param int $parteEfectiva
+     * @param int $parteCrediticia
+     */
+    public function cobrar(Caja $caja, $movimientoable, $parteEfectiva = 0, $parteCrediticia = 0)
+    {
+        $nuevoMovimiento = new Movimiento();
+        $nuevoMovimiento->parteEfectiva = $parteEfectiva == null ? 0 : $parteEfectiva;
+        $nuevoMovimiento->parteCrediticia = $parteCrediticia == null ? 0 : $parteCrediticia;
+        $nuevoMovimiento->tipo = Movimiento::INGRESO;
+        $nuevoMovimiento->empleado()->associate(auth()->user());
+        $caja->saldo = $caja->saldo + $parteEfectiva;
+        $caja->save();
+        $caja->refresh();
+        if ($movimientoable instanceof Venta) {
+            $this->actualizarSaldo($movimientoable, $nuevoMovimiento);
+            if ($movimientoable->saldo == 0) {
+                $movimientoable->fechapagado = now();
+            };
+            $movimientoable->save();
+            $movimientoable->refresh();
+        }
+        $nuevoMovimiento->caja()->associate($caja);
+        $nuevoMovimiento->movimientoable()->associate($movimientoable);
+        $nuevoMovimiento->save();
+    }
+
+    /**
+     * Anula un cobro basado en el movimiento previo, genera un nuevo movimiento
+     * @param Caja $caja
+     * @param $movimientoable
+     * @param $parteEfectiva
+     * @param $parteCrediticia
+     */
+    public function anularCobro($movimiento, $parteEfectiva = null, $parteCrediticia = null)
+    {
+        $movimientoable = $movimiento->movimientoable;
+        $caja = $movimiento->caja;
+        $nuevoMovimiento = new Movimiento();
+        $nuevoMovimiento->parteEfectiva = $parteEfectiva == null ? $movimiento->parteEfectiva : $parteEfectiva;
+        $nuevoMovimiento->parteCrediticia = $parteCrediticia == null ? $movimiento->parteCrediticia : $parteCrediticia;
+        $nuevoMovimiento->tipo = Movimiento::EGRESO;
+        $nuevoMovimiento->empleado()->associate(auth()->user());
+        $caja->saldo = $caja->saldo - $nuevoMovimiento->parteEfectiva;
+        $caja->save();
+        $caja->refresh();
+        if ($movimientoable instanceof Venta) {
+            if ($movimientoable->saldo == 0) {
+                $movimientoable->fechapagado = null;
+            };
+            $this->actualizarSaldo($movimientoable, $nuevoMovimiento);
+            $movimientoable->save();
+            $movimientoable->refresh();
+        }
+        $nuevoMovimiento->caja()->associate($caja);
+        $nuevoMovimiento->movimientoable()->associate($movimientoable);
+        $nuevoMovimiento->save();
+        $movimiento->delete();
+
+    }
+
+
+    /**
      * Actualiza el saldo de una entrada sin guardarlo en BD
      * @param Entrada $entrada
      */
@@ -83,6 +149,24 @@ class Cajas
         }
     }
 
+    public function anularTodosLosCobros($movimientoable)
+    {
+        foreach ($movimientoable->movimientos as $movimiento) {
+            if ($movimiento->tipo == Movimiento::INGRESO)
+                $this->anularCobro($movimiento);
+        }
+    }
+
+    public function getCobroNoAnulable($movimientoable)
+    {
+        foreach ($movimientoable->movimientos as $movimiento) {
+            if ($movimiento->tipo == Movimiento::INGRESO && !$this->isPagable($movimiento->caja, $movimiento->parteEfectiva)) {
+                return "el cobro # " . $movimiento->id . " por un monto de " . $movimiento->parteEfectiva;
+            }
+        }
+        return null;
+    }
+
     /**
      * Anula un pago basado en el movimiento previo, genera un nuevo movimiento
      * @param Caja $caja
@@ -99,7 +183,7 @@ class Cajas
         $nuevoMovimiento->parteCrediticia = $parteCrediticia == null ? $movimiento->parteCrediticia : $parteCrediticia;
         $nuevoMovimiento->tipo = Movimiento::INGRESO;
         $nuevoMovimiento->empleado()->associate(auth()->user());
-        $caja->saldo = $caja->saldo + $parteEfectiva;
+        $caja->saldo = $caja->saldo + $nuevoMovimiento->parteEfectiva;
         $caja->save();
         $caja->refresh();
         if ($movimientoable instanceof Entrada) {

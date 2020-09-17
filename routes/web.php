@@ -18,18 +18,18 @@ Route::get('/empleados', 'EmpleadoController@index')->name('empleados')->middlew
 Route::get('/nominas', 'NominaController@index')->name('nominas')->middleware('auth');
 //Route::get('/entradas', 'EntradaController@index')->name('entradas')->middleware('auth');
 Route::get('/entradas/{id?}', 'EntradaController@index')->name('entradas')->middleware('auth');
-Route::get('/ventas', 'VentasController@index')->name('ventas')->middleware('auth');
-Route::get('/movimientos','MovimientoController@index')->name('movimientos')->middleware('auth');
+Route::get('/ventas', 'VentaController@index')->name('ventas')->middleware('auth');
+Route::get('/movimientos', 'MovimientoController@index')->name('movimientos')->middleware('auth');
 Route::get('/notificaciones', 'NotificacionController@index')->name('notificaciones')->middleware('auth');
 
 /*
  * OPERACIONES CRUD Y CORE DEL NEGOCIO
  */
 
-Route::prefix('api')->group(function(){
+Route::prefix('api')->group(function () {
 
     // CRUD Proveedores
-    Route::prefix('proveedores')->group(function(){
+    Route::prefix('proveedores')->group(function () {
         Route::get('listar', 'ProveedorController@list')->middleware('auth');
         Route::post('crear', 'ProveedorController@store')->middleware('auth');
         Route::post('modificar', 'ProveedorController@update')->middleware('auth');
@@ -37,7 +37,7 @@ Route::prefix('api')->group(function(){
     });
 
     // CRUD Tipos de productos
-    Route::prefix('tiposproductos')->group(function(){
+    Route::prefix('tiposproductos')->group(function () {
         Route::get('listar', 'ProductoTipoController@list')->middleware('auth');
         Route::post('crear', 'ProductoTipoController@store')->middleware('auth');
         Route::post('modificar', 'ProductoTipoController@update')->middleware('auth');
@@ -45,7 +45,7 @@ Route::prefix('api')->group(function(){
     });
 
     // CRUD productos
-    Route::prefix('productos')->group(function(){
+    Route::prefix('productos')->group(function () {
         Route::get('listar', 'ProductoController@list')->middleware('auth');
         Route::post('crear', 'ProductoController@store')->middleware('auth');
         Route::post('modificar', 'ProductoController@update')->middleware('auth');
@@ -53,7 +53,7 @@ Route::prefix('api')->group(function(){
     });
 
     // CRUD clientes
-    Route::prefix('clientes')->group(function(){
+    Route::prefix('clientes')->group(function () {
         Route::get('listar', 'ClienteController@list')->middleware('auth');
         Route::post('crear', 'ClienteController@store')->middleware('auth');
         Route::post('modificar', 'ClienteController@update')->middleware('auth');
@@ -61,7 +61,7 @@ Route::prefix('api')->group(function(){
     });
 
     // CRUD empleados
-    Route::prefix('empleados')->group(function(){
+    Route::prefix('empleados')->group(function () {
         Route::get('listar', 'EmpleadoController@list')->middleware('auth');
         Route::post('crear', 'EmpleadoController@store')->middleware('auth');
         Route::post('modificar', 'EmpleadoController@update')->middleware('auth');
@@ -69,33 +69,37 @@ Route::prefix('api')->group(function(){
     });
 
     // Procesamiento nóminas
-    Route::prefix('nominas')->group(function(){
+    Route::prefix('nominas')->group(function () {
         Route::get('listar', 'NominaController@list')->middleware('auth');
         Route::post('pagar', 'NominaController@pay')->middleware('auth');
         Route::post('anular', 'NominaController@undoPay')->middleware('auth');
     });
 
     // Procesamiento de entradas
-    Route::prefix('entradas')->group(function(){
+    Route::prefix('entradas')->group(function () {
         Route::get('listar', 'EntradaController@list')->middleware('auth');
         Route::get('{id}/pagos', 'EntradaController@pagos')->middleware('auth');
         Route::post('crear', 'EntradaController@store')->middleware('auth');
+        Route::post('modificar', 'EntradaController@update')->middleware('auth');
         Route::post('pagar', 'EntradaController@pagar')->middleware('auth');
         Route::post('anular', 'EntradaController@anular')->middleware('auth');
     });
 
     // Procesamiento de ventas
-    Route::prefix('ventas')->group(function(){
+    Route::prefix('ventas')->group(function () {
         Route::get('listar', 'VentaController@list')->middleware('auth');
-        Route::post('crear', 'VentasController@store')->middleware('auth');
-        Route::post('cargar', 'VentasController@cargar')->middleware('auth');
-        Route::post('anular', 'VentasController@anular')->middleware('auth');
+        Route::get('{id}/cobros', 'VentaController@cobros')->middleware('auth');
+        Route::post('crear', 'VentaController@store')->middleware('auth');
+        Route::post('modificar', 'VentaController@update')->middleware('auth');
+        Route::post('cobrar', 'VentaController@cobrar')->middleware('auth');
+        Route::post('anular', 'VentaController@anular')->middleware('auth');
     });
 
     // Procesamiento de movimientos
-    Route::prefix('movimientos')->group(function(){
+    Route::prefix('movimientos')->group(function () {
         Route::get('listar', 'MovimientoController@list')->middleware('auth');
         Route::post('anularPago', 'MovimientoController@anularPago')->middleware('auth');
+        Route::post('anularCobro', 'MovimientoController@anularCobro')->middleware('auth');
     });
 
 });

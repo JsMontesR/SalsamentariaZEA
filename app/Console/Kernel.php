@@ -3,7 +3,7 @@
 namespace App\Console;
 
 use App\Entrada;
-use App\Jobs\GenerarRecordatorios;
+use App\Jobs\ActualizarNotificaciones;
 use App\Nomina;
 use App\Notifications\CuentaPorPagarNotification;
 use App\Notifications\NominaPorPagarNotification;
@@ -31,7 +31,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->job(new GenerarRecordatorios())->everyMinute();
+        $schedule->job(new ActualizarNotificaciones())->everyMinute();
     }
 
     /**

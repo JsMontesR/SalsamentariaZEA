@@ -10,27 +10,32 @@ class Venta extends Model
 {
     use SoftDeletes;
 
+    protected $guarded = ["id"];
+
     public function productos()
     {
         return $this->belongsToMany('App\Producto');
     }
+
     public function empleado()
     {
         return $this->belongsTo('App\User');
     }
+
     public function cliente()
     {
         return $this->belongsTo('App\User');
     }
 
-    public function movimientos(){
-        return $this->morphMany(Movimiento::class,'movimientoable');
+    public function movimientos()
+    {
+        return $this->morphMany(Movimiento::class, 'movimientoable');
     }
 
     /**
      * Prepare a date for array / JSON serialization.
      *
-     * @param  \DateTimeInterface  $date
+     * @param \DateTimeInterface $date
      * @return string
      */
     protected function serializeDate(DateTimeInterface $date)

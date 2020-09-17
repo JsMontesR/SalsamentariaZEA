@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Exceptions\FondosInsuficientesException;
 use App\Movimiento;
 use App\Repositories\Cajas;
 use Illuminate\Database\Eloquent\Builder;
@@ -29,7 +30,7 @@ class MovimientoController extends Controller
     }
 
     /**
-     * Registra una entrada.
+     * Anula un pago.
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
@@ -43,6 +44,26 @@ class MovimientoController extends Controller
         $this->cajas->anularPago($movimiento);
         return response()->json([
             'msg' => '¡Pago anulado!',
+        ]);
+    }
+
+    /**
+     * Anula un cobro.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function anularCobro(Request $request)
+    {
+        //Validación de la factibilidad de la transacción
+        $movimiento = Movimiento::findOrFail($request->id);
+        if (!$this->cajas->isPagable($movimiento->caja, $movimiento->parteEfectiva)) {
+            throw FondosInsuficientesException::withMessages(["id" => "Operación no realizable, saldo en caja insuficiente"]);
+        }
+        // Ejecución de la transacción
+        $this->cajas->anularCobro($movimiento);
+        return response()->json([
+            'msg' => '¡Cobro anulado!',
         ]);
     }
 

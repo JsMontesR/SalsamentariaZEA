@@ -33,12 +33,12 @@ class GenerarRecordatoriosPagoEntradas implements ShouldQueue
      */
     public function handle()
     {
-        $entradas = Entrada::query()->whereNull('fechapagado')->whereRaw('DATEDIFF(fechapago,NOW()) = ' . GenerarRecordatorios::DIASANTICIPACION)->get();
+        $entradas = Entrada::query()->whereNull('fechapagado')->whereRaw('DATEDIFF(fechapago,NOW()) < ' . ActualizarNotificaciones::DIASANTICIPACION)->get();
 
         Log::info("Generando notificaciones de cuentas por pagar");
         foreach ($entradas as $entrada) {
-            $empleadosANotificar = User::query()->where('rol_id', '<>', 3)->whereDoesntHave('notifications', function ($query) {
-                $query->whereRaw("JSON_EXTRACT(data,'$.id') = 1");
+            $empleadosANotificar = User::query()->where('rol_id', '<>', 3)->whereDoesntHave('notifications', function ($query) use ($entrada) {
+                $query->whereRaw("JSON_EXTRACT(data,'$.id') = " . $entrada->id);
             })->get();
             Notification::send($empleadosANotificar, new CuentaPorPagarNotification($entrada, "Pagar al proveedor " . $entrada->proveedor->nombre . " la entrada #" . $entrada->id . ", el saldo pendiente es de $" . number_format($entrada->saldo, 0)));
         }
