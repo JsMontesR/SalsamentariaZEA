@@ -2,6 +2,10 @@
     $(document).ready(function () {
         let btnAgregar = "<input name='btn_agregar_productos_tabla' type='button' value='Agregar' class='btn btn-success container-fluid'/>";
 
+        function darFormatoNumerico() {
+            $('.money').mask('000.000.000.000.000', {reverse: true});
+        }
+
         function crearEstructuraDeProductos() {
             let arr = [];
             productos_entrada_table.rows().every(function (rowIdx, tableLoop, rowLoop) {
@@ -87,7 +91,7 @@
                 productos_entrada_table.responsive.rebuild();
                 productos_entrada_table.responsive.recalc();
             }
-            $('.money').mask('000.000.000.000.000', {reverse: true});
+            darFormatoNumerico();
         }
 
         function renderChange(data, type, row, meta) {
@@ -397,7 +401,7 @@
                 productos_entrada_table.row.add(newRow).draw();
                 productos_entrada_table.responsive.rebuild();
                 productos_entrada_table.responsive.recalc();
-                $('.money').mask('000.000.000.000.000', {reverse: true});
+                darFormatoNumerico();
             } else {
                 toastr.warning("El producto seleccionado ya se agregó a la entrada");
             }
@@ -421,7 +425,7 @@
         }
 
         $(document).on('keyup change', '[id^="cantidad_producto_entrada"]', function () {
-            $('.money').mask('000.000.000.000.000', {reverse: true});
+            darFormatoNumerico();
             let valor = $(this).cleanVal();
             let precio = parseInt($(this).attr("precio"));
             let idPrecio = $(this).attr("id").replace("cantidad", "precio");
@@ -510,6 +514,7 @@
         let pagos_table;
 
         $("#verpagos").click(function () {
+            darFormatoNumerico();
             $.ajax({
                 url: "/api/entradas/" + $("#id").val() + "/pagos",
                 type: "get",

@@ -180,7 +180,7 @@
                                         <span class="input-group-text">$</span>
                                     </div>
                                     <input id="valor" type="number" readonly="readonly"
-                                           class="form-control border-warning"
+                                           class="form-control border-warning money"
                                            name="valor">
                                 </div>
                             </div>
@@ -190,8 +190,8 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">$</span>
                                     </div>
-                                    <input id="valorcobrado" type="number" readonly="readonly"
-                                           class="form-control border-success"
+                                    <input id="valorcobrado" readonly="readonly"
+                                           class="form-control border-success money"
                                            name="valorcobrado">
                                 </div>
                             </div>
@@ -201,8 +201,8 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">$</span>
                                     </div>
-                                    <input id="saldo" type="number" readonly="readonly"
-                                           class="form-control border-danger"
+                                    <input id="saldo" readonly="readonly"
+                                           class="form-control border-danger money"
                                            name="saldo">
                                 </div>
                             </div>
@@ -214,8 +214,8 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">💵</span>
                                 </div>
-                                <input id="parteEfectiva" type="number"
-                                       class="form-control"
+                                <input id="parteEfectiva"
+                                       class="form-control money"
                                        name="parteEfectiva" required="required">
                             </div>
                         </div>
@@ -226,8 +226,8 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">💳</span>
                                 </div>
-                                <input id="parteCrediticia" type="number"
-                                       class="form-control"
+                                <input id="parteCrediticia"
+                                       class="form-control money"
                                        name="parteCrediticia" required="required">
                             </div>
                         </div>

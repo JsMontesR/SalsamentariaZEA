@@ -20,7 +20,7 @@ class ProductosSeeder extends Seeder
         $producto->costo = 2000;
         $producto->utilidad = 10;
         $producto->precio = 2200;
-        $producto->stock = 0;
+        $producto->stock = 50;
         $producto->save();
     }
 }

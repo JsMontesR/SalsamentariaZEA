@@ -2,6 +2,10 @@
     $(document).ready(function () {
         let btnAgregar = "<input name='btn_agregar_productos_tabla' type='button' value='Agregar' class='btn btn-success container-fluid'/>";
 
+        function darFormatoNumerico() {
+            $('.money').mask('000.000.000.000.000', {reverse: true});
+        }
+
         function crearEstructuraDeProductos() {
             let arr = [];
             productos_carrito_table.rows().every(function (rowIdx, tableLoop, rowLoop) {
@@ -87,7 +91,7 @@
                 productos_carrito_table.responsive.rebuild();
                 productos_carrito_table.responsive.recalc();
             }
-            $('.money').mask('000.000.000.000.000', {reverse: true});
+            darFormatoNumerico();
         }
 
         function renderChange(data, type, row, meta) {
@@ -131,7 +135,7 @@
             document.getElementById('fechapagado').value = data['fechapagado'];
             $('[name="valor"]').val(data['valor']);
             $('[name="saldo"]').val(data['saldo']);
-            $('[name="valorpagado"]').val(data['valor'] - data['saldo']);
+            $('[name="valorcobrado"]').val(data['valor'] - data['saldo']);
             $('#productos_container').hide();
             cargarProductosVenta(data['productos']);
             clienteId = data['cliente']['id'];
@@ -405,7 +409,7 @@
                 productos_carrito_table.row.add(newRow).draw();
                 productos_carrito_table.responsive.rebuild();
                 productos_carrito_table.responsive.recalc();
-                $('.money').mask('000.000.000.000.000', {reverse: true});
+                darFormatoNumerico();
             } else {
                 toastr.warning("El producto seleccionado ya se agregó a la venta");
             }
@@ -430,7 +434,7 @@
 
 
         $(document).on('keyup change', '[id^="cantidad_producto_carrito"]', function () {
-            $('.money').mask('000.000.000.000.000', {reverse: true});
+            darFormatoNumerico();
             let valor = $(this).cleanVal();
             let precio = parseInt($(this).attr("precio"));
             let idPrecio = $(this).attr("id").replace("cantidad", "precio");
@@ -519,6 +523,7 @@
         let cobros_table;
 
         $("#vercobros").click(function () {
+            darFormatoNumerico();
             $.ajax({
                 url: "/api/ventas/" + $("#id").val() + "/cobros",
                 type: "get",
