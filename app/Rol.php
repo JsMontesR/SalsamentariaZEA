@@ -7,7 +7,7 @@ use DateTimeInterface;
 
 class Rol extends Model
 {
-    protected $fillable = ['nombre'];
+    protected $fillable = ['id', 'nombre'];
 
     public function users()
     {
@@ -17,7 +17,7 @@ class Rol extends Model
     /**
      * Prepare a date for array / JSON serialization.
      *
-     * @param  \DateTimeInterface  $date
+     * @param \DateTimeInterface $date
      * @return string
      */
     protected function serializeDate(DateTimeInterface $date)
