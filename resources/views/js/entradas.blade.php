@@ -9,8 +9,8 @@
                 let id = data['id'];
                 arr.push({
                     id: id,
-                    cantidad: $('#cantidad_producto_entrada' + id).val(),
-                    costo: $('#precio_producto_entrada' + id).val()
+                    cantidad: $('#cantidad_producto_entrada' + id).cleanVal(),
+                    costo: $('#precio_producto_entrada' + id).cleanVal()
                 });
             });
             return arr;
@@ -75,8 +75,8 @@
             }
             return $.extend({
                 'btnEliminar': "<input " + activated + " name='btn_eliminar_productos_entrada_table' type='button' value='Eliminar' class='btn btn-warning container-fluid'/>",
-                'cantidad': "<div class='input-group mb-1'><div class='input-group-prepend'><span class='input-group-text'>" + emoji + "</span></div><input " + cantidad + " id='cantidad_producto_entrada" + data['id'] + "' class='form-control' type='number' placeholder='" + tipoDeCantidad + "'/></div>",
-                'costoTotal': "<div class='input-group mb-1'><div class='input-group-prepend'><span class='input-group-text'>💵</span></div><input " + costo + " id='precio_producto_entrada" + data['id'] + "' class='form-control' type='number' placeholder='Costo total'/></div>"
+                'cantidad': "<div class='input-group mb-1'><div class='input-group-prepend'><span class='input-group-text'>" + emoji + "</span></div><input " + cantidad + " id='cantidad_producto_entrada" + data['id'] + "' class='money form-control' type='number' placeholder='" + tipoDeCantidad + "'/></div>",
+                'costoTotal': "<div class='input-group mb-1'><div class='input-group-prepend'><span class='input-group-text'>💵</span></div><input " + costo + " id='precio_producto_entrada" + data['id'] + "' class='money form-control' type='number' placeholder='Costo total'/></div>"
             }, data)
         }
 
@@ -87,6 +87,7 @@
                 productos_entrada_table.responsive.rebuild();
                 productos_entrada_table.responsive.recalc();
             }
+            $('.money').mask('000.000.000.000.000', {reverse: true});
         }
 
         function renderChange(data, type, row, meta) {
@@ -396,21 +397,37 @@
                 productos_entrada_table.row.add(newRow).draw();
                 productos_entrada_table.responsive.rebuild();
                 productos_entrada_table.responsive.recalc();
+                $('.money').mask('000.000.000.000.000', {reverse: true});
             } else {
                 toastr.warning("El producto seleccionado ya se agregó a la entrada");
             }
         });
 
         $(document).on('keyup', '[id^="precio_producto_entrada"]', function () {
+            calcularTotal();
+        });
+
+        function calcularTotal() {
             let alreadyUsed = {};
             let valor = 0;
             $('[id^="precio_producto_entrada"]').each(function (index, value) {
                 if (!alreadyUsed[$(this).attr("id")]) {
-                    valor += isNaN(parseInt(value.value, 10)) ? 0 : parseInt(value.value, 10)
+                    let val = $(this).cleanVal();
+                    valor += isNaN(parseInt(val, 10)) ? 0 : parseInt(val, 10)
                 }
                 alreadyUsed[$(this).attr("id")] = true;
             })
-            document.getElementById("valor").value = valor;
+            $("#valor").val(valor).trigger('input');
+        }
+
+        $(document).on('keyup change', '[id^="cantidad_producto_entrada"]', function () {
+            $('.money').mask('000.000.000.000.000', {reverse: true});
+            let valor = $(this).cleanVal();
+            let precio = parseInt($(this).attr("precio"));
+            let idPrecio = $(this).attr("id").replace("cantidad", "precio");
+            let total = isNaN(parseInt(valor * precio, 10)) ? 0 : parseInt(valor * precio, 10)
+            $("[name='" + idPrecio + "']").val(total).trigger('input');
+            calcularTotal();
         });
 
         $("#registrar").click(function () {

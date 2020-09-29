@@ -87,6 +87,7 @@
                 productos_carrito_table.responsive.rebuild();
                 productos_carrito_table.responsive.recalc();
             }
+            $('.money').mask('000.000.000.000.000', {reverse: true});
         }
 
         function renderChange(data, type, row, meta) {
@@ -142,16 +143,16 @@
             document.getElementById('modificar').disabled = false;
         }
 
-        $.ajax({
-            url: "/api/ventas/listar",
-            type: "get",
-            success: function (data) {
-                console.log(data);
-            },
-            error: function (err) {
-                console.warn(err);
-            }
-        })
+        // $.ajax({
+        //     url: "/api/ventas/listar",
+        //     type: "get",
+        //     success: function (data) {
+        //         console.log(data);
+        //     },
+        //     error: function (err) {
+        //         console.warn(err);
+        //     }
+        // })
 
         let clienteSpecific;
         let table = $('#recurso').DataTable($.extend({
@@ -243,7 +244,6 @@
                 }
             });
         });
-
 
         let productos_table = $('#productos_table').DataTable($.extend({
             serverSide: true,
