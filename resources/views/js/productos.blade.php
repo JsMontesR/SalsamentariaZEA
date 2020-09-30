@@ -52,19 +52,19 @@
             serverSide: true,
             ajax: 'api/productos/listar',
             columns: [
-                {data: 'id', name: 'id', title: 'Id', className: "text-center"},
-                {data: 'nombre', name: 'nombre', title: 'Nombre', className: "text-center"},
-                {data: 'categoria', title: 'Categoría', className: "text-center"},
+                {data: 'id', name: 'productos.id', title: 'Id', className: "text-center"},
+                {data: 'nombre', name: 'productos.nombre', title: 'Nombre', className: "text-center"},
+                {data: 'categoria', name: 'productos.categoria', title: 'Categoría', className: "text-center"},
                 {
                     data: 'costo',
-                    name: 'costo',
+                    name: 'productos.costo',
                     title: 'Costo Unitario/Kg',
                     render: $.fn.dataTable.render.number(',', '.', 0, '$ '),
                     className: "text-center"
                 },
                 {
                     data: 'utilidad',
-                    name: 'utilidad',
+                    name: 'productos.utilidad',
                     title: 'Utilidad Unitaria/Kg',
                     className: "text-center",
                     render: function (data, type, full, meta) {
@@ -73,13 +73,13 @@
                 },
                 {
                     data: 'precio',
-                    name: 'precio',
+                    name: 'productos.precio',
                     title: 'Precio Unitario/Kg',
                     render: $.fn.dataTable.render.number(',', '.', 0, '$ '),
                     className: "text-center"
                 },
                 {
-                    data: 'stock', name: 'stock', title: 'Unidades/g en stock', render: function (data, type, row) {
+                    data: 'stock', name: 'productos.stock', title: 'Unidades/g en stock', render: function (data, type, row) {
                         if (row["categoria"] == "Granel") {
                             return +data + ' gramos';
                         } else if (row["categoria"] == "Unitario") {

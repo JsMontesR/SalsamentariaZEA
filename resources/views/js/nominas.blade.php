@@ -1,5 +1,12 @@
 <script>
     $(document).ready(function () {
+        $('.number').mask('000.000.000.000.000', {reverse: true});
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
 
         function limpiarFormulario() {
             document.getElementById('id').value = "";
@@ -52,9 +59,9 @@
             document.getElementById('id').value = data['id'];
             document.getElementById('empleado_id').value = data['empleado']['id'];
             document.getElementById('nombre').value = data['empleado']['name'];
-            document.getElementById('di').value = data['empleado']['di'];
-            document.getElementById('salario').value = data['empleado']['salario'];
-            document.getElementById('valor').value = data['valor'];
+            $('#di').val(data['empleado']['di']).trigger('input');
+            $('#salario').val(data['empleado']['salario']).trigger('input');
+            $('#valor').val(data['valor']).trigger('input');
         });
 
         let empleados_table = $('#empleados').DataTable($.extend({
@@ -62,7 +69,7 @@
             ajax: 'api/empleados/listar',
             columns: [
                 {data: 'id', title: 'Id', className: "text-center"},
-                {data: 'name', title: 'Nombre'},
+                {data: 'name', title: 'Nombre', className: "text-center"},
                 {
                     data: 'di',
                     title: 'Documento de identidad',
@@ -90,13 +97,18 @@
             let data = empleados_table.row(this).data();
             document.getElementById('empleado_id').value = data['id'];
             document.getElementById('nombre').value = data['name'];
-            document.getElementById('di').value = data['di'];
-            document.getElementById('salario').value = data['salario'];
-            document.getElementById('parteEfectiva').value = data['salario'];
+            $('#di').val(data['di']).trigger('input');
+            $('#salario').val(data['salario']).trigger('input');
+            $('#valor').val(data['salario']).trigger('input');
+            $('#parteEfectiva').val(data['salario']).trigger('input');
         });
 
         $("#pagar").click(function () {
-            $.post('api/nominas/pagar', $('#form').serialize(), function (data) {
+            $.post('api/nominas/pagar', {
+                empleado_id: $("#empleado_id").val(),
+                parteEfectiva: $("#parteEfectiva").cleanVal(),
+                parteCrediticia: $("#parteCrediticia").cleanVal(),
+            }, function (data) {
                 swal("¡Operación exitosa!", data.msg, "success");
                 limpiarFormulario()
                 table.ajax.reload();
@@ -122,7 +134,9 @@
             })
                 .then((willDelete) => {
                     if (willDelete) {
-                        $.post('api/nominas/anular', $('#form').serialize(), function (data) {
+                        $.post('api/nominas/anular', {
+                            id: $('#id').val()
+                        }, function (data) {
                             swal("¡Operación exitosa!", data.msg, "success");
                             limpiarFormulario()
                             table.ajax.reload();

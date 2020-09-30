@@ -24,6 +24,7 @@ class Nominas
         $nomina = new Nomina();
         $nomina->empleado()->associate(User::findOrFail($request->empleado_id));
         $nomina->valor = $request->parteCrediticia + $request->parteEfectiva;
+        $nomina->fechapago = now();
         $nomina->save();
         $nomina->refresh();
         return $nomina;

@@ -83,12 +83,12 @@ class NominaController extends Controller
     public function undoPay(Request $request)
     {
         //Validación de la factibilidad de la transacción
-        $request->validate($this->validationRules);
+        $request->validate($this->validationIdRule);
 
         // Ejecución de la transacción
         $nomina = Nomina::find($request->id);
         $movimiento = $nomina->movimientos->first();
-        $this->cajas->anularPago($movimiento->caja, $nomina, $movimiento->parteEfectiva, $movimiento->parteCrediticia);
+        $this->cajas->anularPago($movimiento);
         $this->nominas->anular($nomina);
 
         return response()->json([

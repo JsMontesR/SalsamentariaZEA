@@ -20,28 +20,37 @@
             serverSide: true,
             ajax: 'api/empleados/listar',
             columns: [
-                {data: 'id', title: 'Id', className: "text-center"},
-                {data: 'name', title: 'Nombre'},
+                {data: 'id', name: 'users.id', title: 'Id', className: "text-center"},
+                {data: 'name', name: 'users.name', title: 'Nombre'},
                 {
                     data: 'di',
+                    name: 'users.di',
                     title: 'Documento de identidad',
                     render: $.fn.dataTable.render.number('.', '.', 0,),
                     className: "text-center"
                 },
-                {data: 'celular', title: 'Teléfono celular', className: "text-center"},
-                {data: 'fijo', title: 'Teléfono fijo', className: "text-center"},
-                {data: 'email', title: 'Correo electrónico', className: "text-center"},
-                {data: 'direccion', title: 'Dirección', className: "text-center"},
+                {data: 'celular', name: 'users.celular', title: 'Teléfono celular', className: "text-center"},
+                {data: 'fijo', name: 'users.fijo', title: 'Teléfono fijo', className: "text-center"},
+                {data: 'email', name: 'users.email', title: 'Correo electrónico', className: "text-center"},
+                {data: 'direccion', name: 'users.direccion', title: 'Dirección', className: "text-center"},
                 {
                     data: 'salario',
+                    name: 'users.salario',
                     title: 'Salario',
                     render: $.fn.dataTable.render.number(',', '.', 0, " $"),
                     className: "text-center"
                 },
-                {data: 'rol.id', title: 'Id de rol', className: "text-center", visible: false, searchable: false,},
-                {data: 'rol.nombre', title: 'Rol', className: "text-center"},
-                {data: 'created_at', title: 'Fecha de creación', className: "text-center"},
-                {data: 'updated_at', title: 'Fecha de actualización', className: "text-center"},
+                {
+                    data: 'rol.id',
+                    name: 'rol.id',
+                    title: 'Id de rol',
+                    className: "text-center",
+                    visible: false,
+                    searchable: false,
+                },
+                {data: 'rol.nombre', name: 'rol.nombre', title: 'Rol', className: "text-center"},
+                {data: 'created_at', name: 'users.created_at', title: 'Fecha de creación', className: "text-center"},
+                {data: 'updated_at', name: 'users.updated_at', title: 'Fecha de actualización', className: "text-center"},
             ]
         }, options));
 

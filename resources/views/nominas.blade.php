@@ -43,14 +43,14 @@
                         <label class="col-md-4 col-form-label text-md-left">Nombre del empleado:</label>
                         <div class="col-md-8">
                             <input id="nombre" readonly="readonly"
-                                   class="form-control"
+                                   class="number form-control"
                                    name="nombre">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-4 col-form-label text-md-left">Documento de identidad:</label>
                         <div class="col-md-8">
-                            <input id="di" readonly="readonly" class="form-control"
+                            <input id="di" readonly="readonly" class="number form-control"
                                    name="di">
                         </div>
                     </div>
@@ -60,8 +60,8 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-fw fa-money-bill-alt"></i></span>
                             </div>
-                            <input id="salario" type="number" readonly="readonly"
-                                   class="form-control"
+                            <input id="salario" readonly="readonly"
+                                   class="number form-control"
                                    name="salario">
                         </div>
                     </div>
@@ -71,8 +71,8 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">💵</span>
                             </div>
-                            <input id="parteEfectiva" type="number"
-                                   class="form-control"
+                            <input id="parteEfectiva"
+                                   class="number form-control"
                                    name="parteEfectiva" required="required">
                         </div>
                     </div>
@@ -82,8 +82,8 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">💳</span>
                             </div>
-                            <input id="parteCrediticia" type="number"
-                                   class="form-control"
+                            <input id="parteCrediticia"
+                                   class="number form-control"
                                    name="parteCrediticia" required="required">
                         </div>
                     </div>
@@ -94,8 +94,8 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">$</span>
                             </div>
-                            <input id="valor" type="number" readonly
-                                   class="form-control"
+                            <input id="valor" readonly
+                                   class="number form-control"
                                    name="valor" required="required">
                         </div>
                     </div>

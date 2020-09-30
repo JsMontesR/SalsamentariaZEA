@@ -57,7 +57,7 @@ class EmpleadoController extends Controller
 
     public function list()
     {
-        return datatables()->eloquent(User::query()->with('rol')->where('rol_id','<>',3))->toJson();
+        return datatables()->eloquent(User::query()->select('users.*')->with('rol')->where('rol_id','<>',3))->toJson();
     }
 
     /**
