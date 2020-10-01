@@ -4,9 +4,6 @@ namespace App\Repositories;
 
 use App\Entrada;
 use App\Nomina;
-use App\Producto;
-use App\ProductoTipo;
-use App\Proveedor;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -23,8 +20,9 @@ class Nominas
     {
         $nomina = new Nomina();
         $nomina->empleado()->associate(User::findOrFail($request->empleado_id));
-        $nomina->valor = $request->parteCrediticia + $request->parteEfectiva;
-        $nomina->fechapago = now();
+        $nomina->valor = $request->valor;
+        $nomina->saldo = $request->valor;
+        $nomina->fechapago = $request->fechapago;
         $nomina->save();
         $nomina->refresh();
         return $nomina;
@@ -39,9 +37,9 @@ class Nominas
         $nomina->delete();
     }
 
-    public function isEntradaPagable(Entrada $entrada)
+    public function isNominaPagable(Nomina $nomina)
     {
-        return $entrada->fechapagado == null;
+        return $nomina->fechapagado == null;
     }
 }
 

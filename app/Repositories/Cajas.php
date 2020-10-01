@@ -186,7 +186,7 @@ class Cajas
         $caja->saldo = $caja->saldo + $nuevoMovimiento->parteEfectiva;
         $caja->save();
         $caja->refresh();
-        if ($movimientoable instanceof Entrada) {
+        if ($movimientoable instanceof Entrada || $movimientoable instanceof Nomina) {
             if ($movimientoable->saldo == 0) {
                 $movimientoable->fechapagado = null;
             };

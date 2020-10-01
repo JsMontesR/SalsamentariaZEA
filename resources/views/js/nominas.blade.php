@@ -1,6 +1,11 @@
 <script>
     $(document).ready(function () {
-        $('.number').mask('000.000.000.000.000', {reverse: true});
+
+        darFormatoNumerico();
+
+        function darFormatoNumerico() {
+            $('.number').mask('000.000.000.000.000', {reverse: true});
+        }
 
         $.ajaxSetup({
             headers: {
@@ -19,49 +24,73 @@
             document.getElementById('parteCrediticia').value = "";
             document.getElementById('pagar').disabled = false;
             $('#recurso tr').removeClass("selected");
+            document.getElementById('verpagos').disabled = true;
+            document.getElementById('registrar').disabled = false;
+            document.getElementById('eliminar').disabled = true;
+            document.getElementById('modificar').disabled = true;
+            table.ajax.reload();
         }
 
         let table = $('#recurso').DataTable($.extend({
             serverSide: true,
             ajax: 'api/nominas/listar',
             columns: [
-                {data: 'id', title: 'Id', className: "text-center"},
-                {data: 'empleado.id', title: 'Id del empleado', visible: false, searchable: false},
-                {data: 'empleado.name', title: 'Nombre del empleado', className: "text-center"},
+                {data: 'id', name: 'nominas.id', title: 'Id', className: "text-center"},
+                {data: 'empleado.id', name: 'empleado.id', title: 'Id del empleado', visible: false, searchable: false},
+                {data: 'empleado.name', name: 'empleado.name', title: 'Nombre del empleado', className: "text-center"},
                 {
                     data: 'empleado.di',
+                    name: 'empleado.di',
                     title: 'Documento de identidad',
                     render: $.fn.dataTable.render.number('.', '.', 0),
                     className: "text-center"
                 },
                 {
                     data: 'empleado.salario',
+                    name: 'empleado.salario',
                     title: 'Salario',
                     render: $.fn.dataTable.render.number(',', '.', 0, '$ '),
                     className: "text-center"
                 },
                 {
                     data: 'valor',
-                    title: 'Valor pagado',
+                    name: 'nominas.valor',
+                    title: 'Valor',
                     render: $.fn.dataTable.render.number(',', '.', 0, '$ '),
                     className: "text-center"
                 },
-                {data: 'created_at', title: 'Fecha de creación', className: "text-center"},
-                {data: 'updated_at', title: 'Fecha de actualización', className: "text-center"},
+                {
+                    data: 'fechapago',
+                    name: 'nominas.fechapago',
+                    title: 'Fecha límite de pago',
+                    className: "text-center"
+                },
+                {data: 'created_at', name: 'nominas.created_at', title: 'Fecha de creación', className: "text-center"},
+                {
+                    data: 'updated_at',
+                    name: 'nominas.updated_at',
+                    title: 'Fecha de actualización',
+                    className: "text-center"
+                },
             ]
         }, options));
 
         $('#recurso tbody').on('click', 'tr', function () {
             limpiarFormulario();
             $(this).addClass('selected');
-            document.getElementById('pagar').disabled = true;
             let data = table.row(this).data();
             document.getElementById('id').value = data['id'];
             document.getElementById('empleado_id').value = data['empleado']['id'];
             document.getElementById('nombre').value = data['empleado']['name'];
             $('#di').val(data['empleado']['di']).trigger('input');
             $('#salario').val(data['empleado']['salario']).trigger('input');
-            $('#valor').val(data['valor']).trigger('input');
+            $('[name="valor"]').val(data['valor']).trigger('input');
+            $('[name="saldo"]').val(data['saldo']).trigger('input');
+            $('[name="valorpagado"]').val(data['valor'] - data['saldo']).trigger('input');
+            document.getElementById('registrar').disabled = true;
+            document.getElementById('verpagos').disabled = false;
+            document.getElementById('eliminar').disabled = false;
+            document.getElementById('modificar').disabled = false;
         });
 
         let empleados_table = $('#empleados').DataTable($.extend({
@@ -103,16 +132,22 @@
             $('#parteEfectiva').val(data['salario']).trigger('input');
         });
 
-        $("#pagar").click(function () {
-            $.post('api/nominas/pagar', {
-                empleado_id: $("#empleado_id").val(),
-                parteEfectiva: $("#parteEfectiva").cleanVal(),
-                parteCrediticia: $("#parteCrediticia").cleanVal(),
-            }, function (data) {
-                swal("¡Operación exitosa!", data.msg, "success");
-                limpiarFormulario()
-                table.ajax.reload();
-            }).fail(function (err) {
+        $("#registrar").click(function () {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.post('/api/nominas/crear',
+                {
+                    empleado_id: $("#empleado_id").val(),
+                    valor: $("#valor").cleanVal(),
+                    fechapago: $("#fechapago").val(),
+                }, function (data) {
+                    swal("¡Operación exitosa!", data.msg, "success");
+                    limpiarFormulario();
+                    table.ajax.reload();
+                }).fail(function (err) {
                 $.each(err.responseJSON.errors, function (i, error) {
                     toastr.error(error[0]);
                 });
@@ -148,6 +183,123 @@
                         })
                     }
                 });
+        });
+
+
+        /*
+        SECCION MODAL
+        */
+
+        let pagos_table;
+        // $("#modalMovimientos").on('shown.bs.modal', function () {
+        //     $('[name="valor"]').trigger('input');
+        //     $('[name="saldo"]').trigger('input');
+        //     $('[name="valorpagado"]').trigger('input');
+        // });
+        $("#verpagos").click(function () {
+
+            $.ajax({
+                url: "/api/nominas/" + $("#id").val() + "/pagos",
+                type: "get",
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function (err) {
+                    console.warn(err);
+                }
+            })
+            if ($.fn.DataTable.isDataTable('#pagos_table')) {
+                pagos_table.destroy();
+            }
+            pagos_table = $('#pagos_table').DataTable($.extend({
+                serverSide: true,
+                ajax: '/api/nominas/' + $("#id").val() + '/pagos',
+                columns: [
+                    {data: 'id', title: 'Id', className: "text-center"},
+                    {data: 'empleado.name', title: 'Nombre del empleado', className: "text-center"},
+                    {
+                        data: 'parteEfectiva',
+                        title: 'Parte efectiva',
+                        className: "text-center",
+                        render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
+                    },
+                    {
+                        data: 'parteCrediticia',
+                        title: 'Parte crediticia',
+                        className: "text-center",
+                        render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
+                    },
+                    {data: 'created_at', title: 'Fecha de creación', className: "text-center"}
+                ],
+                responsive: true
+            }, options));
+        })
+
+        $("#pagar").click(function () {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.post('/api/nominas/pagar',
+                {
+                    id: $("#id").val(),
+                    parteCrediticia: $("#parteCrediticia").val(),
+                    parteEfectiva: $("#parteEfectiva").val()
+                }, function (data) {
+                    table.ajax.reload();
+                    limpiarFormularioModal()
+                    limpiarFormulario();
+                    swal("¡Operación exitosa!", data.msg, "success");
+                }).fail(function (err) {
+                $.each(err.responseJSON.errors, function (i, error) {
+                    toastr.error(error[0]);
+                });
+                console.error(err);
+            })
+        })
+
+        $("#anularpago").click(function () {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.post('/api/nominas/anularPago',
+                {
+                    id: $("#idpago").val(),
+                }, function (data) {
+                    pagos_table.ajax.reload();
+                    table.ajax.reload();
+                    limpiarFormularioModal();
+                    limpiarFormulario();
+                    swal("¡Operación exitosa!", data.msg, "success");
+                }).fail(function (err) {
+                $.each(err.responseJSON.errors, function (i, error) {
+                    toastr.error(error[0]);
+                });
+                console.error(err);
+            })
+        })
+
+        $("#limpiarmodal,#cerrarmodal").click(function () {
+            limpiarFormularioModal();
+        })
+
+        function limpiarFormularioModal() {
+            $("#idpago").val("");
+            $("#parteEfectiva").val("");
+            $("#parteCrediticia").val("");
+            $('#pagos_table tr').removeClass("selected");
+        }
+
+        $('#pagos_table tbody').on('click', 'tr', function () {
+            limpiarFormularioModal();
+            $(this).addClass('selected');
+            let data = pagos_table.row(this).data();
+            $("#idpago").val(data["id"]);
+            $("#parteEfectiva").val(data["parteEfectiva"]);
+            $("#parteCrediticia").val(data["parteCrediticia"]);
         });
     });
 </script>

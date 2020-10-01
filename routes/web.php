@@ -71,8 +71,11 @@ Route::prefix('api')->group(function () {
     // Procesamiento nóminas
     Route::prefix('nominas')->group(function () {
         Route::get('listar', 'NominaController@list')->middleware('auth');
-        Route::post('pagar', 'NominaController@pay')->middleware('auth');
-        Route::post('anular', 'NominaController@undoPay')->middleware('auth');
+        Route::get('{id}/pagos', 'NominaController@pagos')->middleware('auth');
+        Route::post('crear', 'NominaController@store')->middleware('auth');
+        Route::post('modificar', 'NominaController@update')->middleware('auth');
+        Route::post('pagar', 'NominaController@pagar')->middleware('auth');
+        Route::post('anular', 'NominaController@anular')->middleware('auth');
     });
 
     // Procesamiento de entradas
