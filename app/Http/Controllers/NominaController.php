@@ -96,7 +96,7 @@ class NominaController extends Controller
         $request->validate($this->validationIdRule);
         $nomina = Nomina::findOrFail($request->id);
         if (!$this->nominas->isNominaPagable($nomina)) {
-            throw ValidationException::withMessages(["valor" => "La entrada seleccionada ya fue pagada en su totalidad"]);
+            throw ValidationException::withMessages(["valor" => "La nómina seleccionada ya fue pagada en su totalidad"]);
         }
         if (!$this->cajas->isMontosPagoValidos($request->parteEfectiva, $request->parteCrediticia, $nomina->saldo)) {
             throw ValidationException::withMessages(["valor" => "La suma de los montos a pagar es superior al saldo pendiente"]);

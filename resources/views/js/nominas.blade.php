@@ -28,7 +28,7 @@
             document.getElementById('registrar').disabled = false;
             document.getElementById('eliminar').disabled = true;
             document.getElementById('modificar').disabled = true;
-            table.ajax.reload();
+            // table.ajax.reload();
         }
 
         let table = $('#recurso').DataTable($.extend({
@@ -46,18 +46,25 @@
                     className: "text-center"
                 },
                 {
-                    data: 'empleado.salario',
-                    name: 'empleado.salario',
-                    title: 'Salario',
-                    render: $.fn.dataTable.render.number(',', '.', 0, '$ '),
-                    className: "text-center"
-                },
-                {
                     data: 'valor',
                     name: 'nominas.valor',
                     title: 'Valor',
                     render: $.fn.dataTable.render.number(',', '.', 0, '$ '),
                     className: "text-center"
+                },
+                {
+                    data: 'fechapagado',
+                    name: 'fechapagado',
+                    title: 'Fecha de pago',
+                    render: $.fn.dataTable.render.number(',', '.', 0, '$ '),
+                    className: "text-center",
+                    render: function (data) {
+                        if (data) {
+                            return '<a class="text-success">' + data + '</a>';
+                        } else {
+                            return '<a class="text-danger">Sin pagar</a>';
+                        }
+                    }
                 },
                 {
                     data: 'fechapago',
@@ -74,6 +81,23 @@
                 },
             ]
         }, options));
+
+        $('#recurso thead th').each(function () {
+            var title = $(this).text();
+            let id = "";
+            if (title == "Id") {
+                id = 'id = "specific"'
+            }
+            $(this).html(title + ' <input ' + id + 'type="text" class="col-search-input form-control-sm" placeholder="Buscar" />');
+        });
+        table.columns().every(function (index) {
+            var col = this;
+            $('input', this.header()).on('keyup', function () {
+                if (col.search() !== this.value) {
+                    col.search(this.value).draw();
+                }
+            });
+        });
 
         $('#recurso tbody').on('click', 'tr', function () {
             limpiarFormulario();
@@ -244,8 +268,8 @@
             $.post('/api/nominas/pagar',
                 {
                     id: $("#id").val(),
-                    parteCrediticia: $("#parteCrediticia").val(),
-                    parteEfectiva: $("#parteEfectiva").val()
+                    parteCrediticia: $("#parteCrediticia").cleanVal(),
+                    parteEfectiva: $("#parteEfectiva").cleanVal()
                 }, function (data) {
                     table.ajax.reload();
                     limpiarFormularioModal()
@@ -265,7 +289,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            $.post('/api/nominas/anularPago',
+            $.post('/api/movimientos/anularPago',
                 {
                     id: $("#idpago").val(),
                 }, function (data) {
