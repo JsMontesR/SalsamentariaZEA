@@ -98,6 +98,16 @@ Route::prefix('api')->group(function () {
         Route::post('anular', 'VentaController@anular')->middleware('auth');
     });
 
+    // Procesamiento de retiros
+    Route::prefix('ventas')->group(function () {
+        Route::get('listar', 'VentaController@list')->middleware('auth');
+        Route::get('{id}/cobros', 'VentaController@cobros')->middleware('auth');
+        Route::post('crear', 'VentaController@store')->middleware('auth');
+        Route::post('modificar', 'VentaController@update')->middleware('auth');
+        Route::post('cobrar', 'VentaController@cobrar')->middleware('auth');
+        Route::post('anular', 'VentaController@anular')->middleware('auth');
+    });
+
     // Procesamiento de movimientos
     Route::prefix('movimientos')->group(function () {
         Route::get('listar', 'MovimientoController@list')->middleware('auth');

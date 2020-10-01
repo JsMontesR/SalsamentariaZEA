@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Caja;
 use App\Entrada;
 use App\Movimiento;
+use App\Nomina;
 use App\Venta;
 use Illuminate\Support\Facades\Log;
 
@@ -39,7 +40,7 @@ class Cajas
         $caja->saldo = $caja->saldo - $parteEfectiva;
         $caja->save();
         $caja->refresh();
-        if ($movimientoable instanceof Entrada) {
+        if ($movimientoable instanceof Entrada || $movimientoable instanceof Nomina) {
             $this->actualizarSaldo($movimientoable, $nuevoMovimiento);
             if ($movimientoable->saldo == 0) {
                 $movimientoable->fechapagado = now();
@@ -124,21 +125,19 @@ class Cajas
 
     public function actualizarSaldo($movimientoable, $nuevoMovimiento)
     {
-        $ponderado = 0;
-        foreach ($movimientoable->movimientos()->withTrashed()->get() as $movimiento) {
-            Log::info($movimiento);
-            if ($movimiento->tipo == Movimiento::EGRESO) {
-                $ponderado += $movimiento->parteEfectiva + $movimiento->parteCrediticia;
-            } else if ($movimiento->tipo == Movimiento::INGRESO) {
-                $ponderado -= $movimiento->parteEfectiva + $movimiento->parteCrediticia;
+        if ($movimientoable instanceof Venta) {
+            if ($nuevoMovimiento->tipo == Movimiento::EGRESO) {
+                $movimientoable->saldo += $nuevoMovimiento->parteEfectiva + $nuevoMovimiento->parteCrediticia;
+            } else if ($nuevoMovimiento->tipo == Movimiento::INGRESO) {
+                $movimientoable->saldo -= $nuevoMovimiento->parteEfectiva + $nuevoMovimiento->parteCrediticia;
+            }
+        } else if ($movimientoable instanceof Entrada || $movimientoable instanceof Nomina) {
+            if ($nuevoMovimiento->tipo == Movimiento::EGRESO) {
+                $movimientoable->saldo -= $nuevoMovimiento->parteEfectiva + $nuevoMovimiento->parteCrediticia;
+            } else if ($nuevoMovimiento->tipo == Movimiento::INGRESO) {
+                $movimientoable->saldo += $nuevoMovimiento->parteEfectiva + $nuevoMovimiento->parteCrediticia;
             }
         }
-        if ($nuevoMovimiento->tipo == Movimiento::EGRESO) {
-            $movimientoable->saldo = $movimientoable->valor - ($ponderado + $nuevoMovimiento->parteEfectiva + $nuevoMovimiento->parteCrediticia);
-        } else if ($nuevoMovimiento->tipo == Movimiento::INGRESO) {
-            $movimientoable->saldo = $movimientoable->valor - ($ponderado - ($nuevoMovimiento->parteEfectiva + $nuevoMovimiento->parteCrediticia));
-        }
-
     }
 
     public function anularTodosLosPagos($movimientoable)

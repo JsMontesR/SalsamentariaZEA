@@ -34,6 +34,12 @@ class NominaController extends Controller
 
     public $validationIdRule = ['id' => 'required|integer|min:0'];
 
+    public $customMessages = [
+        'fechapago.required' => 'Por favor ingrese la fecha límite del pago',
+        'empleado_id.required' => 'Por favor seleccione un empleado de la tabla',
+        'valor.required' => 'Por favor especifique el total a pagar'
+    ];
+
     /**
      * Display a listing of the resource.
      *
@@ -77,7 +83,7 @@ class NominaController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate($this->validationRules);
+        $request->validate($this->validationRules, $this->customMessages);
         $this->nominas->store($request);
         return response()->json([
             'msg' => '¡Nomina registrada!',

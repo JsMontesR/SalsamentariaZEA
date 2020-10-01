@@ -27,6 +27,7 @@ let options = {
             "copy": "Copiar",
             "colvis": "Visibilidad"
         }
-    }
+    },
+    order: [[0, 'desc']]
 
 }

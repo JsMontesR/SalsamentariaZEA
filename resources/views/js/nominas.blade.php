@@ -4,7 +4,7 @@
         darFormatoNumerico();
 
         function darFormatoNumerico() {
-            $('.number').mask('000.000.000.000.000', {reverse: true});
+            $('.number').mask('#.##0', {reverse: true});
         }
 
         $.ajaxSetup({
@@ -143,7 +143,7 @@
                 {data: 'rol.nombre', title: 'Rol', className: "text-center"},
                 {data: 'created_at', title: 'Fecha de creación', className: "text-center"},
                 {data: 'updated_at', title: 'Fecha de actualización', className: "text-center"},
-            ]
+            ],
         }, options));
 
         $('#empleados tbody').on('click', 'tr', function () {
@@ -173,7 +173,7 @@
                     table.ajax.reload();
                 }).fail(function (err) {
                 $.each(err.responseJSON.errors, function (i, error) {
-                    toastr.error(error[0]);
+                    swal("Ha ocurrido un error", error[0], "error");
                 });
                 console.error(err);
             })
@@ -201,7 +201,7 @@
                             table.ajax.reload();
                         }).fail(function (err) {
                             $.each(err.responseJSON.errors, function (i, error) {
-                                toastr.error(error[0]);
+                                swal("Ha ocurrido un error", error[0], "error");
                             });
                             console.error(err);
                         })
@@ -277,7 +277,7 @@
                     swal("¡Operación exitosa!", data.msg, "success");
                 }).fail(function (err) {
                 $.each(err.responseJSON.errors, function (i, error) {
-                    toastr.error(error[0]);
+                    swal("Ha ocurrido un error", error[0], "error");
                 });
                 console.error(err);
             })
@@ -293,14 +293,13 @@
                 {
                     id: $("#idpago").val(),
                 }, function (data) {
-                    pagos_table.ajax.reload();
                     table.ajax.reload();
                     limpiarFormularioModal();
                     limpiarFormulario();
                     swal("¡Operación exitosa!", data.msg, "success");
                 }).fail(function (err) {
                 $.each(err.responseJSON.errors, function (i, error) {
-                    toastr.error(error[0]);
+                    swal("Ha ocurrido un error", error[0], "error");
                 });
                 console.error(err);
             })
@@ -308,6 +307,7 @@
 
         $("#limpiarmodal,#cerrarmodal").click(function () {
             limpiarFormularioModal();
+            pagos_table.ajax.reload();
         })
 
         function limpiarFormularioModal() {

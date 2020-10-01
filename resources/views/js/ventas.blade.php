@@ -3,7 +3,7 @@
         let btnAgregar = "<input name='btn_agregar_productos_tabla' type='button' value='Agregar' class='btn btn-success container-fluid'/>";
 
         function darFormatoNumerico() {
-            $('.money').mask('000.000.000.000.000', {reverse: true});
+            $('.money').mask('#.##0', {reverse: true});
         }
 
         function crearEstructuraDeProductos() {
@@ -133,9 +133,9 @@
             document.getElementById('cliente_id').value = data['cliente']['id'];
             document.getElementById('fechapago').value = data['fechapago'];
             document.getElementById('fechapagado').value = data['fechapagado'];
-            $('[name="valor"]').val(data['valor']);
-            $('[name="saldo"]').val(data['saldo']);
-            $('[name="valorcobrado"]').val(data['valor'] - data['saldo']);
+            $('[name="valor"]').val(data['valor']).trigger('input');
+            $('[name="saldo"]').val(data['saldo']).trigger('input');
+            $('[name="valorcobrado"]').val(data['valor'] - data['saldo']).trigger('input');
             $('#productos_container').hide();
             cargarProductosVenta(data['productos']);
             clienteId = data['cliente']['id'];
@@ -228,8 +228,7 @@
                     title: 'Fecha de actualización',
                     className: "text-center"
                 },
-            ],
-            order: [[0, 'desc']]
+            ]
         }, options));
 
         $('#recurso thead th').each(function () {
@@ -460,7 +459,7 @@
                     table.ajax.reload();
                 }).fail(function (err) {
                 $.each(err.responseJSON.errors, function (i, error) {
-                    toastr.error(error[0]);
+                    swal("Ha ocurrido un error", error[0], "error");
                 });
                 console.error(err);
             })
@@ -486,7 +485,7 @@
                             table.ajax.reload()
                         }).fail(function (err) {
                             $.each(err.responseJSON.errors, function (i, error) {
-                                toastr.error(error[0]);
+                                swal("Ha ocurrido un error", error[0], "error");
                             });
                             console.error(err);
                         })
@@ -510,7 +509,7 @@
                     swal("¡Operación exitosa!", data.msg, "success");
                 }).fail(function (err) {
                 $.each(err.responseJSON.errors, function (i, error) {
-                    toastr.error(error[0]);
+                    swal("Ha ocurrido un error", error[0], "error");
                 });
                 console.error(err);
             })
@@ -570,8 +569,8 @@
             $.post('/api/ventas/cobrar',
                 {
                     id: $("#id").val(),
-                    parteCrediticia: $("#parteCrediticia").val(),
-                    parteEfectiva: $("#parteEfectiva").val()
+                    parteCrediticia: $("#parteCrediticia").cleanVal(),
+                    parteEfectiva: $("#parteEfectiva").cleanVal()
                 }, function (data) {
                     table.ajax.reload();
                     limpiarFormularioModal()
@@ -579,7 +578,7 @@
                     swal("¡Operación exitosa!", data.msg, "success");
                 }).fail(function (err) {
                 $.each(err.responseJSON.errors, function (i, error) {
-                    toastr.error(error[0]);
+                    swal("Ha ocurrido un error", error[0], "error");
                 });
                 console.error(err);
             })
@@ -602,7 +601,7 @@
                     swal("¡Operación exitosa!", data.msg, "success");
                 }).fail(function (err) {
                 $.each(err.responseJSON.errors, function (i, error) {
-                    toastr.error(error[0]);
+                    swal("Ha ocurrido un error", error[0], "error");
                 });
                 console.error(err);
             })
@@ -624,8 +623,8 @@
             $(this).addClass('selected');
             let data = cobros_table.row(this).data();
             $("#idcobro").val(data["id"]);
-            $("#parteEfectiva").val(data["parteEfectiva"]);
-            $("#parteCrediticia").val(data["parteCrediticia"]);
+            $("#parteEfectiva").val(data["parteEfectiva"]).trigger('input');
+            $("#parteCrediticia").val(data["parteCrediticia"]).trigger('input');
         });
     });
 </script>

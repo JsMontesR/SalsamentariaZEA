@@ -3,7 +3,7 @@
         let btnAgregar = "<input name='btn_agregar_productos_tabla' type='button' value='Agregar' class='btn btn-success container-fluid'/>";
 
         function darFormatoNumerico() {
-            $('.money').mask('000.000.000.000.000', {reverse: true});
+            $('.money').mask('#.##0', {reverse: true});
         }
 
         function crearEstructuraDeProductos() {
@@ -132,9 +132,9 @@
             document.getElementById('proveedor_id').value = data['proveedor']['id'];
             document.getElementById('fechapago').value = data['fechapago'];
             document.getElementById('fechapagado').value = data['fechapagado'];
-            $('[name="valor"]').val(data['valor']);
-            $('[name="saldo"]').val(data['saldo']);
-            $('[name="valorpagado"]').val(data['valor'] - data['saldo']);
+            $('[name="valor"]').val(data['valor']).trigger('input');
+            $('[name="saldo"]').val(data['saldo']).trigger('input');
+            $('[name="valorpagado"]').val(data['valor'] - data['saldo']).trigger('input');
             $('#productos_container').hide();
             cargarProductosEntrada(data['productos']);
             proveedorId = data['proveedor']['id'];
@@ -227,8 +227,7 @@
                     title: 'Fecha de actualización',
                     className: "text-center"
                 },
-            ],
-            order: [[0, 'desc']]
+            ]
         }, options));
 
         $('#recurso thead th').each(function () {
@@ -451,7 +450,7 @@
                     table.ajax.reload();
                 }).fail(function (err) {
                 $.each(err.responseJSON.errors, function (i, error) {
-                    toastr.error(error[0]);
+                    swal("Ha ocurrido un error", error[0], "error");
                 });
                 console.error(err);
             })
@@ -477,7 +476,7 @@
                             table.ajax.reload()
                         }).fail(function (err) {
                             $.each(err.responseJSON.errors, function (i, error) {
-                                toastr.error(error[0]);
+                                swal("Ha ocurrido un error", error[0], "error");
                             });
                             console.error(err);
                         })
@@ -501,7 +500,7 @@
                     swal("¡Operación exitosa!", data.msg, "success");
                 }).fail(function (err) {
                 $.each(err.responseJSON.errors, function (i, error) {
-                    toastr.error(error[0]);
+                    swal("Ha ocurrido un error", error[0], "error");
                 });
                 console.error(err);
             })
@@ -570,7 +569,7 @@
                     swal("¡Operación exitosa!", data.msg, "success");
                 }).fail(function (err) {
                 $.each(err.responseJSON.errors, function (i, error) {
-                    toastr.error(error[0]);
+                    swal("Ha ocurrido un error", error[0], "error");
                 });
                 console.error(err);
             })
@@ -593,7 +592,7 @@
                     swal("¡Operación exitosa!", data.msg, "success");
                 }).fail(function (err) {
                 $.each(err.responseJSON.errors, function (i, error) {
-                    toastr.error(error[0]);
+                    swal("Ha ocurrido un error", error[0], "error");
                 });
                 console.error(err);
             })

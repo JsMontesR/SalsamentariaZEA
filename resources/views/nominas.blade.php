@@ -156,8 +156,8 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">$</span>
                                     </div>
-                                    <input id="valor" type="number" readonly="readonly"
-                                           class="number form-control border-warning"
+                                    <input id="valor" readonly="readonly"
+                                           class="form-control border-warning number"
                                            name="valor">
                                 </div>
                             </div>
