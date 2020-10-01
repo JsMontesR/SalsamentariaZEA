@@ -24,6 +24,15 @@ class Producto extends Model
         return $this->belongsToMany('App\Venta');
     }
 
+    public function retiros()
+    {
+        return $this->belongsToMany('App\Retiro');
+    }
+
+    public function ingresos()
+    {
+        return $this->belongsToMany('App\Ingreso');
+    }
 
 
     /**

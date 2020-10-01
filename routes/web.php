@@ -99,13 +99,17 @@ Route::prefix('api')->group(function () {
     });
 
     // Procesamiento de retiros
-    Route::prefix('ventas')->group(function () {
-        Route::get('listar', 'VentaController@list')->middleware('auth');
-        Route::get('{id}/cobros', 'VentaController@cobros')->middleware('auth');
-        Route::post('crear', 'VentaController@store')->middleware('auth');
-        Route::post('modificar', 'VentaController@update')->middleware('auth');
-        Route::post('cobrar', 'VentaController@cobrar')->middleware('auth');
-        Route::post('anular', 'VentaController@anular')->middleware('auth');
+    Route::prefix('retiros')->group(function () {
+        Route::get('listar', 'RetiroController@list')->middleware('auth');
+        Route::post('crear', 'RetiroController@store')->middleware('auth');
+        Route::post('anular', 'RetiroController@anular')->middleware('auth');
+    });
+
+    // Procesamiento de ingresos
+    Route::prefix('ingresos')->group(function () {
+        Route::get('listar', 'IngresoController@list')->middleware('auth');
+        Route::post('crear', 'IngresoController@store')->middleware('auth');
+        Route::post('anular', 'IngresoController@anular')->middleware('auth');
     });
 
     // Procesamiento de movimientos

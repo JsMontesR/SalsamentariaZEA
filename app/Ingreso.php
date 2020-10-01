@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Retiro extends Model
+class Ingreso extends Model
 {
     //
     use SoftDeletes;

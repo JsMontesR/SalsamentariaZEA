@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'di', 'celular', 'fijo', 'direccion', 'salario' , 'rol_id'
+        'name', 'email', 'password', 'di', 'celular', 'fijo', 'direccion', 'salario', 'rol_id'
     ];
 
     /**
@@ -58,20 +58,30 @@ class User extends Authenticatable
         return $this->hasMany('App\Entrada');
     }
 
+    public function retiros()
+    {
+        return $this->hasMany('App\Retiro');
+    }
+
+    public function ingresos()
+    {
+        return $this->hasMany('App\Ingreso');
+    }
+
     public function nominas()
     {
-        return $this->hasMany('App\Nomina','empleado_id');
+        return $this->hasMany('App\Nomina', 'empleado_id');
     }
 
     public function movimientos()
     {
-        return $this->hasMany('App\Movimiento','empleado_id');
+        return $this->hasMany('App\Movimiento', 'empleado_id');
     }
 
     /**
      * Prepare a date for array / JSON serialization.
      *
-     * @param  \DateTimeInterface  $date
+     * @param \DateTimeInterface $date
      * @return string
      */
     protected function serializeDate(DateTimeInterface $date)
