@@ -48,7 +48,7 @@
                                 </div>
                                 <div id="card_productos_carrito_table"
                                      class="card-body">
-                                    <table id="productos_carrito_table"
+                                    <table id="productos_retiro_table"
                                            class="table table-bordered dt-responsive wrap table-hover"
                                            style="width:100%">
                                         <tbody></tbody>
@@ -89,7 +89,7 @@
         </div>
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h3 class="m-0 font-weight-bold text-primary text-center">Ventas registradas</h3>
+                <h3 class="m-0 font-weight-bold text-primary text-center">Retiros registrados</h3>
             </div>
             <div class="card-body">
                 <table id="recurso" class="table table-bordered dt-responsive table-hover row-cursor-hand"
