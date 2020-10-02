@@ -179,6 +179,29 @@
             })
         });
 
+        $("#registrarypagar").click(function () {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.post('/api/nominas/crearypagar',
+                {
+                    empleado_id: $("#empleado_id").val(),
+                    valor: $("#valor").cleanVal(),
+                    fechapago: $("#fechapago").val(),
+                }, function (data) {
+                    swal("¡Operación exitosa!", data.msg, "success");
+                    limpiarFormulario();
+                    table.ajax.reload();
+                }).fail(function (err) {
+                $.each(err.responseJSON.errors, function (i, error) {
+                    swal("Ha ocurrido un error", error[0], "error");
+                });
+                console.error(err);
+            })
+        });
+
         $("#limpiar").click(function () {
             limpiarFormulario();
         });

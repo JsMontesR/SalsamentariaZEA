@@ -82,6 +82,35 @@ class VentaController extends Controller
     public function store(Request $request)
     {
         //Validación de la factibilidad de la transacción
+        $this->validarVenta($request);
+        // Ejecución de la transacción
+        $this->ventas->store($request);
+        return response()->json([
+            'msg' => '¡Venta registrada!',
+        ]);
+    }
+
+    /**
+     * Registra una venta y la cobra en efectivo y en su totalidad.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeCharge(Request $request)
+    {
+        //Validación de la factibilidad de la transacción
+        $this->validarVenta($request);
+        // Ejecución de la transacción
+        $venta = $this->ventas->store($request);
+        $caja = Caja::findOrFail(1);
+        $this->cajas->cobrar($caja, $venta, $venta->saldo);
+        return response()->json([
+            'msg' => '¡Venta registrada y cobrada en efectivo!',
+        ]);
+    }
+
+    public function validarVenta(Request $request)
+    {
         $request->validate($this->validationRules, $this->customMessages);
         foreach ($request->productos_venta as $producto) {
             if (empty($producto["cantidad"]) || empty($producto["costo"])) {
@@ -91,12 +120,6 @@ class VentaController extends Controller
         if (($problem = $this->ventas->getNoDescontable($request)) != null) {
             throw ValidationException::withMessages(["productos_venta" => "No se cuenta con las existencias suficientes de " . $problem . " para realizar la venta"]);
         }
-
-        // Ejecución de la transacción
-        $this->ventas->store($request);
-        return response()->json([
-            'msg' => '¡Venta registrada!',
-        ]);
     }
 
     /**
@@ -161,7 +184,7 @@ class VentaController extends Controller
         }
 
         // Ejecución de la transacción
-        $this->cajas->anularTodosLosPagos($venta);
+        $this->cajas->anularTodosLosCobros($venta);
         $this->ventas->anular($venta);
         return response()->json([
             'msg' => '¡Venta anulada!',

@@ -180,7 +180,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">$</span>
                                     </div>
-                                    <input id="valor" type="number" readonly="readonly"
+                                    <input id="valor" readonly="readonly"
                                            class="money form-control border-warning"
                                            name="valor">
                                 </div>

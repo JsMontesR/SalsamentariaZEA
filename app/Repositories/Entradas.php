@@ -42,6 +42,7 @@ class Entradas
         $entrada->valor = $costo;
         $entrada->saldo = $costo;
         $entrada->save();
+        $entrada->refresh();
         return $entrada;
     }
 

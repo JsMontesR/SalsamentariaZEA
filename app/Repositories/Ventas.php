@@ -39,6 +39,7 @@ class Ventas
         $venta->valor = $costo;
         $venta->saldo = $costo;
         $venta->save();
+        $venta->refresh();
         return $venta;
     }
 

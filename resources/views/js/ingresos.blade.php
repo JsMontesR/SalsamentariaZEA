@@ -146,19 +146,19 @@
                 {
                     data: 'empleado.name',
                     name: 'empleado.name',
-                    title: 'Empleado que retiró',
+                    title: 'Empleado que ingresó',
                     className: "text-center",
                     orderable: false
                 },
                 {
                     data: 'valor',
-                    title: 'Valor retirado',
+                    title: 'Valor ingresado',
                     className: "text-center",
                     render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
                 },
                 {
                     data: 'costo',
-                    title: 'Costo total retirado en productos',
+                    title: 'Costo total ingresado en productos',
                     className: "text-center",
                     render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
                 },

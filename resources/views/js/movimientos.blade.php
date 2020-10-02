@@ -44,7 +44,14 @@
                                 if (row["tipo"] == "Ingreso") {
                                     msg = "Devolución de retiro";
                                 } else if (row["tipo"] == "Egreso") {
-                                    msg = "Retiro de inventario";
+                                    msg = "Retiro de caja";
+                                }
+                                return '<i class="fas fa-sign-out-alt"></i><br>' + msg;
+                            case "App\\Ingreso":
+                                if (row["tipo"] == "Ingreso") {
+                                    msg = "Ingreso de caja";
+                                } else if (row["tipo"] == "Egreso") {
+                                    msg = "Devolución de ingreso";
                                 }
                                 return '<i class="fas fa-sign-out-alt"></i><br>' + msg;
                             case "App\\Venta":

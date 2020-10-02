@@ -74,6 +74,7 @@ Route::prefix('api')->group(function () {
         Route::get('listar', 'NominaController@list')->middleware('auth');
         Route::get('{id}/pagos', 'NominaController@pagos')->middleware('auth');
         Route::post('crear', 'NominaController@store')->middleware('auth');
+        Route::post('crearypagar', 'NominaController@storePay')->middleware('auth');
         Route::post('modificar', 'NominaController@update')->middleware('auth');
         Route::post('pagar', 'NominaController@pagar')->middleware('auth');
         Route::post('anular', 'NominaController@anular')->middleware('auth');
@@ -84,6 +85,7 @@ Route::prefix('api')->group(function () {
         Route::get('listar', 'EntradaController@list')->middleware('auth');
         Route::get('{id}/pagos', 'EntradaController@pagos')->middleware('auth');
         Route::post('crear', 'EntradaController@store')->middleware('auth');
+        Route::post('crearypagar', 'EntradaController@storePay')->middleware('auth');
         Route::post('modificar', 'EntradaController@update')->middleware('auth');
         Route::post('pagar', 'EntradaController@pagar')->middleware('auth');
         Route::post('anular', 'EntradaController@anular')->middleware('auth');
@@ -94,6 +96,7 @@ Route::prefix('api')->group(function () {
         Route::get('listar', 'VentaController@list')->middleware('auth');
         Route::get('{id}/cobros', 'VentaController@cobros')->middleware('auth');
         Route::post('crear', 'VentaController@store')->middleware('auth');
+        Route::post('crearycobrar', 'VentaController@storeCharge')->middleware('auth');
         Route::post('modificar', 'VentaController@update')->middleware('auth');
         Route::post('cobrar', 'VentaController@cobrar')->middleware('auth');
         Route::post('anular', 'VentaController@anular')->middleware('auth');

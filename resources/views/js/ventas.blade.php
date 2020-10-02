@@ -32,6 +32,7 @@
             $('#productos_container').show();
             document.getElementById('vercobros').disabled = true;
             document.getElementById('registrar').disabled = false;
+            document.getElementById('registrarycobrar').disabled = false;
             document.getElementById('eliminar').disabled = true;
             document.getElementById('modificar').disabled = true;
             productos_table.ajax.reload()
@@ -142,6 +143,7 @@
             tablaClientes.columns(0).search(data['cliente']['id']).draw();
             $(row).addClass("selected");
             document.getElementById('registrar').disabled = true;
+            document.getElementById('registrarycobrar').disabled = true;
             document.getElementById('vercobros').disabled = false;
             document.getElementById('eliminar').disabled = false;
             document.getElementById('modificar').disabled = false;
@@ -449,6 +451,29 @@
                 }
             });
             $.post('/api/ventas/crear',
+                {
+                    cliente_id: $("#cliente_id").val(),
+                    fechapago: $("#fechapago").val(),
+                    productos_venta: crearEstructuraDeProductos()
+                }, function (data) {
+                    swal("¡Operación exitosa!", data.msg, "success");
+                    limpiarFormulario();
+                    table.ajax.reload();
+                }).fail(function (err) {
+                $.each(err.responseJSON.errors, function (i, error) {
+                    swal("Ha ocurrido un error", error[0], "error");
+                });
+                console.error(err);
+            })
+        });
+
+        $("#registrarycobrar").click(function () {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.post('/api/ventas/crearycobrar',
                 {
                     cliente_id: $("#cliente_id").val(),
                     fechapago: $("#fechapago").val(),

@@ -111,28 +111,32 @@
                 </form>
                 <br>
                 <div class="row btn-toolbar justify-content-center">
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 py-2">
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 py-2">
                         <input id="registrar" type="button" value="Registrar"
-                               class="btn btn-primary container-fluid"/>
+                               class="btn btn-primary btn-rounded container-fluid"/>
                     </div>
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 py-2">
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 py-2">
+                        <input id="registrarycobrar" type="button" value="Registrar y cobrar"
+                               class="btn btn-info btn-rounded container-fluid"/>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 py-2">
                         <input id="vercobros" type="button" disabled value="Cobros"
-                               class="btn btn-success container-fluid" data-toggle="modal"
+                               class="btn btn-success btn-rounded container-fluid" data-toggle="modal"
                                data-target="#modalMovimientos"/>
                     </div>
                 </div>
                 <div class="row btn-toolbar justify-content-center">
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 py-2">
                         <input id="limpiar" type="button" value="Limpiar"
-                               class="btn btn-light text-dark container-fluid"/>
+                               class="btn btn-light btn-rounded text-dark container-fluid"/>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 py-2">
                         <input id="modificar" type="button" disabled value="Modificar"
-                               class="btn btn-warning text-dark container-fluid"/>
+                               class="btn btn-warning btn-rounded text-dark container-fluid"/>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 py-2">
                         <input id="eliminar" type="button" disabled value="Eliminar"
-                               class="btn btn-danger container-fluid"/>
+                               class="btn btn-danger btn-rounded container-fluid"/>
                     </div>
                 </div>
             </div>

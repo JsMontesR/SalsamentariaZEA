@@ -456,6 +456,29 @@
             })
         });
 
+        $("#registrarypagar").click(function () {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.post('/api/entradas/crearypagar',
+                {
+                    proveedor_id: $("#proveedor_id").val(),
+                    fechapago: $("#fechapago").val(),
+                    productos_entrada: crearEstructuraDeProductos()
+                }, function (data) {
+                    swal("¡Operación exitosa!", data.msg, "success");
+                    limpiarFormulario();
+                    table.ajax.reload();
+                }).fail(function (err) {
+                $.each(err.responseJSON.errors, function (i, error) {
+                    swal("Ha ocurrido un error", error[0], "error");
+                });
+                console.error(err);
+            })
+        });
+
         $("#limpiar").click(function () {
             location.href = "{{route('entradas')}}";
         });
@@ -560,8 +583,8 @@
             $.post('/api/entradas/pagar',
                 {
                     id: $("#id").val(),
-                    parteCrediticia: $("#parteCrediticia").val(),
-                    parteEfectiva: $("#parteEfectiva").val()
+                    parteCrediticia: $("#parteCrediticia").cleanVal(),
+                    parteEfectiva: $("#parteEfectiva").cleanVal()
                 }, function (data) {
                     table.ajax.reload();
                     limpiarFormularioModal()
