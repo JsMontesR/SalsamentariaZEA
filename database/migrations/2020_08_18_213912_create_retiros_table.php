@@ -16,6 +16,7 @@ class CreateRetirosTable extends Migration
         Schema::create('retiros', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('valor')->nullable();
+            $table->unsignedBigInteger('costo')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -196,6 +196,20 @@
                                 </ul>
                             </div>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                               data-target="#submenu-0" aria-controls="submenu-0"><i class="fas fa-fw fa-chart-pie"></i>Extraordinarios</a>
+                            <div id="submenu-0" class="collapse submenu" style="">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ route('retiros') }}">Retiros</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ route('ingresos') }}">Ingresos</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
                         <li class="nav-item ">
                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
                                data-target="#submenu-4" aria-controls="submenu-4"><i class="fab fa-fw fa-wpforms"></i>Reportes</a>

@@ -14,7 +14,7 @@ class IngresoController extends Controller
      */
     public function index()
     {
-        //
+        return view('ingresos');
     }
 
     /**
@@ -30,7 +30,7 @@ class IngresoController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -41,7 +41,7 @@ class IngresoController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Ingreso  $ingreso
+     * @param \App\Ingreso $ingreso
      * @return \Illuminate\Http\Response
      */
     public function show(Ingreso $ingreso)
@@ -52,7 +52,7 @@ class IngresoController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Ingreso  $ingreso
+     * @param \App\Ingreso $ingreso
      * @return \Illuminate\Http\Response
      */
     public function edit(Ingreso $ingreso)
@@ -63,8 +63,8 @@ class IngresoController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Ingreso  $ingreso
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Ingreso $ingreso
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Ingreso $ingreso)
@@ -75,7 +75,7 @@ class IngresoController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Ingreso  $ingreso
+     * @param \App\Ingreso $ingreso
      * @return \Illuminate\Http\Response
      */
     public function destroy(Ingreso $ingreso)

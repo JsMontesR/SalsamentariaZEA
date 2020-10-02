@@ -62,9 +62,9 @@
                         <label class="col-md-4 col-form-label text-md-left">Dinero a retirar de caja:</label>
                         <div class="input-group col-md-8">
                             <div class="input-group-prepend">
-                                <span class="input-group-text">$</span>
+                                <span class="input-group-text">💵</span>
                             </div>
-                            <input id="valor" type="text" readonly="readonly"
+                            <input id="valor"
                                    class="form-control money"
                                    name="valor" required autocomplete="valor">
                         </div>

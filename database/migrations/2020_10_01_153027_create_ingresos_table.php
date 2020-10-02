@@ -16,6 +16,7 @@ class CreateIngresosTable extends Migration
         Schema::create('ingresos', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('valor')->nullable();
+            $table->unsignedBigInteger('costo')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

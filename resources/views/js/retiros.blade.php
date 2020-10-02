@@ -2,19 +2,26 @@
     $(document).ready(function () {
         let btnAgregar = "<input name='btn_agregar_productos_tabla' type='button' value='Agregar' class='btn btn-success container-fluid'/>";
 
+        darFormatoNumerico();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
         function darFormatoNumerico() {
             $('.money').mask('#.##0', {reverse: true});
         }
 
         function crearEstructuraDeProductos() {
             let arr = [];
-            productos_carrito_table.rows().every(function (rowIdx, tableLoop, rowLoop) {
+            productos_retiro_table.rows().every(function (rowIdx, tableLoop, rowLoop) {
                 let data = this.data();
                 let id = data['id'];
                 arr.push({
                     id: id,
-                    cantidad: $('#cantidad_producto_carrito' + id).cleanVal(),
-                    costo: $('#precio_producto_carrito' + id).cleanVal()
+                    cantidad: $('#cantidad_producto_tabla_retiro' + id).cleanVal()
                 });
             });
             return arr;
@@ -22,32 +29,26 @@
 
         function limpiarFormulario() {
             document.getElementById('id').value = "";
-            document.getElementById('cliente_id').value = "";
-            document.getElementById('fechapagado').value = "";
-            document.getElementById('fechapago').value = "";
             document.getElementById('valor').value = "";
             $('#recurso tr').removeClass("selected");
             $('#clientes tr').removeClass("selected");
-            vacearCarrito();
+            vacearProductosRetiro();
             $('#productos_container').show();
-            document.getElementById('vercobros').disabled = true;
             document.getElementById('registrar').disabled = false;
             document.getElementById('eliminar').disabled = true;
-            document.getElementById('modificar').disabled = true;
             productos_table.ajax.reload()
-            tablaClientes.ajax.reload()
         }
 
-        function vacearCarrito() {
-            productos_carrito_table.clear().draw();
+        function vacearProductosRetiro() {
+            productos_retiro_table.clear().draw();
         }
 
-        function quitarProductoDelCarrito(row) {
-            productos_carrito_table.row(row).remove().draw();
+        function quitarProductoRetiro(row) {
+            productos_retiro_table.row(row).remove().draw();
         }
 
-        function isFilaenCarrito(newRow) {
-            let data = productos_carrito_table.rows().data();
+        function isFilaEnTablaRetiro(newRow) {
+            let data = productos_retiro_table.rows().data();
             let existe = false;
             data.each(function (value) {
                 if (value["id"] == newRow["id"]) {
@@ -58,7 +59,7 @@
             return existe;
         }
 
-        function crearFilaDeCarrito(data) {
+        function crearFilatTablaRetiro(data) {
             let tipoDeCantidad = "";
             let emoji = "";
             let activated = "";
@@ -78,18 +79,17 @@
                 activated = "disabled";
             }
             return $.extend({
-                'btnEliminar': "<input " + activated + " name='btn_eliminar_productos_carrito' type='button' value='Eliminar' class='btn btn-warning container-fluid'/>",
-                'cantidad': "<div class='input-group mb-1'><div class='input-group-prepend'><span class='input-group-text'>" + emoji + "</span></div><input " + cantidad + " id='cantidad_producto_carrito" + data['id'] + "' name='cantidad_producto_carrito" + data['id'] + "' precio=" + data['precio'] + " class='money form-control' type='text' placeholder='" + tipoDeCantidad + "'/></div>",
-                'costoTotal': "<div class='input-group mb-1'><div class='input-group-prepend'><span class='input-group-text'>💵</span></div><input " + costo + " id='precio_producto_carrito" + data['id'] + "' " + " name='precio_producto_carrito" + data['id'] + "' class='money form-control' type='text' placeholder='Costo total'/></div>"
+                'btnEliminar': "<input " + activated + " name='btn_eliminar_productos_tabla_retiro' type='button' value='Eliminar' class='btn btn-warning container-fluid'/>",
+                'cantidad': "<div class='input-group mb-1'><div class='input-group-prepend'><span class='input-group-text'>" + emoji + "</span></div><input " + cantidad + " id='cantidad_producto_tabla_retiro" + data['id'] + "' name='cantidad_producto_tabla_retiro" + data['id'] + "' precio=" + data['precio'] + " class='money form-control' type='text' placeholder='" + tipoDeCantidad + "'/></div>"
             }, data)
         }
 
-        function cargarProductosVenta(productos) {
+        function cargarProductosRetiro(productos) {
             for (i in productos) {
-                let newRow = crearFilaDeCarrito(productos[i]);
-                productos_carrito_table.row.add(newRow).draw();
-                productos_carrito_table.responsive.rebuild();
-                productos_carrito_table.responsive.recalc();
+                let newRow = crearFilatTablaRetiro(productos[i]);
+                productos_retiro_table.row.add(newRow).draw();
+                productos_retiro_table.responsive.rebuild();
+                productos_retiro_table.responsive.recalc();
             }
             darFormatoNumerico();
         }
@@ -124,97 +124,41 @@
             return data;
         }
 
-        let clienteId;
 
-        function cargarVenta(row) {
+        function cargarRetiro(row) {
             limpiarFormulario();
             let data = table.row(row).data();
             document.getElementById('id').value = data['id'];
-            document.getElementById('cliente_id').value = data['cliente']['id'];
-            document.getElementById('fechapago').value = data['fechapago'];
-            document.getElementById('fechapagado').value = data['fechapagado'];
             $('[name="valor"]').val(data['valor']).trigger('input');
-            $('[name="saldo"]').val(data['saldo']).trigger('input');
-            $('[name="valorcobrado"]').val(data['valor'] - data['saldo']).trigger('input');
             $('#productos_container').hide();
-            cargarProductosVenta(data['productos']);
-            clienteId = data['cliente']['id'];
-            tablaClientes.columns(0).search(data['cliente']['id']).draw();
+            cargarProductosRetiro(data['productos']);
             $(row).addClass("selected");
             document.getElementById('registrar').disabled = true;
-            document.getElementById('vercobros').disabled = false;
             document.getElementById('eliminar').disabled = false;
-            document.getElementById('modificar').disabled = false;
         }
 
-        // $.ajax({
-        //     url: "/api/ventas/listar",
-        //     type: "get",
-        //     success: function (data) {
-        //         console.log(data);
-        //     },
-        //     error: function (err) {
-        //         console.warn(err);
-        //     }
-        // })
-
-        let clienteSpecific;
         let table = $('#recurso').DataTable($.extend({
             serverSide: true,
             processing: true,
-            ajax: "/api/ventas/listar",
+            ajax: "/api/retiros/listar",
             columns: [
-                {data: 'id', name: 'ventas.id', title: 'Id', className: "text-center font-weight-bold"},
-                {
-                    data: 'cliente.id',
-                    name: 'cliente.id',
-                    title: 'Id del cliente',
-                    visible: false,
-                    searchable: false,
-                    orderable: false
-                },
-                {
-                    data: 'cliente.name',
-                    name: 'cliente.name',
-                    title: 'Nombre del cliente',
-                    className: "text-center",
-                    orderable: false
-                },
+                {data: 'id', name: 'retiros.id', title: 'Id', className: "text-center font-weight-bold"},
                 {
                     data: 'empleado.name',
                     name: 'empleado.name',
-                    title: 'Nombre del vendedor',
+                    title: 'Empleado que retiró',
                     className: "text-center",
                     orderable: false
                 },
                 {
-                    data: 'fechapagado',
-                    name: 'ventas.fechapagado',
-                    title: 'Fecha de pago',
-                    className: "text-center",
-                    render: function (data) {
-                        if (data) {
-                            return '<a class="text-success">' + data + '</a>';
-                        } else {
-                            return '<a class="text-danger">Sin pagar</a>';
-                        }
-                    }
-                },
-                {
-                    data: 'fechapago',
-                    name: 'ventas.fechapago',
-                    title: 'Fecha límite de pago',
-                    className: "text-center"
-                },
-                {
-                    data: 'saldo',
-                    title: 'Saldo por cobrar',
+                    data: 'valor',
+                    title: 'Valor retirado',
                     className: "text-center",
                     render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
                 },
                 {
-                    data: 'valor',
-                    title: 'Valor de la venta',
+                    data: 'costo',
+                    title: 'Costo total retirado en productos',
                     className: "text-center",
                     render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
                 },
@@ -222,12 +166,7 @@
                     data: 'created_at',
                     title: 'Fecha de creación',
                     className: "text-center"
-                },
-                {
-                    data: 'updated_at',
-                    title: 'Fecha de actualización',
-                    className: "text-center"
-                },
+                }
             ]
         }, options));
 
@@ -308,39 +247,7 @@
             responsive: true
         }, options));
 
-        let tablaClientes = $('#clientes').DataTable($.extend({
-            serverSide: true,
-            ajax: '/api/clientes/listar',
-            columns: [
-                {data: 'id', title: 'Id', className: "text-center"},
-                {data: 'name', title: 'Nombre', className: "text-center"},
-                {
-                    data: 'di',
-                    title: 'Documento de identidad',
-                    render: $.fn.dataTable.render.number('.', '.', 0),
-                    className: "text-center"
-                },
-                {data: 'celular', title: 'Teléfono celular', className: "text-center"},
-                {data: 'fijo', title: 'Teléfono fijo', className: "text-center"},
-                {data: 'email', title: 'Correo electrónico', className: "text-center"},
-                {data: 'direccion', title: 'Dirección', className: "text-center"},
-                {data: 'created_at', title: 'Fecha de creación', className: "text-center"},
-                {data: 'updated_at', title: 'Fecha de actualización', className: "text-center"},
-            ],
-            responsive: true,
-            drawCallback: function () {
-                if (clienteId) {
-                    clienteSpecific = tablaClientes.row({search: 'applied'});
-                    let foundId = clienteSpecific.data().id;
-                    if (foundId == clienteId) {
-                        cargarCliente(clienteSpecific.node());
-                    }
-                    clienteId = null;
-                }
-            }
-        }, options));
-
-        let productos_carrito_table = $('#productos_carrito_table').DataTable($.extend({
+        let productos_retiro_table = $('#productos_retiro_table').DataTable($.extend({
             columns: [
                 {data: 'id', title: 'Id', className: "text-center"},
                 {data: 'btnEliminar', title: 'Eliminar', className: "text-center", searchable: false,},
@@ -354,39 +261,20 @@
                     render: function (data, type, row, meta) {
                         return renderChange(data, type, row, meta);
                     }
-                },
-                {
-                    data: 'costoTotal',
-                    title: 'Costo total',
-                    className: "text-center",
-                    render: function (data, type, row, meta) {
-                        return renderChange(data, type, row, meta);
-                    }
                 }
             ],
             responsive: true
         }, options));
 
         $('#recurso tbody').on('click', 'tr', function () {
-            cargarVenta(this);
+            cargarRetiro(this);
         });
 
-        $('#clientes tbody').on('click', 'tr', function () {
-            cargarCliente(this)
-        });
-
-        function cargarCliente(row) {
-            let data = tablaClientes.row(row).data();
-            $('#clientes tr').removeClass("selected");
-            $(row).addClass("selected");
-            document.getElementById('cliente_id').value = data['id'];
-        }
-
-        $('#productos_carrito_table tbody').on('keyup change', '.child input, .child select, .child textarea', function (e) {
+        $('#productos_retiro_table tbody').on('keyup change', '.child input, .child select, .child textarea', function (e) {
             let $el = $(this);
             let rowIdx = $el.closest('ul').data('dtr-index');
             let colIdx = $el.closest('li').data('dtr-index');
-            let cell = productos_carrito_table.cell({row: rowIdx, column: colIdx}).node();
+            let cell = productos_retiro_table.cell({row: rowIdx, column: colIdx}).node();
             $('input, select, textarea', cell).val($el.val());
             if ($el.is(':checked')) {
                 $('input', cell).prop('checked', true);
@@ -395,64 +283,30 @@
             }
         });
 
-        $(document).on('click', '[name="btn_eliminar_productos_carrito"]', function () {
+        $(document).on('click', '[name="btn_eliminar_productos_tabla_retiro"]', function () {
             let row = $(this).closest('tr');
-            quitarProductoDelCarrito(row)
+            quitarProductoRetiro(row)
         });
 
         $(document).on('click', '[name="btn_agregar_productos_tabla"]', function () {
             let row = productos_table.row($(this).closest('tr'));
             let data = productos_table.row(row).data();
-            let newRow = crearFilaDeCarrito(data);
-            if (!isFilaenCarrito(newRow)) {
-                productos_carrito_table.row.add(newRow).draw();
-                productos_carrito_table.responsive.rebuild();
-                productos_carrito_table.responsive.recalc();
+            let newRow = crearFilatTablaRetiro(data);
+            if (!isFilaEnTablaRetiro(newRow)) {
+                productos_retiro_table.row.add(newRow).draw();
+                productos_retiro_table.responsive.rebuild();
+                productos_retiro_table.responsive.recalc();
                 darFormatoNumerico();
             } else {
-                toastr.warning("El producto seleccionado ya se agregó a la venta");
+                toastr.warning("El producto seleccionado ya se agregó al retiro");
             }
         });
 
-        $(document).on('keyup', '[id^="precio_producto_carrito"]', function () {
-            calcularTotal();
-        });
-
-        function calcularTotal() {
-            let alreadyUsed = {};
-            let valor = 0;
-            $('[id^="precio_producto_carrito"]').each(function (index, value) {
-                if (!alreadyUsed[$(this).attr("id")]) {
-                    let val = $(this).cleanVal();
-                    valor += isNaN(parseInt(val, 10)) ? 0 : parseInt(val, 10)
-                }
-                alreadyUsed[$(this).attr("id")] = true;
-            })
-            $("#valor").val(valor).trigger('input');
-        }
-
-
-        $(document).on('keyup change', '[id^="cantidad_producto_carrito"]', function () {
-            darFormatoNumerico();
-            let valor = $(this).cleanVal();
-            let precio = parseInt($(this).attr("precio"));
-            let idPrecio = $(this).attr("id").replace("cantidad", "precio");
-            let total = isNaN(parseInt(valor * precio, 10)) ? 0 : parseInt(valor * precio, 10)
-            $("[name='" + idPrecio + "']").val(total).trigger('input');
-            calcularTotal();
-        });
-
         $("#registrar").click(function () {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.post('/api/ventas/crear',
+            $.post('/api/retiros/crear',
                 {
-                    cliente_id: $("#cliente_id").val(),
-                    fechapago: $("#fechapago").val(),
-                    productos_venta: crearEstructuraDeProductos()
+                    valor: $('#valor').cleanVal(),
+                    productos_retiro: crearEstructuraDeProductos()
                 }, function (data) {
                     swal("¡Operación exitosa!", data.msg, "success");
                     limpiarFormulario();
@@ -466,20 +320,22 @@
         });
 
         $("#limpiar").click(function () {
-            location.href = "{{route('ventas')}}";
+            location.href = "{{route('retiros')}}";
         });
 
         $("#eliminar").click(function () {
             swal({
                 title: "¿Estas seguro?",
-                text: "¡Una vez borrado no será posible recuperarlo!",
+                text: "¡Una vez hecho no será posible restablecerlo!",
                 icon: "warning",
                 dangerMode: true,
                 buttons: ["Cancelar", "Borrar"]
             })
                 .then((willDelete) => {
                     if (willDelete) {
-                        $.post('/api/ventas/anular', $('#form').serialize(), function (data) {
+                        $.post('/api/retiros/anular', {
+                            id: $('#id').val()
+                        }, function (data) {
                             swal("¡Operación exitosa!", data.msg, "success");
                             limpiarFormulario()
                             table.ajax.reload()
@@ -491,140 +347,6 @@
                         })
                     }
                 });
-        });
-
-        $("#modificar").click(function () {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.post('/api/ventas/modificar',
-                {
-                    id: $("#id").val(),
-                    fechapago: $("#fechapago").val(),
-                }, function (data) {
-                    table.ajax.reload();
-                    limpiarFormulario();
-                    swal("¡Operación exitosa!", data.msg, "success");
-                }).fail(function (err) {
-                $.each(err.responseJSON.errors, function (i, error) {
-                    swal("Ha ocurrido un error", error[0], "error");
-                });
-                console.error(err);
-            })
-        })
-
-        /*
-            SECCION MODAL
-         */
-
-        let cobros_table;
-
-        $("#vercobros").click(function () {
-            darFormatoNumerico();
-            $.ajax({
-                url: "/api/ventas/" + $("#id").val() + "/cobros",
-                type: "get",
-                success: function (data) {
-                    console.log(data);
-                },
-                error: function (err) {
-                    console.warn(err);
-                }
-            })
-            if ($.fn.DataTable.isDataTable('#cobros_table')) {
-                cobros_table.destroy();
-            }
-            cobros_table = $('#cobros_table').DataTable($.extend({
-                serverSide: true,
-                ajax: '/api/ventas/' + $("#id").val() + '/cobros',
-                columns: [
-                    {data: 'id', title: 'Id', className: "text-center"},
-                    {data: 'empleado.name', title: 'Nombre del empleado', className: "text-center"},
-                    {
-                        data: 'parteEfectiva',
-                        title: 'Parte efectiva',
-                        className: "text-center",
-                        render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
-                    },
-                    {
-                        data: 'parteCrediticia',
-                        title: 'Parte crediticia',
-                        className: "text-center",
-                        render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
-                    },
-                    {data: 'created_at', title: 'Fecha de creación', className: "text-center"}
-                ],
-                responsive: true
-            }, options));
-        })
-
-        $("#cobrar").click(function () {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.post('/api/ventas/cobrar',
-                {
-                    id: $("#id").val(),
-                    parteCrediticia: $("#parteCrediticia").cleanVal(),
-                    parteEfectiva: $("#parteEfectiva").cleanVal()
-                }, function (data) {
-                    table.ajax.reload();
-                    limpiarFormularioModal()
-                    limpiarFormulario();
-                    swal("¡Operación exitosa!", data.msg, "success");
-                }).fail(function (err) {
-                $.each(err.responseJSON.errors, function (i, error) {
-                    swal("Ha ocurrido un error", error[0], "error");
-                });
-                console.error(err);
-            })
-        })
-
-        $("#anularcobro").click(function () {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.post('/api/movimientos/anularCobro',
-                {
-                    id: $("#idcobro").val(),
-                }, function (data) {
-                    cobros_table.ajax.reload();
-                    table.ajax.reload();
-                    limpiarFormularioModal();
-                    limpiarFormulario();
-                    swal("¡Operación exitosa!", data.msg, "success");
-                }).fail(function (err) {
-                $.each(err.responseJSON.errors, function (i, error) {
-                    swal("Ha ocurrido un error", error[0], "error");
-                });
-                console.error(err);
-            })
-        })
-
-        $("#limpiarmodal,#cerrarmodal").click(function () {
-            limpiarFormularioModal();
-        })
-
-        function limpiarFormularioModal() {
-            $("#idcobro").val("");
-            $("#parteEfectiva").val("");
-            $("#parteCrediticia").val("");
-            $('#cobros_table tr').removeClass("selected");
-        }
-
-        $('#cobros_table tbody').on('click', 'tr', function () {
-            limpiarFormularioModal();
-            $(this).addClass('selected');
-            let data = cobros_table.row(this).data();
-            $("#idcobro").val(data["id"]);
-            $("#parteEfectiva").val(data["parteEfectiva"]).trigger('input');
-            $("#parteCrediticia").val(data["parteCrediticia"]).trigger('input');
         });
     });
 </script>
