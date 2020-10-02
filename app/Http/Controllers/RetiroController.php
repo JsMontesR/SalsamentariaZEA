@@ -78,7 +78,7 @@ class RetiroController extends Controller
         $retiro = $this->retiros->store($request);
         $this->cajas->pagar($caja, $retiro, $request->valor);
         return response()->json([
-            'msg' => '¡Retiro registrado!',
+            'msg' => '¡Retiro realizado!',
         ]);
     }
 

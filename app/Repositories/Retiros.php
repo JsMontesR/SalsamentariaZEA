@@ -36,6 +36,7 @@ class Retiros
             $productoActual->save();
         }
         $retiro->costo = $costoRetiro;
+        $retiro->valor = $request->valor;
         $retiro->save();
         return $retiro;
     }

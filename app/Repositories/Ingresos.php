@@ -2,58 +2,56 @@
 
 namespace App\Repositories;
 
+use App\Entrada;
+use App\Ingreso;
 use App\Producto;
 use App\ProductoTipo;
-use App\User;
-use App\Venta;
+use App\Proveedor;
 use Illuminate\Http\Request;
 
 class Ingresos
 {
 
     /**
-     * Registra una venta.
+     * Registra un ingreso.
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $venta = new Venta();
-        $venta->fechapago = $request->fechapago;
-        $venta->cliente()->associate(User::findOrFail($request->cliente_id));
-        $venta->empleado()->associate(auth()->user());
-        $venta->save();
-        $costo = 0;
-        foreach ($request->productos_venta as $producto) {
-            $venta->productos()->attach($producto["id"], ['cantidad' => $producto["cantidad"], 'costo' => $producto["costo"]]);
+        $ingreso = new Ingreso();
+        $ingreso->empleado()->associate(auth()->user());
+        $ingreso->save();
+        $costoIngreso = 0;
+        foreach ($request->productos_ingreso as $producto) {
             $productoActual = Producto::findOrFail($producto["id"]);
+            $ingreso->productos()->attach($producto["id"], ['cantidad' => $producto["cantidad"], 'costo' => $productoActual->costo]);
             if ($productoActual->categoria == ProductoTipo::UNITARIO) {
-                $productoActual->stock = $productoActual->stock - $producto["cantidad"];
+                $productoActual->stock = $productoActual->stock + $producto["cantidad"];
             } elseif ($productoActual->categoria == ProductoTipo::GRANEL) {
-                $productoActual->stock = $productoActual->stock - ($producto["cantidad"] * 1000);
+                $productoActual->stock = $productoActual->stock + ($producto["cantidad"] * 1000);
             }
+            $costoIngreso += $productoActual->costo * $producto["cantidad"];
             $productoActual->save();
-            $costo += $producto["costo"];
         }
-        $venta->valor = $costo;
-        $venta->saldo = $costo;
-        $venta->save();
-        return $venta;
+        $ingreso->costo = $costoIngreso;
+        $ingreso->valor = $request->valor;
+        $ingreso->save();
+        return $ingreso;
     }
 
 
     /**
-     * Verifica cual producto de una venta no es descontable del inventario
-     * @param Request $request
+     * Verifica cual producto de un ingreso no es descontable del inventario
+     * @param Entrada $ingreso
      * @return bool|string
      */
-    public function getNoDescontable(Request $request)
+    public function getNoDescontable(Ingreso $ingreso)
     {
-        foreach ($request->productos_venta as $producto) {
-            $productoActual = Producto::findOrFail($producto["id"]);
-            if ($producto["cantidad"] > $productoActual->stock) {
-                return $productoActual->nombre . " (Con el id: " . $productoActual->id . ")";
+        foreach ($ingreso->productos as $producto) {
+            if ($producto->stock < $producto->pivot->cantidad) {
+                return $producto->nombre . " (Con el id: " . $producto->id . ")";
             }
         }
         return null;
@@ -61,25 +59,21 @@ class Ingresos
 
 
     /**
-     * Agrega al inventario los productos de la venta correspondiente
-     * @param Venta $venta
+     * Descuenta del inventario los productos del ingreso correspondiente
+     * @param Entrada $ingreso
+     * @throws \Exception
      */
-    public function anular(Venta $venta)
+    public function anular(Ingreso $ingreso)
     {
-        foreach ($venta->productos as $producto) {
+        foreach ($ingreso->productos as $producto) {
             if ($producto->categoria == ProductoTipo::UNITARIO) {
-                $producto->stock = $producto->stock + $producto->pivot->cantidad;
+                $producto->stock = $producto->stock - $producto->pivot->cantidad;
             } elseif ($producto->categoria == ProductoTipo::GRANEL) {
-                $producto->stock = $producto->stock + ($producto->pivot->cantidad * 1000);
+                $producto->stock = $producto->stock - ($producto->pivot->cantidad * 1000);
             }
             $producto->save();
         }
-        $venta->delete();
-    }
-
-    public function isVentaCobrable(Venta $entrada)
-    {
-        return $entrada->fechapagado == null;
+        $ingreso->delete();
     }
 
 }

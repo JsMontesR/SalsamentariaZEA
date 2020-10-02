@@ -21,7 +21,7 @@
                     </div>
                     <hr>
                     <div class="form-group row">
-                        <label class="col-md-4 col-form-label text-md-left">Productos a retirar:</label>
+                        <label class="col-md-4 col-form-label text-md-left">Productos:</label>
                     </div>
 
                     <div class="row">
@@ -44,7 +44,7 @@
                             <div
                                 class="card shadow mb-4 form-control">
                                 <div class="card-header py-3">
-                                    <h3 class="m-0 font-weight-bold text-primary text-center">Productos a retirar</h3>
+                                    <h3 class="m-0 font-weight-bold text-primary text-center">Productos del retiro</h3>
                                 </div>
                                 <div id="card_productos_carrito_table"
                                      class="card-body">

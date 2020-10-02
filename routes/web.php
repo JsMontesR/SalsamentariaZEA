@@ -16,8 +16,9 @@ Route::get('/productos', 'ProductoController@index')->name('productos')->middlew
 Route::get('/clientes', 'ClienteController@index')->name('clientes')->middleware('auth');
 Route::get('/empleados', 'EmpleadoController@index')->name('empleados')->middleware('auth');
 Route::get('/nominas', 'NominaController@index')->name('nominas')->middleware('auth');
-//Route::get('/entradas', 'EntradaController@index')->name('entradas')->middleware('auth');
-Route::get('/entradas/{id?}', 'EntradaController@index')->name('entradas')->middleware('auth');
+Route::get('/retiros', 'RetiroController@index')->name('retiros')->middleware('auth');
+Route::get('/ingresos', 'IngresoController@index')->name('ingresos')->middleware('auth');
+Route::get('/entradas', 'EntradaController@index')->name('entradas')->middleware('auth');
 Route::get('/ventas', 'VentaController@index')->name('ventas')->middleware('auth');
 Route::get('/movimientos', 'MovimientoController@index')->name('movimientos')->middleware('auth');
 Route::get('/notificaciones', 'NotificacionController@index')->name('notificaciones')->middleware('auth');
@@ -100,7 +101,7 @@ Route::prefix('api')->group(function () {
 
     // Procesamiento de retiros
     Route::prefix('retiros')->group(function () {
-        Route::get('/', 'RetiroController@index')->name('retiros')->middleware('auth');
+
         Route::get('listar', 'RetiroController@list')->middleware('auth');
         Route::post('crear', 'RetiroController@store')->middleware('auth');
         Route::post('anular', 'RetiroController@anular')->middleware('auth');
@@ -108,7 +109,6 @@ Route::prefix('api')->group(function () {
 
     // Procesamiento de ingresos
     Route::prefix('ingresos')->group(function () {
-        Route::get('/', 'IngresoController@index')->name('ingresos')->middleware('auth');
         Route::get('listar', 'IngresoController@list')->middleware('auth');
         Route::post('crear', 'IngresoController@store')->middleware('auth');
         Route::post('anular', 'IngresoController@anular')->middleware('auth');
