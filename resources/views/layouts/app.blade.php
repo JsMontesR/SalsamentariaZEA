@@ -143,72 +143,41 @@
                             Tablero de control
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                               data-target="#submenu-3" aria-controls="submenu-3"><i class="fas fa-fw fa-chart-pie"></i>Facturación</a>
-                            <div id="submenu-3" class="collapse submenu" style="">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('ventas') }}">Ventas</a>
-                                    </li>
-                                </ul>
-                            </div>
+                            <a class="nav-link" href="{{ route('ventas') }}"><i class="fas fa-fw fa-shopping-cart"></i>Ventas</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                               data-target="#submenu-2" aria-controls="submenu-2"><i class="fa fa-fw fa-archive"></i>Inventario</a>
-                            <div id="submenu-2" class="collapse submenu" style="">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{route('entradas')}}">Entradas a inventario</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{route("productos")}}">Productos</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{route('tiposproductos')}}">Tipos de productos</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="nav-item ">
-                            <a class="nav-link active" href="#" data-toggle="collapse" aria-expanded="false"
-                               data-target="#submenu-1" aria-controls="submenu-1"><i
-                                    class="fa fa-fw fa-cogs"></i>Gestión del negocio<span
-                                    class="badge badge-success">6</span></a>
-                            <div id="submenu-1" class="collapse submenu" style="">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{route('clientes')}}">Clientes</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{route('proveedores')}}">Proveedores</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{route('empleados')}}">Empleados</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{route('nominas')}}">Nómina</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('movimientos') }}">Movimientos</a>
-                                    </li>
-
-                                </ul>
-                            </div>
+                            <a class="nav-link" href="{{route('entradas')}}"><i class="fas fa-fw fa-truck"></i>Entradas
+                                a inventario</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                               data-target="#submenu-0" aria-controls="submenu-0"><i class="fas fa-fw fa-chart-pie"></i>Extraordinarios</a>
-                            <div id="submenu-0" class="collapse submenu" style="">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('retiros') }}">Retiros</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('ingresos') }}">Ingresos</a>
-                                    </li>
-                                </ul>
-                            </div>
+                            <a class="nav-link" href="{{route("productos")}}"><i class="fas fa-fw fa-cubes"></i>Productos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('tiposproductos')}}"><i
+                                    class="fas fa-fw fa-info-circle"></i>Tipos de productos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('clientes')}}"><i class="fas fa-fw fa-users"></i>Clientes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('proveedores')}}"><i
+                                    class="fas fa-fw fa-people-carry"></i>Proveedores</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('empleados')}}"><i class="fas fa-fw fa-id-badge"></i>Empleados</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('nominas')}}"><i
+                                    class="fas fa-fw fa-hand-holding-usd"></i>Nómina</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('movimientos') }}"><i class="fas fa-fw fa-cogs"></i>Movimientos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('retiros') }}"><i class="fas fa-fw fa-sign-out-alt"></i>Retiros</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('ingresos') }}"><i class="fas fa-fw fa-sign-in-alt"></i>Ingresos</a>
                         </li>
                         <li class="nav-item ">
                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"

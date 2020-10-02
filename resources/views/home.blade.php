@@ -1,11 +1,7 @@
 @extends('layouts.app')
-
 @section('content')
     <div class="dashboard-ecommerce">
         <div class="container-fluid dashboard-content ">
-            <!-- ============================================================== -->
-            <!-- pageheader  -->
-            <!-- ============================================================== -->
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                 <div class="page-header">
                     <h2 class="pageheader-title text-center">Tablero de control</h2>
@@ -165,7 +161,7 @@
                                     <h3 class="text-dark">Nómina</h3>
                                 </div>
                                 <div class="float-right icon-circle-medium  icon-box-lg  bg-secondary mt-1">
-                                    <i class="fa fa-calendar fa-fw fa-sm text-light"></i>
+                                    <i class="fa fa-hand-holding-usd fa-fw fa-sm text-light"></i>
                                 </div>
                             </div>
                             <div class="card-footer text-light bg-secondary clearfix small z-1"

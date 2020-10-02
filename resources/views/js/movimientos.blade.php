@@ -53,7 +53,7 @@
                                 } else if (row["tipo"] == "Egreso") {
                                     msg = "Devolución de ingreso";
                                 }
-                                return '<i class="fas fa-sign-out-alt"></i><br>' + msg;
+                                return '<i class="fas fa-sign-in-alt"></i><br>' + msg;
                             case "App\\Venta":
                                 if (row["tipo"] == "Ingreso") {
                                     msg = "Venta";
