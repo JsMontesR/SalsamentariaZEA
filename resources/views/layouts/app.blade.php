@@ -171,13 +171,13 @@
                                     class="fas fa-fw fa-hand-holding-usd"></i>Nómina</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('movimientos') }}"><i class="fas fa-fw fa-cogs"></i>Movimientos</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" href="{{ route('retiros') }}"><i class="fas fa-fw fa-sign-out-alt"></i>Retiros</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('ingresos') }}"><i class="fas fa-fw fa-sign-in-alt"></i>Ingresos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('movimientos') }}"><i class="fas fa-fw fa-cogs"></i>Movimientos</a>
                         </li>
                         <li class="nav-item ">
                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"

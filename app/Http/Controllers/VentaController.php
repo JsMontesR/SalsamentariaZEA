@@ -30,6 +30,11 @@ class VentaController extends Controller
         'productos_venta' => 'required',
     ];
 
+    public $validationRegisterCharge = [
+        'cliente_id' => 'required|integer|min:1',
+        'productos_venta' => 'required',
+    ];
+
     public $customMessages = [
         'productos_venta.required' => 'La tabla de productos de la venta debe contener productos',
         'fechapago.required' => 'Por favor ingrese la fecha límite del pago',
@@ -99,7 +104,7 @@ class VentaController extends Controller
     public function storeCharge(Request $request)
     {
         //Validación de la factibilidad de la transacción
-        $this->validarVenta($request);
+        $this->validarVenta($request, $this->validationRegisterCharge);
         // Ejecución de la transacción
         $venta = $this->ventas->store($request);
         $caja = Caja::findOrFail(1);
@@ -109,9 +114,12 @@ class VentaController extends Controller
         ]);
     }
 
-    public function validarVenta(Request $request)
+    public function validarVenta(Request $request, $validationRules = null)
     {
-        $request->validate($this->validationRules, $this->customMessages);
+        if ($validationRules == null) {
+            $validationRules = $this->validationRules;
+        }
+        $request->validate($validationRules, $this->customMessages);
         foreach ($request->productos_venta as $producto) {
             if (empty($producto["cantidad"]) || empty($producto["costo"])) {
                 throw ValidationException::withMessages(['productos_venta' => 'La tabla de productos de la venta debe contener productos con sus respectivas cantidades y costos']);

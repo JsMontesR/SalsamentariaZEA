@@ -45,8 +45,7 @@ class ActualizarNotificaciones implements ShouldQueue
         Log::info("Generando notificaciones a usuarios");
         Log::info("Las notificaciones se generan con " . ActualizarNotificaciones::DIASANTICIPACION . " días de anticipación");
         dispatch(new GenerarRecordatoriosPagoEntradas());
-
-//        dispatch(new GenerarRecordatoriosCobroVentas($usuarios));
+        dispatch(new GenerarRecordatoriosCobroVentas());
 //        dispatch(new GenerarRecordatoriosPagoNominas($usuarios));
         dispatch(new LimpiarNotificacionesAntiguas());
 

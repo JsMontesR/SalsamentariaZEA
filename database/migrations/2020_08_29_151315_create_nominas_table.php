@@ -15,7 +15,7 @@ class CreateNominasTable extends Migration
     {
         Schema::create('nominas', function (Blueprint $table) {
             $table->id();
-            $table->date('fechapago');
+            $table->date('fechapago')->nullable();
             $table->date('fechapagado')->nullable();
             $table->unsignedBigInteger('valor')->nullable();
             $table->unsignedBigInteger('saldo')->nullable();
