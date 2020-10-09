@@ -112,12 +112,28 @@
                 </form>
                 <br>
                 <div class="row btn-toolbar justify-content-center">
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 py-2">
-                        <input id="registrar" type="button" value="Registrar"
-                               class="btn btn-primary container-fluid"/>
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 py-2 input-group-prepend be-addon">
+                        <button id="registrar" tabindex="-1" type="button" class="btn btn-primary container-fluid">Registrar</button>
+                        <button id="otherregister" tabindex="-1" data-toggle="dropdown" type="button"
+                                class="btn btn-primary-link dropdown-toggle dropdown-toggle-split"
+                                aria-expanded="false"><span
+                                class="sr-only">Toggle Dropdown</span></button>
+                        <div class="dropdown-menu" x-placement="top-start"
+                             style="position: absolute; transform: translate3d(99px, -2px, 0px); top: 0px; left: 0px; will-change: transform;">
+                            <button id="registrarypagar" class="dropdown-item row-cursor-hand">Registrar y pagar</button>
+                            <div class="dropdown-divider"></div>
+                            <button id="registrareimprimir" class="dropdown-item row-cursor-hand">Registrar e imprimir</button>
+                            <div class="dropdown-divider"></div>
+                            <button id="registrarpagareimprimir" class="dropdown-item row-cursor-hand">Registrar, pagar e imprimir</button>
+
+                        </div>
                     </div>
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 py-2">
-                        <input id="verpagos" type="button" disabled value="Pagos"
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 py-2">
+                        <input id="imprimir" type="button" disabled value="Imprimir"
+                               class="btn btn-info container-fluid"/>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 py-2">
+                        <input id="vercobros" type="button" disabled value="Cobros"
                                class="btn btn-success container-fluid" data-toggle="modal"
                                data-target="#modalMovimientos"/>
                     </div>

@@ -31,8 +31,12 @@
             vacearCarrito();
             $('#productos_container').show();
             document.getElementById('vercobros').disabled = true;
+            document.getElementById('imprimir').disabled = true;
             document.getElementById('registrar').disabled = false;
             document.getElementById('registrarycobrar').disabled = false;
+            document.getElementById('registrareimprimir').disabled = false;
+            document.getElementById('registrarcobrareimprimir').disabled = false;
+            document.getElementById('otherregister').disabled = false;
             document.getElementById('eliminar').disabled = true;
             document.getElementById('modificar').disabled = true;
             productos_table.ajax.reload()
@@ -144,7 +148,11 @@
             $(row).addClass("selected");
             document.getElementById('registrar').disabled = true;
             document.getElementById('registrarycobrar').disabled = true;
+            document.getElementById('registrareimprimir').disabled = true;
+            document.getElementById('registrarcobrareimprimir').disabled = true;
+            document.getElementById('otherregister').disabled = true;
             document.getElementById('vercobros').disabled = false;
+            document.getElementById('imprimir').disabled = false;
             document.getElementById('eliminar').disabled = false;
             document.getElementById('modificar').disabled = false;
         }
@@ -538,6 +546,11 @@
                 });
                 console.error(err);
             })
+        })
+
+        $("#imprimir").click(function () {
+            document.form.action = '{{ route('imprimirVenta') }}';
+            document.form.submit();
         })
 
         /*

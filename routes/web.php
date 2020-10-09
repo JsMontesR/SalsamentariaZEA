@@ -22,6 +22,7 @@ Route::get('/entradas', 'EntradaController@index')->name('entradas')->middleware
 Route::get('/ventas', 'VentaController@index')->name('ventas')->middleware('auth');
 Route::get('/movimientos', 'MovimientoController@index')->name('movimientos')->middleware('auth');
 Route::get('/notificaciones', 'NotificacionController@index')->name('notificaciones')->middleware('auth');
+Route::get('/imprimirVenta', 'VentaController@imprimir')->name('imprimirVenta')->middleware('auth');
 
 /*
  * OPERACIONES CRUD Y CORE DEL NEGOCIO

@@ -198,4 +198,51 @@ class VentaController extends Controller
             'msg' => '¡Venta anulada!',
         ]);
     }
+
+    /**
+     * Print the specified resource from storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function imprimir(Request $request)
+    {
+        $venta = Venta::findorFail($request->id);
+        return $this->imprimirLogic($venta);
+    }
+
+    public function imprimirLogic(Venta $venta)
+    {
+        $concepto = "Factura de venta";
+        $descripcion = $concepto . " #" . $venta->id;
+        $fecha = $venta->created_at;
+        $tituloParticipante = "Cliente";
+        $nombreParticipante = $venta->cliente->name;
+        $direccionParticipante = $venta->cliente->direccion;
+        $celularParticipante = $venta->cliente->celular;
+        $fijoParticipante = $venta->cliente->fijo;
+        $tituloEmpleado = $venta->cliente->fijo;
+        $emailParticipante = $venta->cliente->email;
+        $tituloEmpleado = $venta->empleado->name;
+        $direccionEmpresa = "Armenia Quindío";
+        $telefonoEmpresa = "300 000000";
+        $emailEmpresa = "salsamentariazea@mail.com";
+        $registros = array();
+        $count = 1;
+        $total = 0;
+        foreach ($venta->productos as $producto) {
+            $registro = new \stdClass();
+            $registro->numero = $count++;
+            $registro->nombre = $producto->nombre;
+            $registro->valorUnitario = $producto->pivot->precio;
+            $registro->cantidad = $producto->pivot->cantidad;
+            $registro->total = $producto->pivot->cantidad * $producto->pivot->precio;
+            $total += $registro->total;
+            array_push($registros, $registro);
+        }
+        $pdf = \PDF::loadView('factura', compact('concepto', 'descripcion', 'fecha', 'tituloParticipante',
+            'nombreParticipante', 'direccionParticipante', 'celularParticipante', 'fijoParticipante', 'tituloEmpleado', 'emailParticipante',
+            'direccionEmpresa', 'telefonoEmpresa', 'emailEmpresa', 'total', 'registros'));
+        return $pdf->stream("factura.pdf");
+    }
 }

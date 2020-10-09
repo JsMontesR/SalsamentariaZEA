@@ -10,7 +10,7 @@
                 <h3 class="m-0 font-weight-bold text-primary text-center">Detalle de la venta</h3>
             </div>
             <div class="card-body">
-                <form id="form" name="form" method="POST">
+                <form id="form" name="form" method="GET">
                     @csrf
                     <div class="form-group row">
                         <label class="col-md-4 col-form-label text-md-left">Id:</label>
@@ -111,32 +111,51 @@
                 </form>
                 <br>
                 <div class="row btn-toolbar justify-content-center">
-                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 py-2">
-                        <input id="registrar" type="button" value="Registrar"
-                               class="btn btn-primary btn-rounded container-fluid"/>
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 py-2 input-group-prepend be-addon">
+                        <button id="registrar" tabindex="-1" type="button" class="btn btn-primary container-fluid">
+                            Registrar
+                        </button>
+                        <button id="otherregister" tabindex="-1" data-toggle="dropdown" type="button"
+                                class="btn btn-primary-link dropdown-toggle dropdown-toggle-split"
+                                aria-expanded="false"><span
+                                class="sr-only">Toggle Dropdown</span></button>
+                        <div class="dropdown-menu" x-placement="top-start"
+                             style="position: absolute; transform: translate3d(99px, -2px, 0px); top: 0px; left: 0px; will-change: transform;">
+                            <button id="registrarycobrar" class="dropdown-item row-cursor-hand">Registrar y cobrar
+                            </button>
+                            <div class="dropdown-divider"></div>
+                            <button target="blank" id="registrareimprimir" class="dropdown-item row-cursor-hand">
+                                Registrar e imprimir
+                            </button>
+                            <div class="dropdown-divider"></div>
+                            <button target="blank" id="registrarcobrareimprimir" class="dropdown-item row-cursor-hand">
+                                Registrar, cobrar e imprimir
+                            </button>
+
+                        </div>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 py-2">
-                        <input id="registrarycobrar" type="button" value="Registrar y cobrar"
-                               class="btn btn-info btn-rounded container-fluid"/>
+                        <input target="blank" id="imprimir" type="button" disabled value="Imprimir"
+                               class="btn btn-info container-fluid"/>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 py-2">
                         <input id="vercobros" type="button" disabled value="Cobros"
-                               class="btn btn-success btn-rounded container-fluid" data-toggle="modal"
+                               class="btn btn-success container-fluid" data-toggle="modal"
                                data-target="#modalMovimientos"/>
                     </div>
                 </div>
                 <div class="row btn-toolbar justify-content-center">
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 py-2">
                         <input id="limpiar" type="button" value="Limpiar"
-                               class="btn btn-light btn-rounded text-dark container-fluid"/>
+                               class="btn btn-light text-dark container-fluid"/>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 py-2">
                         <input id="modificar" type="button" disabled value="Modificar"
-                               class="btn btn-warning btn-rounded text-dark container-fluid"/>
+                               class="btn btn-warning text-dark container-fluid"/>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 py-2">
                         <input id="eliminar" type="button" disabled value="Eliminar"
-                               class="btn btn-danger btn-rounded container-fluid"/>
+                               class="btn btn-danger container-fluid"/>
                     </div>
                 </div>
             </div>
