@@ -12,6 +12,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
 
+use LaravelDaily\Invoices\Invoice;
+use LaravelDaily\Invoices\Classes\Buyer;
+use LaravelDaily\Invoices\Classes\InvoiceItem;
+
 class VentaController extends Controller
 {
 
@@ -213,36 +217,86 @@ class VentaController extends Controller
 
     public function imprimirLogic(Venta $venta)
     {
-        $concepto = "Factura de venta";
-        $descripcion = $concepto . " #" . $venta->id;
-        $fecha = $venta->created_at;
-        $tituloParticipante = "Cliente";
-        $nombreParticipante = $venta->cliente->name;
-        $direccionParticipante = $venta->cliente->direccion;
-        $celularParticipante = $venta->cliente->celular;
-        $fijoParticipante = $venta->cliente->fijo;
-        $tituloEmpleado = $venta->cliente->fijo;
-        $emailParticipante = $venta->cliente->email;
-        $tituloEmpleado = $venta->empleado->name;
-        $direccionEmpresa = "Armenia Quindío";
-        $telefonoEmpresa = "300 000000";
-        $emailEmpresa = "salsamentariazea@mail.com";
-        $registros = array();
-        $count = 1;
-        $total = 0;
-        foreach ($venta->productos as $producto) {
-            $registro = new \stdClass();
-            $registro->numero = $count++;
-            $registro->nombre = $producto->nombre;
-            $registro->valorUnitario = $producto->pivot->precio;
-            $registro->cantidad = $producto->pivot->cantidad;
-            $registro->total = $producto->pivot->cantidad * $producto->pivot->precio;
-            $total += $registro->total;
-            array_push($registros, $registro);
-        }
-        $pdf = \PDF::loadView('factura', compact('concepto', 'descripcion', 'fecha', 'tituloParticipante',
-            'nombreParticipante', 'direccionParticipante', 'celularParticipante', 'fijoParticipante', 'tituloEmpleado', 'emailParticipante',
-            'direccionEmpresa', 'telefonoEmpresa', 'emailEmpresa', 'total', 'registros'));
-        return $pdf->stream("factura.pdf");
+//        $concepto = "Factura de venta";
+//        $descripcion = $concepto . " #" . $venta->id;
+//        $fecha = $venta->created_at;
+//        $tituloParticipante = "Cliente";
+//        $nombreParticipante = $venta->cliente->name;
+//        $direccionParticipante = $venta->cliente->direccion;
+//        $celularParticipante = $venta->cliente->celular;
+//        $fijoParticipante = $venta->cliente->fijo;
+//        $tituloEmpleado = $venta->cliente->fijo;
+//        $emailParticipante = $venta->cliente->email;
+//        $tituloEmpleado = $venta->empleado->name;
+//        $direccionEmpresa = "Armenia Quindío";
+//        $telefonoEmpresa = "300 000000";
+//        $emailEmpresa = "salsamentariazea@mail.com";
+//        $registros = array();
+//        $count = 1;
+//        $total = 0;
+//        foreach ($venta->productos as $producto) {
+//            $registro = new \stdClass();
+//            $registro->numero = $count++;
+//            $registro->nombre = $producto->nombre;
+//            $registro->valorUnitario = $producto->pivot->precio;
+//            $registro->cantidad = $producto->pivot->cantidad;
+//            $registro->total = $producto->pivot->cantidad * $producto->pivot->precio;
+//            $total += $registro->total;
+//            array_push($registros, $registro);
+//        }
+//        $pdf = \PDF::loadView('factura', compact('concepto', 'descripcion', 'fecha', 'tituloParticipante',
+//            'nombreParticipante', 'direccionParticipante', 'celularParticipante', 'fijoParticipante', 'tituloEmpleado', 'emailParticipante',
+//            'direccionEmpresa', 'telefonoEmpresa', 'emailEmpresa', 'total', 'registros'));
+//        return $pdf->stream("factura.pdf");
+        $customer = new Buyer([
+            'name' => 'John Doe',
+            'custom_fields' => [
+                'email' => 'test@example.com',
+            ],
+        ]);
+
+        $client = new Buyer([
+            'name' => 'Sebastian',
+            'custom_fields' => [
+                'email' => 'test@example1.com',
+            ],
+        ]);
+
+        $item = (new InvoiceItem())->title('Service 1')->pricePerUnit(2);
+
+        $invoice = Invoice::make()
+            ->buyer($customer)
+            ->discountByPercent(10)
+            ->taxRate(15)
+            ->addItem($item);
+
+        $notes = [
+            'your multiline',
+            'additional notes',
+            'in regards of delivery or something else',
+        ];
+        $notes = implode("<br>", $notes);
+
+        $invoice = Invoice::make('receipt')
+            ->series('BIG')
+            ->sequence(667)
+            ->serialNumberFormat('{SEQUENCE}/{SERIES}')
+            ->seller($client)
+            ->buyer($customer)
+            ->date(now()->subWeeks(3))
+            ->dateFormat('m/d/Y')
+            ->payUntilDays(14)
+            ->currencySymbol('$')
+            ->currencyCode('USD')
+            ->currencyFormat('{SYMBOL}{VALUE}')
+            ->currencyThousandsSeparator('.')
+            ->currencyDecimalPoint(',')
+            ->filename($client->name . ' ' . $customer->name)
+            ->addItem($item)
+            ->logo(public_path('favicon.png'))
+            // You can additionally save generated invoice to configured disk
+            ->save('public');
+
+        return $invoice->stream();
     }
 }
