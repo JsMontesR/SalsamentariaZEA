@@ -36,25 +36,25 @@
         <tbody>
         @foreach($registros as $registro)
             <tr>
-                <td>{{ $registro->numero }}</td>
+                <td class="id">{{ $registro->numero }}</td>
                 <td class="service">{{ $registro->nombre }}</td>
                 <td class="unit">{{ $registro->valorUnitario }}</td>
                 <td class="qty">{{ $registro->cantidad }}</td>
                 <td class="total">{{ $registro->total }}</td>
             </tr>
         @endforeach
-        <tr>
-            <td colspan="3" class="total">Total</td>
-            <td class="total">{{ $total }}</td>
+        <tr style="font-weight: bold">
+            <td class="grand total" colspan="4">Total</td>
+            <td class="grand total">{{ $total }}</td>
         </tr>
         </tbody>
     </table>
     <div id="notices">
         <div align="center" class="notice">Salsamentaria ZEA</div>
+        <div align="center" class="notice">
+            Fecha y hora de impresión: {{ $fechaActual }}
+        </div>
     </div>
 </main>
-<footer>
-    Fecha de impresión {{ $fechaActual }}
-</footer>
 </body>
 </html>

@@ -288,6 +288,44 @@
             </div>
         </div>
     </div>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modarprinttarget">
+        Launch demo modal
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modarprinttarget" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="row">
+                    <div class="modal-body row justify-content-center">
+                        <div class="col-xl-5 col-lg-6 col-md-6 col-sm-12">
+                            <button type="button" class="btn btn-secondary container-fluid" data-dismiss="modal">
+                                <img src="{{ asset() }}" width="20" />
+                                Impresión carta
+                            </button>
+                        </div>
+                        <div class="col-xl-5 col-lg-6 col-md-6 col-sm-12">
+                            <button type="button" class="btn btn-secondary container-fluid" data-dismiss="modal">
+                                Impresión POS
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar impresión</button>
+                </div>
+            </div>
+        </div>
+    </div>
     @include("js.ventas")
 @endsection
 

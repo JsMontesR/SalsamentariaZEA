@@ -235,14 +235,13 @@ class VentaController extends Controller
             $registro = new \stdClass();
             $registro->numero = $count++;
             $registro->nombre = $producto->nombre;
-            $registro->valorUnitario = "$ " . number_format($producto->pivot->costo, 0);
             $registro->cantidad = $producto->pivot->cantidad;
-            $registro->total = "$ " . number_format($producto->pivot->cantidad * $producto->pivot->costo, 0);
-            $total += $producto->pivot->cantidad * $producto->pivot->costo;
+            $registro->valorUnitario = "$ " . number_format($producto->pivot->costo / $registro->cantidad, 0);
+            $registro->total = "$ " . number_format($producto->pivot->costo, 0);
             array_push($registros, $registro);
         }
-        $total = "$ " . number_format($total, 0);
-        $pdf = \PDF::loadView('factura', compact('concepto', 'descripcion', 'fecha', 'fechaActual', 'tituloParticipante',
+        $total = "$ " . number_format($venta->valor, 0);
+        $pdf = \PDF::loadView('print.factura', compact('concepto', 'descripcion', 'fecha', 'fechaActual', 'tituloParticipante',
             'nombreParticipante', 'direccionParticipante', 'celularParticipante', 'fijoParticipante', 'tituloEmpleado', 'emailParticipante',
             'direccionEmpresa', 'telefonoEmpresa', 'emailEmpresa', 'total', 'registros'));
         return $pdf->stream("factura.pdf");
