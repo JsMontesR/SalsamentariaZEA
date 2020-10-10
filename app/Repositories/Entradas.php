@@ -55,13 +55,16 @@ class Entradas
     public function getNoDescontable(Entrada $entrada)
     {
         foreach ($entrada->productos as $producto) {
-            if ($producto->stock < $producto->pivot->cantidad) {
-                return $producto->nombre . " (Con el id: " . $producto->id . ")";
+            $cantidad = $producto->pivot->cantidad;
+            if ($producto->categoria == ProductoTipo::GRANEL) {
+                $cantidad *= 1000;
+            }
+            if ($producto->stock < $cantidad) {
+                return $producto->nombre . " (Con el id: " . $producto->id . ") faltan " . ($cantidad - $producto->stock) . " " . ($producto->categoria == ProductoTipo::GRANEL ? "Gramos " : "Unidades ");
             }
         }
         return null;
     }
-
 
 
     /**

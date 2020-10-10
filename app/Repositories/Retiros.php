@@ -51,8 +51,12 @@ class Retiros
     {
         foreach ($request->productos_retiro as $producto) {
             $productoActual = Producto::findOrFail($producto["id"]);
-            if ($producto["cantidad"] > $productoActual->stock) {
-                return $productoActual->nombre . " (Con el id: " . $productoActual->id . ")";
+            $cantidad = $producto["cantidad"];
+            if ($productoActual->categoria == ProductoTipo::GRANEL) {
+                $cantidad *= 1000;
+            }
+            if ($cantidad > $productoActual->stock) {
+                return $productoActual->nombre . " (Con el id: " . $productoActual->id . ") faltan " . ($cantidad - $productoActual->stock) . " " . ($productoActual->categoria == ProductoTipo::GRANEL ? "Gramos " : "Unidades ");
             }
         }
         return null;
