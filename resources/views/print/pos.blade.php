@@ -1,71 +1,78 @@
 <style>
     @page {
-        size: 73mm 600pt ;
-        margin: 5px;
+        size: 55mm 600pt;
+        margin: 5mm;
     }
 
     table {
-        border: #b2b2b2 1px solid;
+        border-collapse: collapse;
     }
 
-    td {
-        border: black 1px solid;
+    table, th, td {
+        border: 1px solid black;
+        font-size: 9px;
+    }
+
+    hr {
+        background-color: #403d3d;
+        border: 0 none;
+        color: #eee;
+        height: 1px;
     }
 </style>
+<body>
 <div align="center">
-    <img style="width: 50mm; height: 13mm" src="{{ asset('favicon.png') }}" class="img-fluid" alt="SalsaMentaria ZEA">
+    <img style="width: 13mm; height: 13mm" src="{{ asset('favicon.png') }}" class="img-fluid" alt="Salsamentaria ZEA">
 </div>
-<div align="center" style="font-size:12px">{{$nombre}}</div>
-<div align="center" style="font-size:12px">{{$fijo}}</div>
-<div align="center" style="font-size:12px">{{$celular}}</div>
+<div align="center" style="font-size:12px">{{$nombreEmpresa}}</div>
+<div align="center" style="font-size:12px">{{$direccionEmpresa}}</div>
+<div align="center" style="font-size:12px">{{$telefonoEmpresa}}</div>
+<div align="center" style="font-size:12px">{{$emailEmpresa}}</div>
 <br>
-
 
 <div align="left" style="font-size:12px">
+    <label> {{ $descripcion }} </label>
+    <br>
     <label>Fecha: {{$fechaActual}}</label>
-    <label>Hora: {{$horaActual}}</label>
     <br>
-    <label> Recibo no. {{$numeroRecibo}} </label>
+    <label> Cliente: {{$nombreParticipante}} </label>
     <br>
-    <label> Le atendió: {{$usuario}} </label>
-    <br>
-    <label> Tipo de pago: {{$tipoPago}} </label>
-    <br>
-    <label> Número de documento: {{$cc}} </label>
-    <br>
-    <label> Nombre: {{$nombreCliente}} </label>
-    <br>
-    <label> Dirección: {{$direccion}} </label>
-    <br>
-    <label> Teléfono: {{$telefono}} </label>
-    <br>
-
-    @endif
-    @if($email != null)
-
-        <label> Correo electrónico: {{$email}} </label>
-        <br>
-
-    @endif
-
-    <label> Producto: {{$producto}} </label>
-    <br>
-
-    <label> Total: $ {{$valor}} </label>
-    <br>
-
-    <label> Recibo válido hasta: {{$fechaValidez}} </label>
-    <br>
-
+    <label> Le atendió: {{$tituloEmpleado}} </label>
+    <hr>
+    <table align="center">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th class="service">Producto</th>
+            <th>Precio unit/kg</th>
+            <th>Cant</th>
+            <th>Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach($registros as $registro)
+            <tr>
+                <td align="center">{{ $registro->numero }}</td>
+                <td align="center">{{ $registro->nombre }}</td>
+                <td align="center">{{ $registro->valorUnitario }}</td>
+                <td align="center">{{ $registro->cantidad }}</td>
+                <td align="center">{{ $registro->total }}</td>
+            </tr>
+        @endforeach
+        <tr style="font-weight: bold">
+            <td align="center" style="font-weight: bold" colspan="4">Total</td>
+            <td align="center" style="font-weight: bold">{{ $total }}</td>
+        </tr>
+        </tbody>
+    </table>
+    <hr>
 </div>
-
-<br>
-
 <div align="center" style="font-size:12px">
-    <label>Por favor conservar este tiquete</label>
-    <br>
-    <label>Gracias por su compra</label>
+    <div>Por favor conservar este tiquete</div>
+    <div>Gracias por su compra</div>
 </div>
+</body>
+
 
 
 

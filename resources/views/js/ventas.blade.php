@@ -548,7 +548,12 @@
             })
         })
 
-        $("#imprimir").click(function () {
+        $("#imprimirpos,#imprimircarta").click(function () {
+            if (this.id == "imprimirpos") {
+                $("#tipoimpresion").val("POS");
+            } else if (this.id == "imprimircarta") {
+                $("#tipoimpresion").val("CARTA");
+            }
             document.form.action = '{{ route('imprimirVenta') }}';
             document.form.submit();
         })

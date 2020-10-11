@@ -208,13 +208,11 @@ class VentaController extends Controller
     public function imprimir(Request $request)
     {
         $venta = Venta::findorFail($request->id);
-        return $this->imprimirLogic($venta);
+        return $this->imprimirLogic($venta, $request->tipoimpresion);
     }
 
-    public function imprimirLogic(Venta $venta)
+    public function imprimirLogic(Venta $venta, $impresion)
     {
-        $concepto = "Factura de venta";
-        $descripcion = $concepto . " #" . $venta->id;
         $fecha = $venta->created_at;
         $fechaActual = now();
         $tituloParticipante = "Cliente";
@@ -225,6 +223,7 @@ class VentaController extends Controller
         $tituloEmpleado = $venta->cliente->fijo;
         $emailParticipante = $venta->cliente->email;
         $tituloEmpleado = $venta->empleado->name;
+        $nombreEmpresa = "Salsamentaría ZEA";
         $direccionEmpresa = "Armenia Quindío";
         $telefonoEmpresa = "300 000000";
         $emailEmpresa = "salsamentariazea@mail.com";
@@ -241,9 +240,21 @@ class VentaController extends Controller
             array_push($registros, $registro);
         }
         $total = "$ " . number_format($venta->valor, 0);
-        $pdf = \PDF::loadView('print.factura', compact('concepto', 'descripcion', 'fecha', 'fechaActual', 'tituloParticipante',
-            'nombreParticipante', 'direccionParticipante', 'celularParticipante', 'fijoParticipante', 'tituloEmpleado', 'emailParticipante',
+        if ($impresion == "POS") {
+            $concepto = "Desprendible de venta";
+            $descripcion = $concepto . " #" . $venta->id;
+            $nombrePdf = "pos.pdf";
+            $nombreVista = "print.pos";
+        } else if ($impresion == "CARTA") {
+            $concepto = "Factura de venta";
+            $descripcion = $concepto . " #" . $venta->id;
+            $nombrePdf = "factura.pdf";
+            $nombreVista = "print.factura";
+        }
+        $pdf = \PDF::loadView($nombreVista, compact('concepto', 'descripcion', 'fecha', 'fechaActual', 'tituloParticipante',
+            'nombreParticipante', 'nombreEmpresa' ,'direccionParticipante', 'celularParticipante', 'fijoParticipante', 'tituloEmpleado', 'emailParticipante',
             'direccionEmpresa', 'telefonoEmpresa', 'emailEmpresa', 'total', 'registros'));
-        return $pdf->stream("factura.pdf");
+        return $pdf->stream($nombrePdf);
+
     }
 }

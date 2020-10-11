@@ -107,7 +107,7 @@
                                    name="fechapagado" required>
                         </div>
                     </div>
-
+                    <input id="tipoimpresion" name="tipoimpresion" hidden>
                 </form>
                 <br>
                 <div class="row btn-toolbar justify-content-center">
@@ -136,7 +136,8 @@
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 py-2">
                         <input target="blank" id="imprimir" type="button" disabled value="Imprimir"
-                               class="btn btn-info container-fluid"/>
+                               class="btn btn-info container-fluid" data-toggle="modal"
+                               data-target="#modarprinttarget"/>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 py-2">
                         <input id="vercobros" type="button" disabled value="Cobros"
@@ -202,7 +203,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">$</span>
                                     </div>
-                                    <input id="valor" readonly="readonly"
+                                    <input readonly="readonly"
                                            class="form-control border-warning money"
                                            name="valor">
                                 </div>
@@ -288,18 +289,14 @@
             </div>
         </div>
     </div>
-    <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modarprinttarget">
-        Launch demo modal
-    </button>
 
-    <!-- Modal -->
+    <!-- Modal impresión -->
     <div class="modal fade" id="modarprinttarget" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
          aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                    <h5 class="modal-title" id="exampleModalLongTitle">¿Cómo deseas imprimir?</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -307,21 +304,26 @@
                 <div class="row">
                     <div class="modal-body row justify-content-center">
                         <div class="col-xl-5 col-lg-6 col-md-6 col-sm-12">
-                            <button type="button" class="btn btn-secondary container-fluid" data-dismiss="modal">
-                                <img src="{{ asset() }}" width="20" />
-                                Impresión carta
-                            </button>
+                            <a id="imprimircarta" type="button" class="btn btn-light container-fluid"
+                                    data-dismiss="modal" target="_blank">
+                                <img class="img-fluid" src="{{ asset('assets/images/printer.png') }}"/>
+                                <hr>
+                                <p>Impresión tamaño carta</p>
+                            </a>
                         </div>
                         <div class="col-xl-5 col-lg-6 col-md-6 col-sm-12">
-                            <button type="button" class="btn btn-secondary container-fluid" data-dismiss="modal">
-                                Impresión POS
+                            <button id="imprimirpos" type="button" class="btn btn-light container-fluid"
+                                    data-dismiss="modal">
+                                <img class="img-fluid" src="{{ asset('assets/images/pos.png') }}"/>
+                                <hr>
+                                <p>Impresión POS</p>
                             </button>
                         </div>
                     </div>
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar impresión</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar impresión</button>
                 </div>
             </div>
         </div>

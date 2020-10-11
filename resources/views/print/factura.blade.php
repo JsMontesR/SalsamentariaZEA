@@ -12,7 +12,7 @@
     </div>
     <h1>{{ $descripcion }}</h1>
     <div style="float: right">
-        <div>Salsamentaría ZEA</div>
+        <div> {{ $nombreEmpresa }}</div>
         <div> {{ $direccionEmpresa }}</div>
         <div> {{ $telefonoEmpresa }}</div>
         <div> {{ $emailEmpresa }}</div>
@@ -20,6 +20,7 @@
     <div style="float: left">
         <div><label class="bold">Cliente: </label>{{$nombreParticipante}}</div>
         <div><label class="bold">Fecha: </label>{{ $fecha }}</div>
+        <div><label class="bold">Le atendió: </label>{{ $tituloEmpleado }}</div>
     </div>
 </header>
 <main>
@@ -28,7 +29,7 @@
         <tr>
             <th>#</th>
             <th class="service">Producto</th>
-            <th>Precio</th>
+            <th>Precio unit/kg</th>
             <th>Cantidad</th>
             <th>Total</th>
         </tr>
