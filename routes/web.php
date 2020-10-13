@@ -22,7 +22,7 @@ Route::get('/entradas', 'EntradaController@index')->name('entradas')->middleware
 Route::get('/ventas', 'VentaController@index')->name('ventas')->middleware('auth');
 Route::get('/movimientos', 'MovimientoController@index')->name('movimientos')->middleware('auth');
 Route::get('/notificaciones', 'NotificacionController@index')->name('notificaciones')->middleware('auth');
-Route::get('/imprimirVenta', 'VentaController@imprimir')->name('imprimirVenta')->middleware('auth');
+Route::post('/imprimirVenta', 'VentaController@imprimir')->name('imprimirVenta')->middleware('auth');
 
 /*
  * OPERACIONES CRUD Y CORE DEL NEGOCIO
@@ -125,4 +125,16 @@ Route::prefix('api')->group(function () {
         Route::post('anularCobro', 'MovimientoController@anularCobro')->middleware('auth');
     });
 
+    /*
+     * REPORTES
+     */
+    Route::prefix('reporte')->group(function () {
+        Route::get('/', 'ReportesController@index')->name('reportes')->middleware('auth');
+        Route::get('/inventario', 'ReportesController@reporteInventario')->name('reporteInventario')->middleware('auth');
+        Route::get('/ventas', 'ReportesController@reporteVentas')->name('reporteVentas')->middleware('auth');
+        Route::get('/productosMenosVendidos', 'ReportesController@productosMenosVendidos')->name('reporteProductosMenosVendidos')->middleware('auth');
+        Route::get('/balance', 'ReportesController@balance')->name('reporteBalance')->middleware('auth');
+        Route::get('/facturasPorCobrar', 'ReportesController@facturasPorCobrar')->name('reporteFacturasPorCobrar')->middleware('auth');
+        Route::get('/cuentasPorPagar', 'ReportesController@cuentasPorPagar')->name('reporteCuentasPorPagar')->middleware('auth');
+    });
 });

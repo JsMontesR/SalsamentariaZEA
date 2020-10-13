@@ -10,7 +10,7 @@
                 <h3 class="m-0 font-weight-bold text-primary text-center">Detalle de la venta</h3>
             </div>
             <div class="card-body">
-                <form id="form" name="form" method="GET">
+                <form id="form" name="form" method="POST">
                     @csrf
                     <div class="form-group row">
                         <label class="col-md-4 col-form-label text-md-left">Id:</label>

@@ -114,6 +114,46 @@ class VentaController extends Controller
         ]);
     }
 
+    /**
+     * Registra una venta y devuelve el PDF de su impresión.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storePrint(Request $request)
+    {
+        //Validación de la factibilidad de la transacción
+        $this->validarVenta($request);
+        // Ejecución de la transacción
+        $venta = $this->ventas->store($request);
+        return $this->imprimirLogic($venta, $request->tipoimpresion);
+    }
+
+
+    /**
+     * Registra una venta y la cobra en efectivo, en su totalidad y devuelve el PDF de su impresión.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeChargePrint(Request $request)
+    {
+        //Validación de la factibilidad de la transacción
+        $this->validarVenta($request, $this->validationRegisterCharge);
+        // Ejecución de la transacción
+        $venta = $this->ventas->store($request);
+        $caja = Caja::findOrFail(1);
+        $this->cajas->cobrar($caja, $venta, $venta->saldo);
+        return $this->imprimirLogic($venta, $request->tipoimpresion);
+    }
+
+    /**
+     *
+     * Valida una venta
+     * @param Request $request
+     * @param null $validationRules
+     * @throws ValidationException
+     */
     public function validarVenta(Request $request, $validationRules = null)
     {
         if ($validationRules == null) {
@@ -207,7 +247,7 @@ class VentaController extends Controller
      */
     public function imprimir(Request $request)
     {
-        $venta = Venta::findorFail($request->id);
+        $venta = Venta::findOrFail($request->id);
         return $this->imprimirLogic($venta, $request->tipoimpresion);
     }
 
@@ -215,6 +255,8 @@ class VentaController extends Controller
     {
         $fecha = $venta->created_at;
         $fechaActual = now();
+        $fechaLimitePago = $venta->fechapago;
+        $fechaDePago = $venta->fechapagado;
         $tituloParticipante = "Cliente";
         $nombreParticipante = $venta->cliente->name;
         $direccionParticipante = $venta->cliente->direccion;
@@ -252,8 +294,8 @@ class VentaController extends Controller
             $nombreVista = "print.factura";
         }
         $pdf = \PDF::loadView($nombreVista, compact('concepto', 'descripcion', 'fecha', 'fechaActual', 'tituloParticipante',
-            'nombreParticipante', 'nombreEmpresa' ,'direccionParticipante', 'celularParticipante', 'fijoParticipante', 'tituloEmpleado', 'emailParticipante',
-            'direccionEmpresa', 'telefonoEmpresa', 'emailEmpresa', 'total', 'registros'));
+            'nombreParticipante', 'nombreEmpresa', 'direccionParticipante', 'celularParticipante', 'fijoParticipante', 'tituloEmpleado', 'emailParticipante',
+            'direccionEmpresa', 'telefonoEmpresa', 'emailEmpresa', 'total', 'registros', 'fechaLimitePago', 'fechaDePago'));
         return $pdf->stream($nombrePdf);
 
     }

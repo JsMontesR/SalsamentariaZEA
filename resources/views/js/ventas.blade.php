@@ -1,5 +1,11 @@
 <script>
     $(document).ready(function () {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
         let btnAgregar = "<input name='btn_agregar_productos_tabla' type='button' value='Agregar' class='btn btn-success container-fluid'/>";
 
         function darFormatoNumerico() {
@@ -453,11 +459,6 @@
         });
 
         $("#registrar").click(function () {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
             $.post('/api/ventas/crear',
                 {
                     cliente_id: $("#cliente_id").val(),
@@ -527,11 +528,6 @@
         });
 
         $("#modificar").click(function () {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
             $.post('/api/ventas/modificar',
                 {
                     id: $("#id").val(),
@@ -604,11 +600,6 @@
         })
 
         $("#cobrar").click(function () {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
             $.post('/api/ventas/cobrar',
                 {
                     id: $("#id").val(),
@@ -628,11 +619,6 @@
         })
 
         $("#anularcobro").click(function () {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
             $.post('/api/movimientos/anularCobro',
                 {
                     id: $("#idcobro").val(),

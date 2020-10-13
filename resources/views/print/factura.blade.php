@@ -19,7 +19,12 @@
     </div>
     <div style="float: left">
         <div><label class="bold">Cliente: </label>{{$nombreParticipante}}</div>
-        <div><label class="bold">Fecha: </label>{{ $fecha }}</div>
+        <div><label class="bold">Fecha de venta: </label>{{ $fecha }}</div>
+        @if($fechaDePago == null)
+            <div><label class="bold">Fecha límite de pago: </label>{{ $fechaLimitePago }}</div>
+        @else
+            <div><label class="bold">Fecha de pago: </label>{{ $fechaDePago }}</div>
+        @endif
         <div><label class="bold">Le atendió: </label>{{ $tituloEmpleado }}</div>
     </div>
 </header>

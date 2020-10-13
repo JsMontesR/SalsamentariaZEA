@@ -1,6 +1,6 @@
 <style>
     @page {
-        size: 55mm 600pt;
+        size: 79mm 600pt;
         margin: 5mm;
     }
 
@@ -19,7 +19,14 @@
         color: #eee;
         height: 1px;
     }
+
+    .negrita {
+        font-weight: bold;
+    }
 </style>
+<head>
+    <meta charset="utf-8">
+</head>
 <body>
 <div align="center">
     <img style="width: 13mm; height: 13mm" src="{{ asset('favicon.png') }}" class="img-fluid" alt="Salsamentaria ZEA">
@@ -31,13 +38,13 @@
 <br>
 
 <div align="left" style="font-size:12px">
-    <label> {{ $descripcion }} </label>
+    <label class="negrita"> {{ $descripcion }} </label>
     <br>
-    <label>Fecha: {{$fechaActual}}</label>
+    <label>Fecha:<strong>{{$fechaActual}}</strong></label>
     <br>
-    <label> Cliente: {{$nombreParticipante}} </label>
+    <label> Cliente: <strong>{{$nombreParticipante}}</strong> </label>
     <br>
-    <label> Le atendió: {{$tituloEmpleado}} </label>
+    <label> Le atendió: <strong>{{$tituloEmpleado}}</strong> </label>
     <hr>
     <table align="center">
         <thead>
@@ -52,16 +59,16 @@
         <tbody>
         @foreach($registros as $registro)
             <tr>
-                <td align="center">{{ $registro->numero }}</td>
-                <td align="center">{{ $registro->nombre }}</td>
-                <td align="center">{{ $registro->valorUnitario }}</td>
-                <td align="center">{{ $registro->cantidad }}</td>
-                <td align="center">{{ $registro->total }}</td>
+                <td class="negrita" align="center">{{ $registro->numero }}</td>
+                <td class="negrita" align="center">{{ $registro->nombre }}</td>
+                <td class="negrita" align="center">{{ $registro->valorUnitario }}</td>
+                <td class="negrita" align="center">{{ $registro->cantidad }}</td>
+                <td class="negrita" align="center">{{ $registro->total }}</td>
             </tr>
         @endforeach
         <tr style="font-weight: bold">
-            <td align="center" style="font-weight: bold" colspan="4">Total</td>
-            <td align="center" style="font-weight: bold">{{ $total }}</td>
+            <td class="negrita" align="center" colspan="4">Total</td>
+            <td class="negrita" align="center">{{ $total }}</td>
         </tr>
         </tbody>
     </table>
