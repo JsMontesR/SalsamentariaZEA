@@ -28,6 +28,9 @@ class Caja extends Model
         return $this->hasMany('App\Movimiento');
     }
 
-
+    public function cierres()
+    {
+        return $this->hasMany('App\Cierre', 'cierre_id');
+    }
 
 }

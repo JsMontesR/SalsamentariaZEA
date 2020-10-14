@@ -16,25 +16,25 @@
                         <label class="col-md-4 col-form-label text-md-left">Fecha inicio:</label>
                         <div class="col-md-8">
                             <input id="fechaInicio" type="date" class="form-control" value="{{old('fechaInicio')}}"
-                                   name="fechaInicio" required autocomplete="fechaInicio">
+                                   name="filtro" required autocomplete="fechaInicio">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-4 col-form-label text-md-left">Fecha fin:</label>
                         <div class="col-md-8">
                             <input id="fechaFin" type="date" class="form-control" value="{{old('fechaFin')}}"
-                                   name="fechaFin" required autocomplete="fechaFin">
+                                   name="filtro" required autocomplete="fechaFin">
                         </div>
                     </div>
-                    <br>
+                    <hr>
                     <div class="row btn-toolbar justify-content-center">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 py-2">
-                            <input id="filtrar" type="button" value="Filtrar"
-                                   class="btn btn-primary container-fluid"/>
+                            <input id="verimpresion" type="button" value="Ver impresión"
+                                   class="btn btn-primary text-light container-fluid"/>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 py-2">
-                            <input id="verimpresion" type="button" value="Ver impresión"
-                                   class="btn btn-light text-dark container-fluid"/>
+                            <input id="limpiar" type="button" value="Limpiar filtros"
+                                   class="btn btn-light container-fluid"/>
                         </div>
                     </div>
                 </form>
@@ -52,5 +52,6 @@
             </div>
         </div>
     </div>
+    @include("js.reportes.reporteVentas")
 @endsection
 

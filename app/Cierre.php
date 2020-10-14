@@ -7,8 +7,6 @@ use DateTimeInterface;
 
 class Cierre extends Model
 {
-
-
     /**
      * Prepare a date for array / JSON serialization.
      *
@@ -19,4 +17,10 @@ class Cierre extends Model
     {
         return $date->format('Y-m-d H:i:s');
     }
+
+    public function caja()
+    {
+        return $this->belongsTo('App\Caja', 'caja_id');
+    }
+
 }

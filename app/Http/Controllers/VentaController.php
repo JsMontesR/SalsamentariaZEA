@@ -60,7 +60,7 @@ class VentaController extends Controller
 
     public function list()
     {
-        return datatables(Venta::query()->with(['empleado', 'cliente', 'productos']))
+        return datatables(Venta::query()->select('ventas.*')->with(['empleado', 'cliente', 'productos']))
             ->toJson();
     }
 

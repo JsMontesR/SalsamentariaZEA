@@ -128,13 +128,29 @@ Route::prefix('api')->group(function () {
     /*
      * REPORTES
      */
-    Route::prefix('reporte')->group(function () {
-        Route::get('/', 'ReportesController@index')->name('reportes')->middleware('auth');
-        Route::get('/inventario', 'ReportesController@reporteInventario')->name('reporteInventario')->middleware('auth');
-        Route::get('/ventas', 'ReportesController@reporteVentas')->name('reporteVentas')->middleware('auth');
-        Route::get('/productosMenosVendidos', 'ReportesController@productosMenosVendidos')->name('reporteProductosMenosVendidos')->middleware('auth');
-        Route::get('/balance', 'ReportesController@balance')->name('reporteBalance')->middleware('auth');
-        Route::get('/facturasPorCobrar', 'ReportesController@facturasPorCobrar')->name('reporteFacturasPorCobrar')->middleware('auth');
-        Route::get('/cuentasPorPagar', 'ReportesController@cuentasPorPagar')->name('reporteCuentasPorPagar')->middleware('auth');
+
+    Route::prefix('reportes')->group(function () {
+        Route::get('/listarVentas', 'ReportesController@listarVentas')->name('listarVentas')->middleware('auth');
     });
+
+    /*
+     * CIERRES
+     */
+
+    Route::prefix('cierres')->group(function () {
+        Route::get('/generarCierre', 'CierresController@listarVentas')->name('listarVentas')->middleware('auth');
+    });
+});
+
+/*
+     * REPORTES
+     */
+Route::prefix('reportes')->group(function () {
+    Route::get('/', 'ReportesController@index')->name('reportes')->middleware('auth');
+    Route::get('/inventario', 'ReportesController@reporteInventario')->name('reporteInventario')->middleware('auth');
+    Route::get('/ventas', 'ReportesController@reporteVentas')->name('reporteVentas')->middleware('auth');
+    Route::get('/productosMenosVendidos', 'ReportesController@productosMenosVendidos')->name('reporteProductosMenosVendidos')->middleware('auth');
+    Route::get('/balance', 'ReportesController@balance')->name('reporteBalance')->middleware('auth');
+    Route::get('/facturasPorCobrar', 'ReportesController@facturasPorCobrar')->name('reporteFacturasPorCobrar')->middleware('auth');
+    Route::get('/cuentasPorPagar', 'ReportesController@cuentasPorPagar')->name('reporteCuentasPorPagar')->middleware('auth');
 });

@@ -204,6 +204,10 @@ class Cajas
     {
         return $parteEfectiva <= $caja->saldo;
     }
+
+    public function generarCierre(Caja $caja){
+
+    }
 }
 
 ?>
