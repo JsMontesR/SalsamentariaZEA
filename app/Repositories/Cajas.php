@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Caja;
+use App\Cierre;
 use App\Entrada;
 use App\Movimiento;
 use App\Nomina;
@@ -205,8 +206,11 @@ class Cajas
         return $parteEfectiva <= $caja->saldo;
     }
 
-    public function generarCierre(Caja $caja){
-
+    public function generarCierre(Caja $caja)
+    {
+        $nuevoCierre = new Cierre();
+        $nuevoCierre->caja()->associate($caja);
+        $nuevoCierre->save();
     }
 }
 

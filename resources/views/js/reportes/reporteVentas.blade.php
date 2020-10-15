@@ -3,7 +3,7 @@
 
         llenarTabla();
 
-        function llenarTabla(fechaInicio = '', fechaFin = '') {
+        function llenarTabla(fechaInicio = '', fechaFin = '', cierre_id = '') {
 
             if ($.fn.DataTable.isDataTable('#recurso')) {
                 $('#recurso').DataTable().destroy();
@@ -16,6 +16,7 @@
                     data: {
                         fechaInicio: fechaInicio,
                         fechaFin: fechaFin,
+                        cierre_id: cierre_id,
                     },
                     url: "/api/reportes/listarVentas",
                 },
@@ -86,13 +87,38 @@
             }, options));
         }
 
+        let tablaCierres = $('#cierres').DataTable($.extend({
+            serverSide: true,
+            ajax: '/api/cierres/listar',
+            columns: [
+                {data: 'id', title: 'Número de cierre', className: "text-center"},
+                {data: 'created_at', title: 'Fecha del cierre', className: "text-center"},
+            ],
+            responsive: true,
+        }, options));
+
+        $('#cierres tbody').on('click', 'tr', function () {
+            $('#cierres tr').removeClass("selected");
+            $(this).addClass("selected");
+            let data = tablaCierres.row(row).data();
+            $('cierre_id').val(data.id);
+            aplicarFiltros();
+        });
+
         $('[name="filtro"]').change(function () {
-            llenarTabla($("#fechaInicio").val(), $("#fechaFin").val());
+            aplicarFiltros();
         });
 
         $('#limpiar').click(function () {
-
+            $('[name="filtro"]').val("");
+            $('#cierres tr').removeClass("selected");
+            llenarTabla();
         });
+
+
+        function aplicarFiltros() {
+            llenarTabla($("#fechaInicio").val(), $("#fechaFin").val(), $("#cierre_id").val());
+        }
 
     });
 </script>

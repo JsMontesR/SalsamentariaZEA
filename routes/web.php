@@ -12,6 +12,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/proveedores', 'ProveedorController@index')->name('proveedores')->middleware('auth');
 Route::get('/tiposproductos', 'ProductoTipoController@index')->name('tiposproductos')->middleware('auth');
+Route::get('/tiposservicios', 'TipoServicioController@index')->name('tiposservicios')->middleware('auth');
 Route::get('/productos', 'ProductoController@index')->name('productos')->middleware('auth');
 Route::get('/clientes', 'ClienteController@index')->name('clientes')->middleware('auth');
 Route::get('/empleados', 'EmpleadoController@index')->name('empleados')->middleware('auth');
@@ -68,6 +69,14 @@ Route::prefix('api')->group(function () {
         Route::post('crear', 'EmpleadoController@store')->middleware('auth');
         Route::post('modificar', 'EmpleadoController@update')->middleware('auth');
         Route::post('borrar', 'EmpleadoController@destroy')->middleware('auth');
+    });
+
+    // CRUD Tipos de servicios
+    Route::prefix('tiposervicios')->group(function () {
+        Route::get('listar', 'TipoServicioController@list')->middleware('auth');
+        Route::post('crear', 'TipoServicioController@store')->middleware('auth');
+        Route::post('modificar', 'TipoServicioController@update')->middleware('auth');
+        Route::post('borrar', 'TipoServicioController@destroy')->middleware('auth');
     });
 
     // Procesamiento nóminas
@@ -138,7 +147,8 @@ Route::prefix('api')->group(function () {
      */
 
     Route::prefix('cierres')->group(function () {
-        Route::get('/generarCierre', 'CierresController@listarVentas')->name('listarVentas')->middleware('auth');
+        Route::get('/listar', 'CierresController@list')->middleware('auth');
+        Route::get('/generarCierre', 'CierresController@generarCierre')->name('generarCierre')->middleware('auth');
     });
 });
 

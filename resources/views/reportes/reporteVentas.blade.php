@@ -27,6 +27,27 @@
                         </div>
                     </div>
                     <hr>
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label text-md-left">Por cierre de caja (número de cierre):</label>
+                        <div class="col-md-8">
+                            <input id="cierre_id" readonly
+                                   class="form-control"
+                                   name="cierre_id" required="required">
+                        </div>
+                    </div>
+                    <div class="card mb-3 border border-dark">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="cierres"
+                                       class="table table-bordered dt-responsive table-hover row-cursor-hand"
+                                       style="width:100%">
+                                    <tbody></tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
                     <div class="row btn-toolbar justify-content-center">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 py-2">
                             <input id="verimpresion" type="button" value="Ver impresión"
