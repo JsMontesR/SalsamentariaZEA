@@ -85,7 +85,7 @@
                     render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
                 },
                 {
-                    data: 'valor',
+                    data: 'total',
                     title: 'Total de dinero',
                     className: "text-center",
                     render: $.fn.dataTable.render.number(',', '.', 0, '$ ')

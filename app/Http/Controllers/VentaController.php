@@ -220,12 +220,12 @@ class VentaController extends Controller
             array_push($registros, $registro);
         }
         $total = "$ " . number_format($venta->valor, 0);
-        if ($impresion == "POS") {
+        if ($impresion == "pos") {
             $concepto = "Desprendible de venta";
             $descripcion = $concepto . " #" . $venta->id;
             $nombrePdf = "pos.pdf";
             $nombreVista = "print.pos";
-        } else if ($impresion == "CARTA") {
+        } else if ($impresion == "carta") {
             $concepto = "Factura de venta";
             $descripcion = $concepto . " #" . $venta->id;
             $nombrePdf = "factura.pdf";

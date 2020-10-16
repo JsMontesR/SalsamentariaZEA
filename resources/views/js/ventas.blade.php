@@ -502,6 +502,10 @@
             })
         });
 
+        $("#imprimir").click(function () {
+           imprimir("carta");
+        })
+
         $("#limpiar").click(function () {
             location.href = "{{route('ventas')}}";
         });
@@ -588,6 +592,18 @@
                         className: "text-center",
                         render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
                     },
+                    {
+                        data: 'efectivoRecibido',
+                        title: 'Efectivo recibido',
+                        className: "text-center",
+                        render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
+                    },
+                    {
+                        data: 'cambio',
+                        title: 'Cambio',
+                        className: "text-center",
+                        render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
+                    },
                     {data: 'created_at', title: 'Fecha de creación', className: "text-center"}
                 ],
                 responsive: true
@@ -615,6 +631,8 @@
             })
         })
 
+
+
         $("#cobrareimprimir").click(function () {
             $.post('/api/ventas/cobrar',
                 {
@@ -628,7 +646,7 @@
                     limpiarFormularioModal()
                     limpiarFormulario();
                     swal("¡Operación exitosa!", data.msg, "success");
-                    imprimir("POS");
+                    imprimir("pos");
                 }).fail(function (err) {
                 $.each(err.responseJSON.errors, function (i, error) {
                     swal("Ha ocurrido un error", error[0], "error");
@@ -684,7 +702,6 @@
                 parteEfectiva = parseInt(parteEfectiva, 10);
                 efectivoRecibido = parseInt(efectivoRecibido, 10);
                 if (efectivoRecibido >= parteEfectiva) {
-                    console.log("what");
                     $("#cambio").val(efectivoRecibido - parteEfectiva).trigger('input');
                 } else {
                     $("#cambio").val(0).trigger();

@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers;
 
-
-use App\Caja;
 use App\Exceptions\FondosInsuficientesException;
+use App\Caja;
 use App\Movimiento;
 use App\Nomina;
+use App\Venta;
+use App\Entrada;
 use App\Repositories\Cajas;
 use App\Repositories\Entradas;
 use App\Repositories\Nominas;
-use App\Venta;
-use App\Entrada;
-use Illuminate\Database\Eloquent\Builder;
+use App\Repositories\Ventas;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -120,7 +119,7 @@ class MovimientoController extends Controller
         if (!$this->cajas->isMontosPagoValidos($request->parteEfectiva, $request->parteCrediticia, $movimientoable->saldo)) {
             throw ValidationException::withMessages(["valor" => "La suma de los montos a pagar es superior al saldo pendiente"]);
         }
-        $this->cajas->cobrar($caja, $movimientoable, $request->parteEfectiva, $request->parteCrediticia);
+        $this->cajas->cobrar($caja, $movimientoable, $request->efectivoRecibido ,$request->parteEfectiva, $request->parteCrediticia);
         return response()->json([
             'msg' => '¡Pago de ' . $tipo . ' realizado!',
         ]);

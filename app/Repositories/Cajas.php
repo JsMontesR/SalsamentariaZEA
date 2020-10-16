@@ -67,6 +67,7 @@ class Cajas
         $nuevoMovimiento->parteEfectiva = $parteEfectiva == null ? 0 : $parteEfectiva;
         $nuevoMovimiento->parteCrediticia = $parteCrediticia == null ? 0 : $parteCrediticia;
         $nuevoMovimiento->efectivoRecibido = $efectivoRecibido == null ? 0 : $efectivoRecibido;
+        $nuevoMovimiento->total = $nuevoMovimiento->parteEfectiva + $nuevoMovimiento->parteCrediticia;
         $nuevoMovimiento->cambio = $this->generarCambio($nuevoMovimiento->parteEfectiva, $nuevoMovimiento->efectivoRecibido);
         $nuevoMovimiento->tipo = Movimiento::INGRESO;
         $nuevoMovimiento->empleado()->associate(auth()->user());
