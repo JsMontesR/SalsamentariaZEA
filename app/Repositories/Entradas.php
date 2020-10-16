@@ -84,10 +84,6 @@ class Entradas
         $entrada->delete();
     }
 
-    public function isEntradaPagable(Entrada $entrada)
-    {
-        return $entrada->fechapagado == null;
-    }
 }
 
 ?>

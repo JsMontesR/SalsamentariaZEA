@@ -36,11 +36,6 @@ class Nominas
     {
         $nomina->delete();
     }
-
-    public function isNominaPagable(Nomina $nomina)
-    {
-        return $nomina->fechapagado == null;
-    }
 }
 
 ?>

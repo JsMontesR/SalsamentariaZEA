@@ -61,11 +61,13 @@ class Cajas
      * @param int $parteEfectiva
      * @param int $parteCrediticia
      */
-    public function cobrar(Caja $caja, $movimientoable, $parteEfectiva = 0, $parteCrediticia = 0)
+    public function cobrar(Caja $caja, $movimientoable, $efectivoRecibido = 0, $parteEfectiva = 0, $parteCrediticia = 0)
     {
         $nuevoMovimiento = new Movimiento();
         $nuevoMovimiento->parteEfectiva = $parteEfectiva == null ? 0 : $parteEfectiva;
         $nuevoMovimiento->parteCrediticia = $parteCrediticia == null ? 0 : $parteCrediticia;
+        $nuevoMovimiento->efectivoRecibido = $efectivoRecibido == null ? 0 : $efectivoRecibido;
+        $nuevoMovimiento->cambio = $this->generarCambio($nuevoMovimiento->parteEfectiva, $nuevoMovimiento->efectivoRecibido);
         $nuevoMovimiento->tipo = Movimiento::INGRESO;
         $nuevoMovimiento->empleado()->associate(auth()->user());
         $caja->saldo = $caja->saldo + $parteEfectiva;
@@ -211,6 +213,16 @@ class Cajas
         $nuevoCierre = new Cierre();
         $nuevoCierre->caja()->associate($caja);
         $nuevoCierre->save();
+    }
+
+    public function isProcesable($movimientoable)
+    {
+        return $movimientoable->fechapagado == null;
+    }
+
+    public function generarCambio($parteEfectiva, $efectivoRecibido)
+    {
+        return $efectivoRecibido - $parteEfectiva;
     }
 }
 

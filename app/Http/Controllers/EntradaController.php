@@ -117,34 +117,6 @@ class EntradaController extends Controller
     }
 
     /**
-     * Procesa el pago de una entrada.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function pagar(Request $request)
-    {
-        //Validación de la factibilidad de la transacción
-        $request->validate($this->validationIdRule);
-        $entrada = Entrada::findOrFail($request->id);
-        if (!$this->entradas->isEntradaPagable($entrada)) {
-            throw ValidationException::withMessages(["valor" => "La entrada seleccionada ya fue pagada en su totalidad"]);
-        }
-        if (!$this->cajas->isMontosPagoValidos($request->parteEfectiva, $request->parteCrediticia, $entrada->saldo)) {
-            throw ValidationException::withMessages(["valor" => "La suma de los montos a pagar es superior al saldo pendiente"]);
-        }
-        $caja = Caja::findOrFail(1);
-        if (!$this->cajas->isPagable($caja, $request->parteEfectiva)) {
-            throw FondosInsuficientesException::withMessages(["valor" => "Operación no realizable, saldo en caja insuficiente"]);
-        }
-        // Ejecución de la transacción
-        $this->cajas->pagar($caja, $entrada, $request->parteEfectiva, $request->parteCrediticia);
-        return response()->json([
-            'msg' => '¡Pago de entrada realizado!',
-        ]);
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param \Illuminate\Http\Request $request

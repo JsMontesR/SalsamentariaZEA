@@ -26,12 +26,6 @@ class VentaController extends Controller
 
     public $validationRules = [
         'cliente_id' => 'required|integer|min:1',
-        'fechapago' => 'required|date',
-        'productos_venta' => 'required',
-    ];
-
-    public $validationRegisterCharge = [
-        'cliente_id' => 'required|integer|min:1',
         'productos_venta' => 'required',
     ];
 
@@ -88,10 +82,12 @@ class VentaController extends Controller
     {
         //Validación de la factibilidad de la transacción
         $this->validarVenta($request);
+        $venta = $this->ventas->store($request);
+        $venta->productos;
         // Ejecución de la transacción
-        $this->ventas->store($request);
         return response()->json([
             'msg' => '¡Venta registrada!',
+            'data' => $venta
         ]);
     }
 
@@ -104,7 +100,7 @@ class VentaController extends Controller
     public function storeCharge(Request $request)
     {
         //Validación de la factibilidad de la transacción
-        $this->validarVenta($request, $this->validationRegisterCharge);
+        $this->validarVenta($request, $this->validationRules);
         // Ejecución de la transacción
         $venta = $this->ventas->store($request);
         $caja = Caja::findOrFail(1);
@@ -112,39 +108,6 @@ class VentaController extends Controller
         return response()->json([
             'msg' => '¡Venta registrada y cobrada en efectivo!',
         ]);
-    }
-
-    /**
-     * Registra una venta y devuelve el PDF de su impresión.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function storePrint(Request $request)
-    {
-        //Validación de la factibilidad de la transacción
-        $this->validarVenta($request);
-        // Ejecución de la transacción
-        $venta = $this->ventas->store($request);
-        return $this->imprimirLogic($venta, $request->tipoimpresion);
-    }
-
-
-    /**
-     * Registra una venta y la cobra en efectivo, en su totalidad y devuelve el PDF de su impresión.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function storeChargePrint(Request $request)
-    {
-        //Validación de la factibilidad de la transacción
-        $this->validarVenta($request, $this->validationRegisterCharge);
-        // Ejecución de la transacción
-        $venta = $this->ventas->store($request);
-        $caja = Caja::findOrFail(1);
-        $this->cajas->cobrar($caja, $venta, $venta->saldo);
-        return $this->imprimirLogic($venta, $request->tipoimpresion);
     }
 
     /**
@@ -188,31 +151,6 @@ class VentaController extends Controller
 
         return response()->json([
             'msg' => '¡Datos de la venta actualizados!',
-        ]);
-    }
-
-    /**
-     * Procesa el cobro de una venta.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function cobrar(Request $request)
-    {
-        //Validación de la factibilidad de la transacción
-        $request->validate($this->validationIdRule);
-        $venta = Venta::findOrFail($request->id);
-        if (!$this->ventas->isVentaCobrable($venta)) {
-            throw ValidationException::withMessages(["valor" => "La venta seleccionada ya fue pagada en su totalidad"]);
-        }
-        if (!$this->cajas->isMontosPagoValidos($request->parteEfectiva, $request->parteCrediticia, $venta->saldo)) {
-            throw ValidationException::withMessages(["valor" => "La suma de los montos a pagar es superior al saldo pendiente"]);
-        }
-        $caja = Caja::findOrFail(1);
-        // Ejecución de la transacción
-        $this->cajas->cobrar($caja, $venta, $request->parteEfectiva, $request->parteCrediticia);
-        return response()->json([
-            'msg' => '¡Pago de venta realizado!',
         ]);
     }
 

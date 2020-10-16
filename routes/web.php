@@ -86,7 +86,6 @@ Route::prefix('api')->group(function () {
         Route::post('crear', 'NominaController@store')->middleware('auth');
         Route::post('crearypagar', 'NominaController@storePay')->middleware('auth');
         Route::post('modificar', 'NominaController@update')->middleware('auth');
-        Route::post('pagar', 'NominaController@pagar')->middleware('auth');
         Route::post('anular', 'NominaController@anular')->middleware('auth');
     });
 
@@ -97,7 +96,6 @@ Route::prefix('api')->group(function () {
         Route::post('crear', 'EntradaController@store')->middleware('auth');
         Route::post('crearypagar', 'EntradaController@storePay')->middleware('auth');
         Route::post('modificar', 'EntradaController@update')->middleware('auth');
-        Route::post('pagar', 'EntradaController@pagar')->middleware('auth');
         Route::post('anular', 'EntradaController@anular')->middleware('auth');
     });
 
@@ -108,13 +106,11 @@ Route::prefix('api')->group(function () {
         Route::post('crear', 'VentaController@store')->middleware('auth');
         Route::post('crearycobrar', 'VentaController@storeCharge')->middleware('auth');
         Route::post('modificar', 'VentaController@update')->middleware('auth');
-        Route::post('cobrar', 'VentaController@cobrar')->middleware('auth');
         Route::post('anular', 'VentaController@anular')->middleware('auth');
     });
 
     // Procesamiento de retiros
     Route::prefix('retiros')->group(function () {
-
         Route::get('listar', 'RetiroController@list')->middleware('auth');
         Route::post('crear', 'RetiroController@store')->middleware('auth');
         Route::post('anular', 'RetiroController@anular')->middleware('auth');
@@ -130,7 +126,9 @@ Route::prefix('api')->group(function () {
     // Procesamiento de movimientos
     Route::prefix('movimientos')->group(function () {
         Route::get('listar', 'MovimientoController@list')->middleware('auth');
+        Route::post('generarPago', 'MovimientoController@generarPago')->middleware('auth');
         Route::post('anularPago', 'MovimientoController@anularPago')->middleware('auth');
+        Route::post('generarCobro', 'MovimientoController@generarCobro')->middleware('auth');
         Route::post('anularCobro', 'MovimientoController@anularCobro')->middleware('auth');
     });
 
@@ -153,8 +151,8 @@ Route::prefix('api')->group(function () {
 });
 
 /*
-     * REPORTES
-     */
+ * REPORTES
+ */
 Route::prefix('reportes')->group(function () {
     Route::get('/', 'ReportesController@index')->name('reportes')->middleware('auth');
     Route::get('/inventario', 'ReportesController@reporteInventario')->name('reporteInventario')->middleware('auth');

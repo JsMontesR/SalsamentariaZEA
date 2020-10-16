@@ -11,6 +11,6 @@ class ServicioSeeder extends Seeder
      */
     public function run()
     {
-        //
+
     }
 }

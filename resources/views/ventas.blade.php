@@ -107,6 +107,13 @@
                                    name="fechapagado" required>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label text-md-left">Dirección de entrega:</label>
+                        <div class="col-md-8">
+                            <input id="lugarentrega" class="form-control"
+                                   name="lugarentrega">
+                        </div>
+                    </div>
                     <input id="tipoimpresion" name="tipoimpresion" hidden>
                 </form>
                 <br>
@@ -123,15 +130,6 @@
                              style="position: absolute; transform: translate3d(99px, -2px, 0px); top: 0px; left: 0px; will-change: transform;">
                             <button id="registrarycobrar" class="dropdown-item row-cursor-hand">Registrar y cobrar
                             </button>
-                            <div class="dropdown-divider"></div>
-                            <button target="blank" id="registrareimprimir" class="dropdown-item row-cursor-hand">
-                                Registrar e imprimir
-                            </button>
-                            <div class="dropdown-divider"></div>
-                            <button target="blank" id="registrarcobrareimprimir" class="dropdown-item row-cursor-hand">
-                                Registrar, cobrar e imprimir
-                            </button>
-
                         </div>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 py-2">
@@ -183,17 +181,18 @@
                     <h5 class="modal-title">Registro de cobros</h5>
                 </div>
                 <div class="modal-body">
-
                     <div class="container-fluid">
                         <div class="form-group row py-2">
-                            <label class="col-form-label text-md-left">Id del movimiento:</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">#</span>
+                            <div class="form-group col-xl-12 col-lg-12 col-md-12 col-sm-12 py-2">
+                                <label class="col-form-label text-md-left">Id del movimiento:</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">#</span>
+                                    </div>
+                                    <input id="idcobro" type="number" readonly="readonly"
+                                           class="form-control"
+                                           name="idcobro">
                                 </div>
-                                <input id="idcobro" type="number" readonly="readonly"
-                                       class="form-control"
-                                       name="idcobro">
                             </div>
                         </div>
                         <div class="form-group row py-2">
@@ -231,45 +230,95 @@
                                 </div>
                             </div>
                         </div>
+                        <hr>
                         <div class="form-group row py-2">
-                            <label class="col-form-label text-md-left">Valor a cobrar en
-                                efectivo:</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">💵</span>
+                            <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-6 py-2">
+                                <label class="col-form-label text-md-left">Valor a cobrar en
+                                    efectivo:</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">💵</span>
+                                    </div>
+                                    <input id="parteEfectiva"
+                                           class="form-control money"
+                                           name="parteEfectiva" required="required">
                                 </div>
-                                <input id="parteEfectiva"
-                                       class="form-control money"
-                                       name="parteEfectiva" required="required">
+                            </div>
+                            <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-6 py-2">
+                                <label class="col-form-label text-md-left">Efectivo recibido:</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">💰</span>
+                                    </div>
+                                    <input id="efectivoRecibido"
+                                           class="form-control money"
+                                           name="efectivoRecibido" required="required">
+                                </div>
+                            </div>
+                            <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-6 py-2">
+                                <label class="col-form-label text-md-left">Cambio:</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">↩️</span>
+                                    </div>
+                                    <input id="cambio"
+                                           class="form-control money"
+                                           name="cambio" required="required" readonly>
+                                </div>
                             </div>
                         </div>
-
+                        <hr>
                         <div class="form-group row py-2">
-                            <label class="col-form-label text-md-left">Valor con tarjeta:</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">💳</span>
+                            <div class="form-group col-xl-12 col-lg-12 col-md-12 col-sm-12 py-2">
+                                <label class="col-form-label text-md-left">Valor con tarjeta:</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">💳</span>
+                                    </div>
+                                    <input id="parteCrediticia"
+                                           class="form-control money"
+                                           name="parteCrediticia" required="required">
                                 </div>
-                                <input id="parteCrediticia"
-                                       class="form-control money"
-                                       name="parteCrediticia" required="required">
                             </div>
                         </div>
                     </div>
-
                 </div>
-                <div class="modal-footer">
-                    <input id="cobrar" type="button" value="Cobrar"
-                           class="btn btn-success container-fluid" data-dismiss="modal"/>
-                    <input id="anularcobro" type="button" value="Reversar"
-                           class="btn btn-danger container-fluid" data-dismiss="modal"/>
-                    <input id="limpiarmodal" type="button" value="Limpiar"
-                           class="btn btn-light container-fluid"/>
+                <hr>
+                <div class="row btn-toolbar justify-content-center px-3">
+                    <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 py-2 container-fluid input-group-prepend">
+                        <button id="cobrar" tabindex="-1" type="button" class="btn btn-success container-fluid" data-dismiss="modal">
+                            Cobrar
+                        </button>
+                        <button id="otherpay" tabindex="-1" data-toggle="dropdown" type="button"
+                                class="btn btn-primary-link dropdown-toggle dropdown-toggle-split"
+                                aria-expanded="false"><span
+                                class="sr-only">Toggle Dropdown</span></button>
+                        <div class="dropdown-menu" x-placement="top-start"
+                             style="position: absolute; transform: translate3d(99px, -2px, 0px); top: 0px; left: 0px; will-change: transform;">
+                            <button id="cobrareimprimir" class="dropdown-item row-cursor-hand">Cobrar e imprimir
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 py-2">
+                        <input id="imprimir" type="button" value="Imprimir"
+                               class="btn btn-info container-fluid" data-dismiss="modal"/>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 py-2">
+                        <input id="anularcobro" type="button" value="Reversar"
+                               class="btn btn-danger container-fluid" data-dismiss="modal"/>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 py-2">
+                        <input id="limpiarmodal" type="button" value="Limpiar"
+                               class="btn btn-light container-fluid"/>
+                    </div>
                 </div>
-
+                <hr>
                 <div class="container-fluid">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 p-3">
-                        <div class="card shadow mb-4 form-control">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h3 class="m-0 font-weight-bold text-primary text-center">Cobros</h3>
+                        </div>
+                        <div class="card-body">
                             <table id="cobros_table"
                                    class="table table-bordered dt-responsive table-hover row-cursor-hand"
                                    style="width:100%">
@@ -279,55 +328,53 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="modal-footer">
                     <input id="cerrarmodal" type="button" value="Cerrar"
                            class="btn btn-warning text-right" data-dismiss="modal"
                            data-target="#modalMovimientos"/>
                 </div>
-
             </div>
         </div>
     </div>
 
-    <!-- Modal impresión -->
-    <div class="modal fade" id="modarprinttarget" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">¿Cómo deseas imprimir?</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="row">
-                    <div class="modal-body row justify-content-center">
-                        <div class="col-xl-5 col-lg-6 col-md-6 col-sm-12">
-                            <a id="imprimircarta" type="button" class="btn btn-light container-fluid"
-                                    data-dismiss="modal" target="_blank">
-                                <img class="img-fluid" src="{{ asset('assets/images/printer.png') }}"/>
-                                <hr>
-                                <p>Impresión tamaño carta</p>
-                            </a>
-                        </div>
-                        <div class="col-xl-5 col-lg-6 col-md-6 col-sm-12">
-                            <button id="imprimirpos" type="button" class="btn btn-light container-fluid"
-                                    data-dismiss="modal">
-                                <img class="img-fluid" src="{{ asset('assets/images/pos.png') }}"/>
-                                <hr>
-                                <p>Impresión POS</p>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+{{--    <!-- Modal impresión -->--}}
+{{--    <div class="modal fade" id="modarprinttarget" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"--}}
+{{--         aria-hidden="true">--}}
+{{--        <div class="modal-dialog modal-dialog-centered" role="document">--}}
+{{--            <div class="modal-content">--}}
+{{--                <div class="modal-header">--}}
+{{--                    <h5 class="modal-title" id="exampleModalLongTitle">¿Cómo deseas imprimir?</h5>--}}
+{{--                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">--}}
+{{--                        <span aria-hidden="true">&times;</span>--}}
+{{--                    </button>--}}
+{{--                </div>--}}
+{{--                <div class="row">--}}
+{{--                    <div class="modal-body row justify-content-center">--}}
+{{--                        <div class="col-xl-5 col-lg-6 col-md-6 col-sm-12">--}}
+{{--                            <a id="imprimircarta" type="button" class="btn btn-light container-fluid"--}}
+{{--                               data-dismiss="modal" target="_blank">--}}
+{{--                                <img class="img-fluid" src="{{ asset('assets/images/printer.png') }}"/>--}}
+{{--                                <hr>--}}
+{{--                                <p>Impresión tamaño carta</p>--}}
+{{--                            </a>--}}
+{{--                        </div>--}}
+{{--                        <div class="col-xl-5 col-lg-6 col-md-6 col-sm-12">--}}
+{{--                            <button id="imprimirpos" type="button" class="btn btn-light container-fluid"--}}
+{{--                                    data-dismiss="modal">--}}
+{{--                                <img class="img-fluid" src="{{ asset('assets/images/pos.png') }}"/>--}}
+{{--                                <hr>--}}
+{{--                                <p>Impresión POS</p>--}}
+{{--                            </button>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar impresión</button>
-                </div>
-            </div>
-        </div>
-    </div>
+{{--                <div class="modal-footer">--}}
+{{--                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar impresión</button>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </div>--}}
     @include("js.ventas")
 @endsection
 

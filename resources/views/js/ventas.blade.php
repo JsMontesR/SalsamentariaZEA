@@ -40,8 +40,6 @@
             document.getElementById('imprimir').disabled = true;
             document.getElementById('registrar').disabled = false;
             document.getElementById('registrarycobrar').disabled = false;
-            document.getElementById('registrareimprimir').disabled = false;
-            document.getElementById('registrarcobrareimprimir').disabled = false;
             document.getElementById('otherregister').disabled = false;
             document.getElementById('eliminar').disabled = true;
             document.getElementById('modificar').disabled = true;
@@ -137,9 +135,11 @@
 
         let clienteId;
 
-        function cargarVenta(row) {
+        function cargarVenta(row, data = null) {
             limpiarFormulario();
-            let data = table.row(row).data();
+            if (data == null) {
+                data = table.row(row).data();
+            }
             document.getElementById('id').value = data['id'];
             document.getElementById('cliente_id').value = data['cliente']['id'];
             document.getElementById('fechapago').value = data['fechapago'];
@@ -154,8 +154,6 @@
             $(row).addClass("selected");
             document.getElementById('registrar').disabled = true;
             document.getElementById('registrarycobrar').disabled = true;
-            document.getElementById('registrareimprimir').disabled = true;
-            document.getElementById('registrarcobrareimprimir').disabled = true;
             document.getElementById('otherregister').disabled = true;
             document.getElementById('vercobros').disabled = false;
             document.getElementById('imprimir').disabled = false;
@@ -463,6 +461,7 @@
                 {
                     cliente_id: $("#cliente_id").val(),
                     fechapago: $("#fechapago").val(),
+                    lugarentrega: $("#lugarentrega").val(),
                     productos_venta: crearEstructuraDeProductos()
                 }, function (data) {
                     swal("¡Operación exitosa!", data.msg, "success");
@@ -482,14 +481,18 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            $.post('/api/ventas/crearycobrar',
+            $.post('/api/ventas/crear',
                 {
                     cliente_id: $("#cliente_id").val(),
                     fechapago: $("#fechapago").val(),
+                    lugarentrega: $("#lugarentrega").val(),
                     productos_venta: crearEstructuraDeProductos()
                 }, function (data) {
-                    swal("¡Operación exitosa!", data.msg, "success");
+                    toastr.success(data.msg);
+                    $("#modalMovimientos").modal('show');
                     limpiarFormulario();
+                    cargarVenta(null, data.data);
+                    cargarModalCobros(data.data.id);
                     table.ajax.reload();
                 }).fail(function (err) {
                 $.each(err.responseJSON.errors, function (i, error) {
@@ -532,6 +535,7 @@
                 {
                     id: $("#id").val(),
                     fechapago: $("#fechapago").val(),
+                    lugarentrega: $("#lugarentrega").val()
                 }, function (data) {
                     table.ajax.reload();
                     limpiarFormulario();
@@ -544,15 +548,11 @@
             })
         })
 
-        $("#imprimirpos,#imprimircarta").click(function () {
-            if (this.id == "imprimirpos") {
-                $("#tipoimpresion").val("POS");
-            } else if (this.id == "imprimircarta") {
-                $("#tipoimpresion").val("CARTA");
-            }
+        function imprimir(valor) {
+            $("#tipoimpresion").val(valor);
             document.form.action = '{{ route('imprimirVenta') }}';
             document.form.submit();
-        })
+        }
 
         /*
             SECCION MODAL
@@ -561,23 +561,18 @@
         let cobros_table;
 
         $("#vercobros").click(function () {
+            cargarModalCobros();
+        })
+
+        function cargarModalCobros(idDeVenta = null) {
             darFormatoNumerico();
-            $.ajax({
-                url: "/api/ventas/" + $("#id").val() + "/cobros",
-                type: "get",
-                success: function (data) {
-                    console.log(data);
-                },
-                error: function (err) {
-                    console.warn(err);
-                }
-            })
+            let id = idDeVenta == null ? $("#id").val() : idDeVenta;
             if ($.fn.DataTable.isDataTable('#cobros_table')) {
                 cobros_table.destroy();
             }
             cobros_table = $('#cobros_table').DataTable($.extend({
                 serverSide: true,
-                ajax: '/api/ventas/' + $("#id").val() + '/cobros',
+                ajax: '/api/ventas/' + id + '/cobros',
                 columns: [
                     {data: 'id', title: 'Id', className: "text-center"},
                     {data: 'empleado.name', title: 'Nombre del empleado', className: "text-center"},
@@ -597,19 +592,43 @@
                 ],
                 responsive: true
             }, options));
-        })
+        }
 
         $("#cobrar").click(function () {
-            $.post('/api/ventas/cobrar',
+            $.post('/api/movimientos/generarCobro',
                 {
                     id: $("#id").val(),
                     parteCrediticia: $("#parteCrediticia").cleanVal(),
-                    parteEfectiva: $("#parteEfectiva").cleanVal()
+                    parteEfectiva: $("#parteEfectiva").cleanVal(),
+                    efectivoRecibido: $("#efectivoRecibido").cleanVal(),
+                    movimientoable: "venta"
                 }, function (data) {
                     table.ajax.reload();
                     limpiarFormularioModal()
                     limpiarFormulario();
                     swal("¡Operación exitosa!", data.msg, "success");
+                }).fail(function (err) {
+                $.each(err.responseJSON.errors, function (i, error) {
+                    swal("Ha ocurrido un error", error[0], "error");
+                });
+                console.error(err);
+            })
+        })
+
+        $("#cobrareimprimir").click(function () {
+            $.post('/api/ventas/cobrar',
+                {
+                    id: $("#id").val(),
+                    parteCrediticia: $("#parteCrediticia").cleanVal(),
+                    parteEfectiva: $("#parteEfectiva").cleanVal(),
+                    efectivoRecibido: $("#efectivoRecibido").cleanVal(),
+                    movimientoable: "venta"
+                }, function (data) {
+                    table.ajax.reload();
+                    limpiarFormularioModal()
+                    limpiarFormulario();
+                    swal("¡Operación exitosa!", data.msg, "success");
+                    imprimir("POS");
                 }).fail(function (err) {
                 $.each(err.responseJSON.errors, function (i, error) {
                     swal("Ha ocurrido un error", error[0], "error");
@@ -643,6 +662,8 @@
         function limpiarFormularioModal() {
             $("#idcobro").val("");
             $("#parteEfectiva").val("");
+            $("#efectivoRecibido").val("");
+            $("#cambio").val("");
             $("#parteCrediticia").val("");
             $('#cobros_table tr').removeClass("selected");
         }
@@ -655,5 +676,22 @@
             $("#parteEfectiva").val(data["parteEfectiva"]).trigger('input');
             $("#parteCrediticia").val(data["parteCrediticia"]).trigger('input');
         });
-    });
+
+        $('#parteEfectiva,#efectivoRecibido').on('keyup change', function () {
+            var parteEfectiva = $("#parteEfectiva").cleanVal();
+            var efectivoRecibido = $("#efectivoRecibido").cleanVal();
+            try {
+                parteEfectiva = parseInt(parteEfectiva, 10);
+                efectivoRecibido = parseInt(efectivoRecibido, 10);
+                if (efectivoRecibido >= parteEfectiva) {
+                    console.log("what");
+                    $("#cambio").val(efectivoRecibido - parteEfectiva).trigger('input');
+                } else {
+                    $("#cambio").val(0).trigger();
+                }
+            } catch (e) {
+            }
+        })
+    })
+    ;
 </script>

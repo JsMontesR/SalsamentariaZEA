@@ -21,6 +21,7 @@ class Ventas
     {
         $venta = new Venta();
         $venta->fechapago = $request->fechapago;
+        $venta->lugarentrega = $request->lugarentrega;
         $venta->cliente()->associate(User::findOrFail($request->cliente_id));
         $venta->empleado()->associate(auth()->user());
         $venta->save();
@@ -42,7 +43,6 @@ class Ventas
         $venta->refresh();
         return $venta;
     }
-
 
     /**
      * Verifica cual producto de una venta no es descontable del inventario
@@ -80,11 +80,6 @@ class Ventas
             $producto->save();
         }
         $venta->delete();
-    }
-
-    public function isVentaCobrable(Venta $entrada)
-    {
-        return $entrada->fechapagado == null;
     }
 
 }
