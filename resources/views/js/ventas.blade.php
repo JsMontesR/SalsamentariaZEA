@@ -503,7 +503,7 @@
         });
 
         $("#imprimir").click(function () {
-            $("#form").attr('action', "{{ route('imprimirFactura') }}");
+            $("#form").attr('action', "{{ route('imprimirfactura') }}");
             $("#form").submit();
         })
 
@@ -642,9 +642,8 @@
                     movimientoable: "venta"
                 }, function (data) {
                     table.ajax.reload();
-                    limpiarFormularioModal()
-                    limpiarFormulario();
                     swal("¡Operación exitosa!", data.msg, "success");
+                    $("#idcobro").val(data.data.id);
                     $("#formcobro").attr('action', "{{ route('imprimirpos') }}");
                     $("#formcobro").submit();
                 }).fail(function (err) {

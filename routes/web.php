@@ -5,9 +5,9 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
-Route::get('/inicio', 'HomeController@index')->name('home');
-Route::get('/index', 'HomeController@index')->name('home');
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/inicio', 'HomeController@index');
+Route::get('/index', 'HomeController@index');
+Route::get('/home', 'HomeController@index');
 
 Route::get('/proveedores', 'ProveedorController@index')->name('proveedores')->middleware('auth');
 Route::get('/tiposproductos', 'ProductoTipoController@index')->name('tiposproductos')->middleware('auth');
@@ -27,7 +27,7 @@ Route::get('/notificaciones', 'NotificacionController@index')->name('notificacio
  * Impresiones
  */
 
-Route::post('/imprimirVenta', 'VentaController@imprimirFactura')->name('imprimirFactura')->middleware('auth');
+Route::post('/imprimirventa', 'VentaController@imprimirfactura')->name('imprimirfactura')->middleware('auth');
 Route::post('/imprimirpos', 'MovimientoController@imprimir')->name('imprimirpos')->middleware('auth');
 
 /*
@@ -142,7 +142,7 @@ Route::prefix('api')->group(function () {
      */
 
     Route::prefix('reportes')->group(function () {
-        Route::get('/listarVentas', 'ReportesController@listarVentas')->name('listarVentas')->middleware('auth');
+        Route::get('/listarventas', 'ReportesController@listarVentas')->name('listarventas')->middleware('auth');
     });
 
     /*

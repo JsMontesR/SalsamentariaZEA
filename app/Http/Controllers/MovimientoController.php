@@ -13,6 +13,7 @@ use App\Repositories\Entradas;
 use App\Repositories\Nominas;
 use App\Repositories\Ventas;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 
@@ -153,7 +154,7 @@ class MovimientoController extends Controller
      */
     public function imprimir(Request $request)
     {
-        $movimiento = Movimiento::findOrFail($request->id);
+        $movimiento = Movimiento::findOrFail($request->idcobro);
         $venta = $movimiento->movimientoable;
         return $this->imprimirLogic($venta);
     }
@@ -194,15 +195,13 @@ class MovimientoController extends Controller
         $total = "$ " . number_format($venta->valor, 0);
         $concepto = "Desprendible de venta";
         $descripcion = $concepto . " #" . $venta->id;
-        $nombrePdf = "pos.pdf";
-        $nombreVista = "print.pos";
-        $pdf = \PDF::loadView($nombreVista, compact('concepto', 'descripcion', 'fecha', 'fechaActual', 'tituloParticipante',
+        $pdf = \PDF::loadView("print.pos", compact('concepto', 'descripcion', 'fecha', 'fechaActual', 'tituloParticipante',
             'nombreParticipante', 'nombreEmpresa', 'direccionParticipante', 'celularParticipante', 'fijoParticipante', 'tituloEmpleado', 'emailParticipante',
             'direccionEmpresa', 'telefonoEmpresa', 'emailEmpresa', 'total', 'registros', 'fechaLimitePago', 'fechaDePago', 'razonSocial', 'NIT', 'personaNatural'));
-        return $pdf->stream($nombrePdf);
+        return $pdf->stream("factura.pdf");
 
     }
-    
+
     /**
      * Retrive a list of the resource in storage.
      *
