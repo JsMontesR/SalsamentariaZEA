@@ -85,6 +85,8 @@ class Cajas
         $nuevoMovimiento->caja()->associate($caja);
         $nuevoMovimiento->movimientoable()->associate($movimientoable);
         $nuevoMovimiento->save();
+        $nuevoMovimiento->refresh();
+        return $nuevoMovimiento;
     }
 
     /**

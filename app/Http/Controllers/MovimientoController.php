@@ -119,9 +119,9 @@ class MovimientoController extends Controller
         if (!$this->cajas->isMontosPagoValidos($request->parteEfectiva, $request->parteCrediticia, $movimientoable->saldo)) {
             throw ValidationException::withMessages(["valor" => "La suma de los montos a pagar es superior al saldo pendiente"]);
         }
-        $this->cajas->cobrar($caja, $movimientoable, $request->efectivoRecibido ,$request->parteEfectiva, $request->parteCrediticia);
         return response()->json([
             'msg' => '¡Pago de ' . $tipo . ' realizado!',
+            'data' => $this->cajas->cobrar($caja, $movimientoable, $request->efectivoRecibido, $request->parteEfectiva, $request->parteCrediticia)
         ]);
     }
 
@@ -145,7 +145,64 @@ class MovimientoController extends Controller
         ]);
     }
 
+    /**
+     * Print the specified resource from storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function imprimir(Request $request)
+    {
+        $movimiento = Movimiento::findOrFail($request->id);
+        $venta = $movimiento->movimientoable;
+        return $this->imprimirLogic($venta);
+    }
 
+    public function imprimirLogic(Venta $venta)
+    {
+        $fecha = $venta->created_at;
+        $fechaActual = now();
+        $fechaLimitePago = $venta->fechapago;
+        $fechaDePago = $venta->fechapagado;
+        $tituloParticipante = "Cliente";
+        $nombreParticipante = $venta->cliente->name;
+        $direccionParticipante = $venta->cliente->direccion;
+        $celularParticipante = $venta->cliente->celular;
+        $fijoParticipante = $venta->cliente->fijo;
+        $tituloEmpleado = $venta->cliente->fijo;
+        $emailParticipante = $venta->cliente->email;
+        $tituloEmpleado = $venta->empleado->name;
+        // Datos de la empresa
+        $nombreEmpresa = "Salsamentaría ZEA";
+        $direccionEmpresa = "Armenia Quindío";
+        $telefonoEmpresa = "3112300293";
+        $emailEmpresa = "salsamentariazea@mail.com";
+        $razonSocial = "SALSAMENTARÍA ZEA";
+        $NIT = "1856151593-8";
+        $personaNatural = "JOSE WILMAR GUEVARA ZEA";
+        $registros = array();
+        $count = 1;
+        foreach ($venta->productos as $producto) {
+            $registro = new \stdClass();
+            $registro->numero = $count++;
+            $registro->nombre = $producto->nombre;
+            $registro->cantidad = $producto->pivot->cantidad;
+            $registro->valorUnitario = "$ " . number_format($producto->pivot->costo / $registro->cantidad, 0);
+            $registro->total = "$ " . number_format($producto->pivot->costo, 0);
+            array_push($registros, $registro);
+        }
+        $total = "$ " . number_format($venta->valor, 0);
+        $concepto = "Desprendible de venta";
+        $descripcion = $concepto . " #" . $venta->id;
+        $nombrePdf = "pos.pdf";
+        $nombreVista = "print.pos";
+        $pdf = \PDF::loadView($nombreVista, compact('concepto', 'descripcion', 'fecha', 'fechaActual', 'tituloParticipante',
+            'nombreParticipante', 'nombreEmpresa', 'direccionParticipante', 'celularParticipante', 'fijoParticipante', 'tituloEmpleado', 'emailParticipante',
+            'direccionEmpresa', 'telefonoEmpresa', 'emailEmpresa', 'total', 'registros', 'fechaLimitePago', 'fechaDePago', 'razonSocial', 'NIT', 'personaNatural'));
+        return $pdf->stream($nombrePdf);
+
+    }
+    
     /**
      * Retrive a list of the resource in storage.
      *

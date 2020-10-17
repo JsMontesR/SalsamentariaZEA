@@ -503,7 +503,8 @@
         });
 
         $("#imprimir").click(function () {
-           imprimir("carta");
+            $("#form").attr('action', "{{ route('imprimirFactura') }}");
+            $("#form").submit();
         })
 
         $("#limpiar").click(function () {
@@ -552,12 +553,6 @@
             })
         })
 
-        function imprimir(valor) {
-            $("#tipoimpresion").val(valor);
-            document.form.action = '{{ route('imprimirVenta') }}';
-            document.form.submit();
-        }
-
         /*
             SECCION MODAL
          */
@@ -589,6 +584,12 @@
                     {
                         data: 'parteCrediticia',
                         title: 'Parte crediticia',
+                        className: "text-center",
+                        render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
+                    },
+                    {
+                        data: 'total',
+                        title: 'Total de dinero',
                         className: "text-center",
                         render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
                     },
@@ -631,10 +632,8 @@
             })
         })
 
-
-
         $("#cobrareimprimir").click(function () {
-            $.post('/api/ventas/cobrar',
+            $.post('/api/movimientos/generarCobro',
                 {
                     id: $("#id").val(),
                     parteCrediticia: $("#parteCrediticia").cleanVal(),
@@ -646,13 +645,19 @@
                     limpiarFormularioModal()
                     limpiarFormulario();
                     swal("¡Operación exitosa!", data.msg, "success");
-                    imprimir("pos");
+                    $("#formcobro").attr('action', "{{ route('imprimirpos') }}");
+                    $("#formcobro").submit();
                 }).fail(function (err) {
                 $.each(err.responseJSON.errors, function (i, error) {
                     swal("Ha ocurrido un error", error[0], "error");
                 });
                 console.error(err);
             })
+        })
+
+        $("#imprimirpos").click(function () {
+            $("#formcobro").attr('action', "{{ route('imprimirpos') }}");
+            $("#formcobro").submit();
         })
 
         $("#anularcobro").click(function () {

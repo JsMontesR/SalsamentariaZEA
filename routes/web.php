@@ -9,7 +9,6 @@ Route::get('/inicio', 'HomeController@index')->name('home');
 Route::get('/index', 'HomeController@index')->name('home');
 Route::get('/home', 'HomeController@index')->name('home');
 
-
 Route::get('/proveedores', 'ProveedorController@index')->name('proveedores')->middleware('auth');
 Route::get('/tiposproductos', 'ProductoTipoController@index')->name('tiposproductos')->middleware('auth');
 Route::get('/tiposservicios', 'TipoServicioController@index')->name('tiposservicios')->middleware('auth');
@@ -23,7 +22,13 @@ Route::get('/entradas', 'EntradaController@index')->name('entradas')->middleware
 Route::get('/ventas', 'VentaController@index')->name('ventas')->middleware('auth');
 Route::get('/movimientos', 'MovimientoController@index')->name('movimientos')->middleware('auth');
 Route::get('/notificaciones', 'NotificacionController@index')->name('notificaciones')->middleware('auth');
-Route::post('/imprimirVenta', 'VentaController@imprimir')->name('imprimirVenta')->middleware('auth');
+
+/*
+ * Impresiones
+ */
+
+Route::post('/imprimirVenta', 'VentaController@imprimirFactura')->name('imprimirFactura')->middleware('auth');
+Route::post('/imprimirpos', 'MovimientoController@imprimir')->name('imprimirpos')->middleware('auth');
 
 /*
  * OPERACIONES CRUD Y CORE DEL NEGOCIO

@@ -114,7 +114,6 @@
                                    name="lugarentrega">
                         </div>
                     </div>
-                    <input id="tipoimpresion" name="tipoimpresion" hidden>
                 </form>
                 <br>
                 <div class="row btn-toolbar justify-content-center">
@@ -133,9 +132,8 @@
                         </div>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 py-2">
-                        <input target="blank" id="imprimir" type="button" disabled value="Imprimir"
-                               class="btn btn-info container-fluid" data-toggle="modal"
-                               data-target="#modarprinttarget"/>
+                        <input id="imprimir" type="button" disabled value="Imprimir"
+                               class="btn btn-info container-fluid"/>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 py-2">
                         <input id="vercobros" type="button" disabled value="Cobros"
@@ -181,112 +179,116 @@
                     <h5 class="modal-title">Registro de cobros</h5>
                 </div>
                 <div class="modal-body">
-                    <div class="container-fluid">
-                        <div class="form-group row py-2">
-                            <div class="form-group col-xl-12 col-lg-12 col-md-12 col-sm-12 py-2">
-                                <label class="col-form-label text-md-left">Id del movimiento:</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">#</span>
+                    <form id="formcobro" name="formcobro" method="POST">
+                        @csrf
+                        <div class="container-fluid">
+                            <div class="form-group row py-2">
+                                <div class="form-group col-xl-12 col-lg-12 col-md-12 col-sm-12 py-2">
+                                    <label class="col-form-label text-md-left">Id del movimiento:</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">#</span>
+                                        </div>
+                                        <input id="idcobro" type="number" readonly="readonly"
+                                               class="form-control"
+                                               name="idcobro">
                                     </div>
-                                    <input id="idcobro" type="number" readonly="readonly"
-                                           class="form-control"
-                                           name="idcobro">
+                                </div>
+                            </div>
+                            <div class="form-group row py-2">
+                                <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-6 py-2">
+                                    <label class="col-form-label text-md-left">Valor total:</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">$</span>
+                                        </div>
+                                        <input readonly="readonly"
+                                               class="form-control border-warning money"
+                                               name="valor">
+                                    </div>
+                                </div>
+                                <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-6 py-2">
+                                    <label class="col-form-label text-md-left">Valor cobrado:</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">$</span>
+                                        </div>
+                                        <input id="valorcobrado" readonly="readonly"
+                                               class="form-control border-success money"
+                                               name="valorcobrado">
+                                    </div>
+                                </div>
+                                <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-6 py-2">
+                                    <label class="col-form-label text-md-left">Saldo:</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">$</span>
+                                        </div>
+                                        <input id="saldo" readonly="readonly"
+                                               class="form-control border-danger money"
+                                               name="saldo">
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="form-group row py-2">
+                                <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-6 py-2">
+                                    <label class="col-form-label text-md-left">Valor a cobrar en
+                                        efectivo:</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">💵</span>
+                                        </div>
+                                        <input id="parteEfectiva"
+                                               class="form-control money"
+                                               name="parteEfectiva" required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-6 py-2">
+                                    <label class="col-form-label text-md-left">Efectivo recibido:</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">💰</span>
+                                        </div>
+                                        <input id="efectivoRecibido"
+                                               class="form-control money"
+                                               name="efectivoRecibido" required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-6 py-2">
+                                    <label class="col-form-label text-md-left">Cambio:</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">↩️</span>
+                                        </div>
+                                        <input id="cambio"
+                                               class="form-control money"
+                                               name="cambio" required="required" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="form-group row py-2">
+                                <div class="form-group col-xl-12 col-lg-12 col-md-12 col-sm-12 py-2">
+                                    <label class="col-form-label text-md-left">Valor con tarjeta:</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">💳</span>
+                                        </div>
+                                        <input id="parteCrediticia"
+                                               class="form-control money"
+                                               name="parteCrediticia" required="required">
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group row py-2">
-                            <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-6 py-2">
-                                <label class="col-form-label text-md-left">Valor total:</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">$</span>
-                                    </div>
-                                    <input readonly="readonly"
-                                           class="form-control border-warning money"
-                                           name="valor">
-                                </div>
-                            </div>
-                            <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-6 py-2">
-                                <label class="col-form-label text-md-left">Valor cobrado:</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">$</span>
-                                    </div>
-                                    <input id="valorcobrado" readonly="readonly"
-                                           class="form-control border-success money"
-                                           name="valorcobrado">
-                                </div>
-                            </div>
-                            <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-6 py-2">
-                                <label class="col-form-label text-md-left">Saldo:</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">$</span>
-                                    </div>
-                                    <input id="saldo" readonly="readonly"
-                                           class="form-control border-danger money"
-                                           name="saldo">
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="form-group row py-2">
-                            <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-6 py-2">
-                                <label class="col-form-label text-md-left">Valor a cobrar en
-                                    efectivo:</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">💵</span>
-                                    </div>
-                                    <input id="parteEfectiva"
-                                           class="form-control money"
-                                           name="parteEfectiva" required="required">
-                                </div>
-                            </div>
-                            <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-6 py-2">
-                                <label class="col-form-label text-md-left">Efectivo recibido:</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">💰</span>
-                                    </div>
-                                    <input id="efectivoRecibido"
-                                           class="form-control money"
-                                           name="efectivoRecibido" required="required">
-                                </div>
-                            </div>
-                            <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-6 py-2">
-                                <label class="col-form-label text-md-left">Cambio:</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">↩️</span>
-                                    </div>
-                                    <input id="cambio"
-                                           class="form-control money"
-                                           name="cambio" required="required" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="form-group row py-2">
-                            <div class="form-group col-xl-12 col-lg-12 col-md-12 col-sm-12 py-2">
-                                <label class="col-form-label text-md-left">Valor con tarjeta:</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">💳</span>
-                                    </div>
-                                    <input id="parteCrediticia"
-                                           class="form-control money"
-                                           name="parteCrediticia" required="required">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    </form>
                 </div>
                 <hr>
                 <div class="row btn-toolbar justify-content-center px-3">
                     <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 py-2 container-fluid input-group-prepend">
-                        <button id="cobrar" tabindex="-1" type="button" class="btn btn-success container-fluid" data-dismiss="modal">
+                        <button id="cobrar" tabindex="-1" type="button" class="btn btn-success container-fluid"
+                                data-dismiss="modal">
                             Cobrar
                         </button>
                         <button id="otherpay" tabindex="-1" data-toggle="dropdown" type="button"
@@ -300,8 +302,8 @@
                         </div>
                     </div>
                     <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 py-2">
-                        <input id="imprimir" type="button" value="Imprimir"
-                               class="btn btn-info container-fluid" data-dismiss="modal"/>
+                        <input id="imprimirpos" type="button" value="Imprimir"
+                               class="btn btn-info container-fluid"/>
                     </div>
                     <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 py-2">
                         <input id="anularcobro" type="button" value="Reversar"
@@ -336,45 +338,6 @@
             </div>
         </div>
     </div>
-
-{{--    <!-- Modal impresión -->--}}
-{{--    <div class="modal fade" id="modarprinttarget" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"--}}
-{{--         aria-hidden="true">--}}
-{{--        <div class="modal-dialog modal-dialog-centered" role="document">--}}
-{{--            <div class="modal-content">--}}
-{{--                <div class="modal-header">--}}
-{{--                    <h5 class="modal-title" id="exampleModalLongTitle">¿Cómo deseas imprimir?</h5>--}}
-{{--                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">--}}
-{{--                        <span aria-hidden="true">&times;</span>--}}
-{{--                    </button>--}}
-{{--                </div>--}}
-{{--                <div class="row">--}}
-{{--                    <div class="modal-body row justify-content-center">--}}
-{{--                        <div class="col-xl-5 col-lg-6 col-md-6 col-sm-12">--}}
-{{--                            <a id="imprimircarta" type="button" class="btn btn-light container-fluid"--}}
-{{--                               data-dismiss="modal" target="_blank">--}}
-{{--                                <img class="img-fluid" src="{{ asset('assets/images/printer.png') }}"/>--}}
-{{--                                <hr>--}}
-{{--                                <p>Impresión tamaño carta</p>--}}
-{{--                            </a>--}}
-{{--                        </div>--}}
-{{--                        <div class="col-xl-5 col-lg-6 col-md-6 col-sm-12">--}}
-{{--                            <button id="imprimirpos" type="button" class="btn btn-light container-fluid"--}}
-{{--                                    data-dismiss="modal">--}}
-{{--                                <img class="img-fluid" src="{{ asset('assets/images/pos.png') }}"/>--}}
-{{--                                <hr>--}}
-{{--                                <p>Impresión POS</p>--}}
-{{--                            </button>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-
-{{--                <div class="modal-footer">--}}
-{{--                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar impresión</button>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
     @include("js.ventas")
 @endsection
 
