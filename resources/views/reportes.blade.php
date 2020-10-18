@@ -133,6 +133,19 @@
                     </a>
                 </div>
             </div>
+            <hr>
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <div class="card border-3 border-top border-top-primary">
+                        <div class="card-body">
+                            <h5 class="text-muted">Saldo en caja</h5>
+                            <div class="metric-value d-inline-block">
+                                <h1 class="mb-1">{{ $dineroEnCaja }}</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection

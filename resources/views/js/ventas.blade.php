@@ -69,17 +69,17 @@
 
         function crearFilaDeCarrito(data) {
             let tipoDeCantidad = "";
-            let emoji = "";
+            let gadget = "";
             let activated = "";
             let cantidad = "";
             let costo = "";
 
             if (data['categoria'] == "Unitario") {
                 tipoDeCantidad = "# de unidades";
-                emoji = "📦";
+                gadget = "📦";
             } else {
-                tipoDeCantidad = "# de kilos";
-                emoji = "🌾";
+                tipoDeCantidad = "";
+                gadget = '<select onchange="" id= "unidades' + data['id'] + '"><option value="gramos">g</option><option value="kilogramos">Kg</option></select>';
             }
             if (data['pivot'] != undefined) {
                 cantidad = "readonly value=" + data['pivot']['cantidad']
@@ -88,7 +88,7 @@
             }
             return $.extend({
                 'btnEliminar': "<input " + activated + " name='btn_eliminar_productos_carrito' type='button' value='Eliminar' class='btn btn-warning container-fluid'/>",
-                'cantidad': "<div class='input-group mb-1'><div class='input-group-prepend'><span class='input-group-text'>" + emoji + "</span></div><input " + cantidad + " id='cantidad_producto_carrito" + data['id'] + "' name='cantidad_producto_carrito" + data['id'] + "' precio=" + data['precio'] + " class='money form-control' type='text' placeholder='" + tipoDeCantidad + "'/></div>",
+                'cantidad': "<div class='input-group mb-1'><div class='input-group-prepend'><span class='input-group-text'>" + gadget + "</span></div><input " + cantidad + " id='cantidad_producto_carrito" + data['id'] + "' name='cantidad_producto_carrito" + data['id'] + "' precio=" + data['precio'] + " class='money form-control' type='text' placeholder='" + tipoDeCantidad + "'/></div>",
                 'costoTotal': "<div class='input-group mb-1'><div class='input-group-prepend'><span class='input-group-text'>💵</span></div><input " + costo + " id='precio_producto_carrito" + data['id'] + "' " + " name='precio_producto_carrito" + data['id'] + "' class='money form-control' type='text' placeholder='Costo total'/></div>"
             }, data)
         }
@@ -160,17 +160,6 @@
             document.getElementById('eliminar').disabled = false;
             document.getElementById('modificar').disabled = false;
         }
-
-        // $.ajax({
-        //     url: "/api/ventas/listar",
-        //     type: "get",
-        //     success: function (data) {
-        //         console.log(data);
-        //     },
-        //     error: function (err) {
-        //         console.warn(err);
-        //     }
-        // })
 
         let clienteSpecific;
         let table = $('#recurso').DataTable($.extend({
@@ -363,7 +352,7 @@
                 {data: 'tipo.nombre', title: 'Tipo', className: "text-center"},
                 {
                     data: 'cantidad',
-                    title: 'Cantidad (Un/Kg)',
+                    title: 'Cantidad',
                     className: "text-center",
                     render: function (data, type, row, meta) {
                         return renderChange(data, type, row, meta);
@@ -448,10 +437,31 @@
 
         $(document).on('keyup change', '[id^="cantidad_producto_carrito"]', function () {
             darFormatoNumerico();
-            let valor = $(this).cleanVal();
+            let cantidad = $(this).cleanVal();
             let precio = parseInt($(this).attr("precio"));
             let idPrecio = $(this).attr("id").replace("cantidad", "precio");
-            let total = isNaN(parseInt(valor * precio, 10)) ? 0 : parseInt(valor * precio, 10)
+            let unidades = $("#unidades" + $(this).attr("id").replace("cantidad_producto_carrito", "")).val();
+            console.log(unidades);
+            if (unidades == "gramos") {
+                precio = precio / 1000;
+            }
+            let total = isNaN(parseInt(cantidad * precio, 10)) ? 0 : parseInt(cantidad * precio, 10)
+            $("[name='" + idPrecio + "']").val(total).trigger('input');
+            calcularTotal();
+        });
+
+        $(document).on('change', '[id^="unidades"]', function () {
+            darFormatoNumerico();
+            let id = $(this).attr("id").replace("unidades", "");
+            let cantidad = $("#cantidad_producto_carrito" + id).cleanVal();
+            let precio = parseInt($("#cantidad_producto_carrito" + id).attr("precio"));
+            let idPrecio = "precio_producto_carrito" + id;
+            let unidades = $(this).val();
+            if (unidades == "gramos") {
+                precio = precio / 1000;
+            }
+            let total = isNaN(parseInt(cantidad * precio, 10)) ? 0 : parseInt(cantidad * precio, 10)
+            console.log(total);
             $("[name='" + idPrecio + "']").val(total).trigger('input');
             calcularTotal();
         });

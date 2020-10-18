@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Caja;
 use App\Venta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -15,7 +16,8 @@ class ReportesController extends Controller
      */
     public function index()
     {
-        return view("reportes");
+        $dineroEnCaja = "$ " . number_format(Caja::findOrFail(1)->saldo,0);
+        return view("reportes", compact('dineroEnCaja'));
     }
 
     /**

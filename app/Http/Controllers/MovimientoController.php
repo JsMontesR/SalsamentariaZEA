@@ -165,21 +165,21 @@ class MovimientoController extends Controller
         $fechaActual = now();
         $fechaLimitePago = $venta->fechapago;
         $fechaDePago = $venta->fechapagado;
+        // Datos del cliente
         $tituloParticipante = "Cliente";
         $nombreParticipante = $venta->cliente->name;
         $direccionParticipante = $venta->cliente->direccion;
-        $celularParticipante = $venta->cliente->celular;
-        $fijoParticipante = $venta->cliente->fijo;
+        $telefonoParticipante = $venta->cliente->celular;
         $tituloEmpleado = $venta->cliente->fijo;
         $emailParticipante = $venta->cliente->email;
         $tituloEmpleado = $venta->empleado->name;
         // Datos de la empresa
         $nombreEmpresa = "Salsamentaría ZEA";
-        $direccionEmpresa = "Armenia Quindío";
-        $telefonoEmpresa = "3112300293";
+        $direccionEmpresa = "Calle 21 #24-43 B/San José";
+        $telefonoEmpresa = "CEL 3112300293";
         $emailEmpresa = "salsamentariazea@mail.com";
         $razonSocial = "SALSAMENTARÍA ZEA";
-        $NIT = "1856151593-8";
+        $NIT = "NIT 1856151593-8";
         $personaNatural = "JOSE WILMAR GUEVARA ZEA";
         $registros = array();
         $count = 1;
@@ -196,7 +196,7 @@ class MovimientoController extends Controller
         $concepto = "Desprendible de venta";
         $descripcion = $concepto . " #" . $venta->id;
         $pdf = \PDF::loadView("print.pos", compact('concepto', 'descripcion', 'fecha', 'fechaActual', 'tituloParticipante',
-            'nombreParticipante', 'nombreEmpresa', 'direccionParticipante', 'celularParticipante', 'fijoParticipante', 'tituloEmpleado', 'emailParticipante',
+            'nombreParticipante', 'nombreEmpresa', 'direccionParticipante', 'telefonoParticipante', 'tituloEmpleado', 'emailParticipante',
             'direccionEmpresa', 'telefonoEmpresa', 'emailEmpresa', 'total', 'registros', 'fechaLimitePago', 'fechaDePago', 'razonSocial', 'NIT', 'personaNatural'));
         return $pdf->stream("factura.pdf");
 

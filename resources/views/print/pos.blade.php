@@ -10,7 +10,7 @@
 
     table, th, td {
         border: 1px solid black;
-        font-size: 9px;
+
     }
 
     hr {
@@ -32,6 +32,8 @@
     <img style="width: 13mm; height: 13mm" src="{{ asset('favicon.png') }}" class="img-fluid" alt="Salsamentaria ZEA">
 </div>
 <div align="center" style="font-size:12px">{{$nombreEmpresa}}</div>
+<div align="center" style="font-size:12px">{{$personaNatural}}</div>
+<div align="center" style="font-size:12px">{{$NIT}}</div>
 <div align="center" style="font-size:12px">{{$direccionEmpresa}}</div>
 <div align="center" style="font-size:12px">{{$telefonoEmpresa}}</div>
 <div align="center" style="font-size:12px">{{$emailEmpresa}}</div>
@@ -40,9 +42,15 @@
 <div align="left" style="font-size:12px">
     <label class="negrita"> {{ $descripcion }} </label>
     <br>
-    <label>Fecha:<strong>{{$fechaActual}}</strong></label>
+    <label>Fecha: <strong>{{$fechaActual}}</strong></label>
     <br>
-    <label> Cliente: <strong>{{$nombreParticipante}}</strong> </label>
+    <label> <strong>Datos del cliente</strong> </label>
+    <br>
+    <label> Nombre/razón social: <strong>{{$nombreParticipante}}</strong> </label>
+    <br>
+    <label> Teléfono: <strong>{{$telefonoParticipante}}</strong></label>
+    <br>
+    <label> Direccion: <strong>{{$direccionParticipante}}</strong> </label>
     <br>
     <label> Le atendió: <strong>{{$tituloEmpleado}}</strong> </label>
     <hr>

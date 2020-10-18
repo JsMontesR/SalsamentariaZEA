@@ -99,7 +99,7 @@ class Cajas
     public function anularCobro($movimiento, $parteEfectiva = null, $parteCrediticia = null)
     {
         $movimientoable = $movimiento->movimientoable;
-        $caja = $movimiento->caja;
+        $caja = $movimiento->caja->refresh();
         $nuevoMovimiento = new Movimiento();
         $nuevoMovimiento->parteEfectiva = $parteEfectiva == null ? $movimiento->parteEfectiva : $parteEfectiva;
         $nuevoMovimiento->parteCrediticia = $parteCrediticia == null ? $movimiento->parteCrediticia : $parteCrediticia;
@@ -182,7 +182,7 @@ class Cajas
     public function anularPago($movimiento, $parteEfectiva = null, $parteCrediticia = null)
     {
         $movimientoable = $movimiento->movimientoable;
-        $caja = $movimiento->caja;
+        $caja = $movimiento->caja->refresh();
         $nuevoMovimiento = new Movimiento();
         $nuevoMovimiento->parteEfectiva = $parteEfectiva == null ? $movimiento->parteEfectiva : $parteEfectiva;
         $nuevoMovimiento->parteCrediticia = $parteCrediticia == null ? $movimiento->parteCrediticia : $parteCrediticia;
