@@ -156,15 +156,16 @@ class MovimientoController extends Controller
     {
         $movimiento = Movimiento::findOrFail($request->idcobro);
         $venta = $movimiento->movimientoable;
-        return $this->imprimirLogic($venta);
+        return $this->imprimirLogic($venta, $movimiento);
     }
 
-    public function imprimirLogic(Venta $venta)
+    public function imprimirLogic(Venta $venta, Movimiento $movimiento)
     {
-        $fecha = $venta->created_at;
+        // Datos del pago
+        $fecha = $movimiento->created_at;
         $fechaActual = now();
-        $fechaLimitePago = $venta->fechapago;
-        $fechaDePago = $venta->fechapagado;
+        $concepto = "Recibo de pago # " . $movimiento->id;
+        $descripcion = "Venta # " . $venta->id;
         // Datos del cliente
         $tituloParticipante = "Cliente";
         $nombreParticipante = $venta->cliente->name;
@@ -181,6 +182,7 @@ class MovimientoController extends Controller
         $razonSocial = "SALSAMENTARÍA ZEA";
         $NIT = "NIT 1856151593-8";
         $personaNatural = "JOSE WILMAR GUEVARA ZEA";
+        // Datos de la venta
         $registros = array();
         $count = 1;
         foreach ($venta->productos as $producto) {
@@ -193,12 +195,15 @@ class MovimientoController extends Controller
             array_push($registros, $registro);
         }
         $total = "$ " . number_format($venta->valor, 0);
-        $concepto = "Desprendible de venta";
-        $descripcion = $concepto . " #" . $venta->id;
+        $parteEfectiva = "$ " . number_format($movimiento->parteEfectiva, 0);
+        $parteCrediticia = "$ " . number_format($movimiento->parteCrediticia, 0);
+        $efectivoRecibido = "$ " . number_format($movimiento->efectivoRecibido, 0);;
+        $cambio = "$ " . number_format($movimiento->cambio, 0);;
         $pdf = \PDF::loadView("print.pos", compact('concepto', 'descripcion', 'fecha', 'fechaActual', 'tituloParticipante',
             'nombreParticipante', 'nombreEmpresa', 'direccionParticipante', 'telefonoParticipante', 'tituloEmpleado', 'emailParticipante',
-            'direccionEmpresa', 'telefonoEmpresa', 'emailEmpresa', 'total', 'registros', 'fechaLimitePago', 'fechaDePago', 'razonSocial', 'NIT', 'personaNatural'));
-        return $pdf->stream("factura.pdf");
+            'direccionEmpresa', 'telefonoEmpresa', 'emailEmpresa', 'total', 'registros', 'razonSocial', 'NIT', 'personaNatural', 'efectivoRecibido',
+            'cambio', 'parteEfectiva', 'parteCrediticia'));
+        return $pdf->stream("pos.pdf");
 
     }
 

@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         $user = new User;
-        $user->name = 'Wilmar Zea';
+        $user->name = 'JOSE WILMAR GUEVARA ZEA';
         $user->rol_id = 1;
         $user->email = 'admin@admin.com';
         $user->password = Hash::make('1234');
@@ -21,8 +21,12 @@ class UserSeeder extends Seeder
         $user->save();
 
         $cliente = new User;
-        $cliente->name = 'Sebastian Montes';
+        $cliente->name = 'JHON SEBASTIAN MONTES ROJAS';
         $cliente->rol_id = 3;
+        $cliente->di = "1113313867";
+        $cliente->celular = "3508309863";
+        $cliente->fijo = "2198680";
+        $cliente->direccion = "CARRERA 52 # 54 -53";
         $cliente->email = 'sebas@cliente.com';
         $cliente->save();
     }

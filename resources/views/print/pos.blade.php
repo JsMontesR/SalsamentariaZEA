@@ -40,6 +40,8 @@
 <br>
 
 <div align="left" style="font-size:12px">
+    <label class="negrita"> {{ $concepto }} </label>
+    <br>
     <label class="negrita"> {{ $descripcion }} </label>
     <br>
     <label>Fecha: <strong>{{$fechaActual}}</strong></label>
@@ -80,6 +82,22 @@
         </tr>
         </tbody>
     </table>
+    @if($parteEfectiva != null)
+        <label> Valor pagado en efectivo : <strong>{{$parteEfectiva}}</strong> </label>
+        <br>
+    @endif
+    @if($parteCrediticia != null)
+        <label> Valor pagado con tarjeta : <strong>{{$parteCrediticia}}</strong> </label>
+        <br>
+    @endif
+    @if($efectivoRecibido != null)
+        <label> Efectivo recibido : <strong>{{$efectivoRecibido}}</strong> </label>
+        <br>
+    @endif
+    @if($cambio != null)
+        <label> Cambio: <strong>{{$cambio}}</strong> </label>
+        <br>
+    @endif
     <hr>
 </div>
 <div align="center" style="font-size:12px">
