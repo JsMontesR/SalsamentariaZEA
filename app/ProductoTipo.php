@@ -9,6 +9,8 @@ class ProductoTipo extends Model
 {
     const GRANEL = "Granel";
     const UNITARIO = "Unitario";
+    const GRAMOS = "gramos";
+    const KILOGRAMOS = "kilogramos";
     protected $fillable = ["nombre"];
 
     /**

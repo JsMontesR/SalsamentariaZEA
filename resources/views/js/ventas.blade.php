@@ -20,7 +20,8 @@
                 arr.push({
                     id: id,
                     cantidad: $('#cantidad_producto_carrito' + id).cleanVal(),
-                    costo: $('#precio_producto_carrito' + id).cleanVal()
+                    costo: $('#precio_producto_carrito' + id).cleanVal(),
+                    unidad: $('#unidades' + id).val(),
                 });
             });
             return arr;
@@ -73,19 +74,26 @@
             let activated = "";
             let cantidad = "";
             let costo = "";
+            let unidad = "";
 
             if (data['categoria'] == "Unitario") {
                 tipoDeCantidad = "# de unidades";
                 gadget = "📦";
             } else {
                 tipoDeCantidad = "";
-                gadget = '<select onchange="" id= "unidades' + data['id'] + '"><option value="gramos">g</option><option value="kilogramos">Kg</option></select>';
+                gadget = '<select onchange="" ' + unidad + ' id= "unidades' + data['id'] + '"><option value="gramos">g</option><option value="kilogramos">Kg</option></select>';
             }
+
             if (data['pivot'] != undefined) {
-                cantidad = "readonly value=" + data['pivot']['cantidad']
+                cantidad = "readonly value=" + data['pivot']['cantidad'];
                 costo = "readonly value=" + data['pivot']['costo'];
                 activated = "disabled";
+                gadget = gadget.replace("select", "select disabled");
+                if (data['categoria'] == "Granel") {
+                    gadget = gadget.replace(data['pivot']['unidad'] + '"', data['pivot']['unidad'] + '" selected');
+                }
             }
+
             return $.extend({
                 'btnEliminar': "<input " + activated + " name='btn_eliminar_productos_carrito' type='button' value='Eliminar' class='btn btn-warning container-fluid'/>",
                 'cantidad': "<div class='input-group mb-1'><div class='input-group-prepend'><span class='input-group-text'>" + gadget + "</span></div><input " + cantidad + " id='cantidad_producto_carrito" + data['id'] + "' name='cantidad_producto_carrito" + data['id'] + "' precio=" + data['precio'] + " class='money form-control' type='text' placeholder='" + tipoDeCantidad + "'/></div>",
@@ -434,14 +442,12 @@
             $("#valor").val(valor).trigger('input');
         }
 
-
         $(document).on('keyup change', '[id^="cantidad_producto_carrito"]', function () {
             darFormatoNumerico();
             let cantidad = $(this).cleanVal();
             let precio = parseInt($(this).attr("precio"));
             let idPrecio = $(this).attr("id").replace("cantidad", "precio");
             let unidades = $("#unidades" + $(this).attr("id").replace("cantidad_producto_carrito", "")).val();
-            console.log(unidades);
             if (unidades == "gramos") {
                 precio = precio / 1000;
             }

@@ -19,6 +19,7 @@ class CreateProductoVentaTable extends Migration
             $table->unsignedBigInteger('producto_id');
             $table->foreign('producto_id')->references('id')->on('productos')->onDelete('cascade');
             $table->unsignedBigInteger('cantidad')->nullable();
+            $table->string('unidad')->nullable();
             $table->unsignedBigInteger('costo');
         });
     }

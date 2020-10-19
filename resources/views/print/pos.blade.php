@@ -40,9 +40,7 @@
 <br>
 
 <div align="left" style="font-size:12px">
-    <label class="negrita"> {{ $concepto }} </label>
-    <br>
-    <label class="negrita"> {{ $descripcion }} </label>
+    <label class="negrita"> {{ $concepto }} / {{ $descripcion }} </label>
     <br>
     <label>Fecha: <strong>{{$fechaActual}}</strong></label>
     <br>
@@ -53,8 +51,6 @@
     <label> Teléfono: <strong>{{$telefonoParticipante}}</strong></label>
     <br>
     <label> Direccion: <strong>{{$direccionParticipante}}</strong> </label>
-    <br>
-    <label> Le atendió: <strong>{{$tituloEmpleado}}</strong> </label>
     <hr>
     <table align="center">
         <thead>
@@ -82,22 +78,25 @@
         </tr>
         </tbody>
     </table>
-    @if($parteEfectiva != null)
+    @if($parteEfectiva != "$ 0")
         <label> Valor pagado en efectivo : <strong>{{$parteEfectiva}}</strong> </label>
         <br>
     @endif
-    @if($parteCrediticia != null)
+    @if($parteCrediticia != "$ 0")
         <label> Valor pagado con tarjeta : <strong>{{$parteCrediticia}}</strong> </label>
         <br>
     @endif
-    @if($efectivoRecibido != null)
+    <label> Saldo pendiente: <strong>{{$saldo}}</strong> </label>
+    <br>
+    @if($efectivoRecibido != "$ 0")
         <label> Efectivo recibido : <strong>{{$efectivoRecibido}}</strong> </label>
         <br>
     @endif
-    @if($cambio != null)
+    @if($cambio != "$ 0")
         <label> Cambio: <strong>{{$cambio}}</strong> </label>
         <br>
     @endif
+    <label> Le atendió: <strong>{{$tituloEmpleado}}</strong> </label>
     <hr>
 </div>
 <div align="center" style="font-size:12px">

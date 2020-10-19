@@ -6,6 +6,7 @@ use App\Exceptions\FondosInsuficientesException;
 use App\Caja;
 use App\Movimiento;
 use App\Nomina;
+use App\ProductoTipo;
 use App\Venta;
 use App\Entrada;
 use App\Repositories\Cajas;
@@ -189,12 +190,21 @@ class MovimientoController extends Controller
             $registro = new \stdClass();
             $registro->numero = $count++;
             $registro->nombre = $producto->nombre;
-            $registro->cantidad = $producto->pivot->cantidad;
-            $registro->valorUnitario = "$ " . number_format($producto->pivot->costo / $registro->cantidad, 0);
+            if ($producto->pivot->unidad == ProductoTipo::GRAMOS) {
+                $registro->valorUnitario = "$ " . number_format(1000 * ($producto->pivot->costo / $producto->pivot->cantidad), 0);
+                $registro->cantidad = $producto->pivot->cantidad . " g";
+            } else if ($producto->pivot->unidad == ProductoTipo::KILOGRAMOS) {
+                $registro->valorUnitario = "$ " . number_format($producto->pivot->costo / $producto->pivot->cantidad, 0);
+                $registro->cantidad = $producto->pivot->cantidad . " kg";
+            } else {
+                $registro->valorUnitario = "$ " . number_format($producto->pivot->costo / $producto->pivot->cantidad, 0);
+                $registro->cantidad = $producto->pivot->cantidad . " un";
+            }
             $registro->total = "$ " . number_format($producto->pivot->costo, 0);
             array_push($registros, $registro);
         }
         $total = "$ " . number_format($venta->valor, 0);
+        $saldo = "$ " . number_format($venta->saldo, 0);
         $parteEfectiva = "$ " . number_format($movimiento->parteEfectiva, 0);
         $parteCrediticia = "$ " . number_format($movimiento->parteCrediticia, 0);
         $efectivoRecibido = "$ " . number_format($movimiento->efectivoRecibido, 0);;
@@ -202,9 +212,8 @@ class MovimientoController extends Controller
         $pdf = \PDF::loadView("print.pos", compact('concepto', 'descripcion', 'fecha', 'fechaActual', 'tituloParticipante',
             'nombreParticipante', 'nombreEmpresa', 'direccionParticipante', 'telefonoParticipante', 'tituloEmpleado', 'emailParticipante',
             'direccionEmpresa', 'telefonoEmpresa', 'emailEmpresa', 'total', 'registros', 'razonSocial', 'NIT', 'personaNatural', 'efectivoRecibido',
-            'cambio', 'parteEfectiva', 'parteCrediticia'));
+            'cambio', 'parteEfectiva', 'parteCrediticia', 'saldo'));
         return $pdf->stream("pos.pdf");
-
     }
 
     /**

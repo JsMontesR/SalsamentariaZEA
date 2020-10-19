@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Caja;
 use App\Exceptions\FondosInsuficientesException;
 use App\Movimiento;
+use App\ProductoTipo;
 use App\Repositories\Cajas;
 use App\Repositories\Ventas;
 use App\Venta;
@@ -142,7 +143,7 @@ class VentaController extends Controller
     public function update(Request $request)
     {
         //Validación de la factibilidad de la transacción
-        $request->validate(['fechapago' => 'required|date']);
+        $request->validate($this->validationIdRule);
         $venta = Venta::findOrFail($request->id);
 
         // Ejecución de la transacción
@@ -213,7 +214,13 @@ class VentaController extends Controller
             $registro = new \stdClass();
             $registro->numero = $count++;
             $registro->nombre = $producto->nombre;
-            $registro->cantidad = $producto->pivot->cantidad;
+            if ($producto->pivot->unidad == ProductoTipo::GRAMOS) {
+                $registro->cantidad = $producto->pivot->cantidad . " g";
+            } else if ($producto->pivot->unidad == ProductoTipo::KILOGRAMOS) {
+                $registro->cantidad = $producto->pivot->cantidad . " kg";
+            } else {
+                $registro->cantidad = $producto->pivot->cantidad . " un";
+            }
             $registro->valorUnitario = "$ " . number_format($producto->pivot->costo / $registro->cantidad, 0);
             $registro->total = "$ " . number_format($producto->pivot->costo, 0);
             array_push($registros, $registro);
