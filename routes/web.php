@@ -12,6 +12,7 @@ Route::get('/home', 'HomeController@index');
 Route::get('/proveedores', 'ProveedorController@index')->name('proveedores')->middleware('auth');
 Route::get('/tiposproductos', 'ProductoTipoController@index')->name('tiposproductos')->middleware('auth');
 Route::get('/tiposservicios', 'TipoServicioController@index')->name('tiposservicios')->middleware('auth');
+Route::get('/servicios', 'ServicioController@index')->name('servicios')->middleware('auth');
 Route::get('/productos', 'ProductoController@index')->name('productos')->middleware('auth');
 Route::get('/clientes', 'ClienteController@index')->name('clientes')->middleware('auth');
 Route::get('/empleados', 'EmpleadoController@index')->name('empleados')->middleware('auth');
@@ -92,6 +93,16 @@ Route::prefix('api')->group(function () {
         Route::post('crearypagar', 'NominaController@storePay')->middleware('auth');
         Route::post('modificar', 'NominaController@update')->middleware('auth');
         Route::post('anular', 'NominaController@anular')->middleware('auth');
+    });
+
+    // Procesamiento servicios
+    Route::prefix('servicios')->group(function () {
+        Route::get('listar', 'ServicioController@list')->middleware('auth');
+        Route::get('{id}/pagos', 'ServicioController@pagos')->middleware('auth');
+        Route::post('crear', 'ServicioController@store')->middleware('auth');
+        Route::post('crearypagar', 'ServicioController@storePay')->middleware('auth');
+        Route::post('modificar', 'ServicioController@update')->middleware('auth');
+        Route::post('anular', 'ServicioController@anular')->middleware('auth');
     });
 
     // Procesamiento de entradas

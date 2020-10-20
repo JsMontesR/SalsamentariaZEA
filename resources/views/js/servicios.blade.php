@@ -13,12 +13,21 @@
             }
         });
 
+        $.ajax({
+            url: "/api/servicios/listar",
+            type: "get",
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (err) {
+                console.warn(err);
+            }
+        })
+
         function limpiarFormulario() {
             document.getElementById('id').value = "";
-            document.getElementById('empleado_id').value = "";
-            document.getElementById('nombre').value = "";
-            document.getElementById('di').value = "";
-            document.getElementById('salario').value = "";
+            document.getElementById('servicio_id').value = "";
+            document.getElementById('valorbase').value = "";
             document.getElementById('valor').value = "";
             document.getElementById('parteEfectiva').value = "";
             document.getElementById('parteCrediticia').value = "";
@@ -33,28 +42,32 @@
 
         let table = $('#recurso').DataTable($.extend({
             serverSide: true,
-            ajax: 'api/nominas/listar',
+            ajax: 'api/servicios/listar',
             columns: [
-                {data: 'id', name: 'nominas.id', title: 'Id', className: "text-center"},
-                {data: 'empleado.id', name: 'empleado.id', title: 'Id del empleado', visible: false, searchable: false},
-                {data: 'empleado.name', name: 'empleado.name', title: 'Nombre del empleado', className: "text-center"},
+                {data: 'id', name: 'servicios.id', title: 'Id', className: "text-center"},
                 {
-                    data: 'empleado.di',
-                    name: 'empleado.di',
-                    title: 'Documento de identidad',
-                    render: $.fn.dataTable.render.number('.', '.', 0),
+                    data: 'tiposervicio.id',
+                    name: 'tiposervicio.id',
+                    title: 'Id del tipo de servicio',
+                    visible: false,
+                    searchable: false
+                },
+                {
+                    data: 'tiposervicio.nombre',
+                    name: 'tiposervicio.nombre',
+                    title: 'Nombre del tipo de servicio',
                     className: "text-center"
                 },
                 {
                     data: 'valor',
-                    name: 'nominas.valor',
+                    name: 'servicios.valor',
                     title: 'Valor',
                     render: $.fn.dataTable.render.number(',', '.', 0, '$ '),
                     className: "text-center"
                 },
                 {
                     data: 'fechapagado',
-                    name: 'fechapagado',
+                    name: 'servicios.fechapagado',
                     title: 'Fecha de pago',
                     render: $.fn.dataTable.render.number(',', '.', 0, '$ '),
                     className: "text-center",
@@ -70,12 +83,24 @@
                     data: 'fechapago',
                     name: 'nominas.fechapago',
                     title: 'Fecha límite de pago',
+                    className: "text-center",
+                    render: function (data) {
+                        if (data) {
+                            return '<a>' + data + '</a>';
+                        } else {
+                            return '<a class="text-warning">Sin fecha límite de pago</a>';
+                        }
+                    }
+                },
+                {
+                    data: 'created_at',
+                    name: 'servicios.created_at',
+                    title: 'Fecha de creación',
                     className: "text-center"
                 },
-                {data: 'created_at', name: 'nominas.created_at', title: 'Fecha de creación', className: "text-center"},
                 {
                     data: 'updated_at',
-                    name: 'nominas.updated_at',
+                    name: 'servicios.updated_at',
                     title: 'Fecha de actualización',
                     className: "text-center"
                 },
@@ -104,55 +129,44 @@
             $(this).addClass('selected');
             let data = table.row(this).data();
             document.getElementById('id').value = data['id'];
-            document.getElementById('empleado_id').value = data['empleado']['id'];
-            document.getElementById('nombre').value = data['empleado']['name'];
-            $('#di').val(data['empleado']['di']).trigger('input');
-            $('#salario').val(data['empleado']['salario']).trigger('input');
+            document.getElementById('servicio_id').value = data['tiposervicio']['id'];
+            document.getElementById('nombre').value = data['tiposervicio']['nombre'];
+            $('#di').val(data['tiposervicio']['di']).trigger('input');
+            $('#salario').val(data['tiposervicio']['salario']).trigger('input');
             $('[name="valor"]').val(data['valor']).trigger('input');
             $('[name="saldo"]').val(data['saldo']).trigger('input');
             $('[name="valorpagado"]').val(data['valor'] - data['saldo']).trigger('input');
+            $('#valorbase').val(data['valor']).trigger('input');
             document.getElementById('registrar').disabled = true;
             document.getElementById('verpagos').disabled = false;
             document.getElementById('eliminar').disabled = false;
             document.getElementById('modificar').disabled = false;
         });
 
-        let empleados_table = $('#empleados').DataTable($.extend({
+        let tipos_servicios = $('#tipo_servicio').DataTable($.extend({
             serverSide: true,
-            ajax: 'api/empleados/listar',
+            ajax: 'api/tiposervicios/listar',
             columns: [
                 {data: 'id', title: 'Id', className: "text-center"},
-                {data: 'name', title: 'Nombre', className: "text-center"},
+                {data: 'nombre', title: 'Nombre', className: "text-center"},
                 {
-                    data: 'di',
-                    title: 'Documento de identidad',
-                    render: $.fn.dataTable.render.number('.', '.', 0,),
-                    className: "text-center"
+                    data: 'costo',
+                    title: 'Costo',
+                    className: "text-center",
+                    render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
                 },
-                {data: 'celular', title: 'Teléfono celular', className: "text-center"},
-                {data: 'fijo', title: 'Teléfono fijo', className: "text-center"},
-                {data: 'email', title: 'Correo electrónico', className: "text-center"},
-                {data: 'direccion', title: 'Dirección', className: "text-center"},
-                {
-                    data: 'salario',
-                    title: 'Salario',
-                    render: $.fn.dataTable.render.number(',', '.', 0, " $"),
-                    className: "text-center"
-                },
-                {data: 'rol.id', title: 'Id de rol', className: "text-center", visible: false, searchable: false,},
-                {data: 'rol.nombre', title: 'Rol', className: "text-center"},
-                {data: 'created_at', title: 'Fecha de creación', className: "text-center"},
-                {data: 'updated_at', title: 'Fecha de actualización', className: "text-center"},
-            ],
+            ]
         }, options));
 
-        $('#empleados tbody').on('click', 'tr', function () {
-            let data = empleados_table.row(this).data();
-            document.getElementById('empleado_id').value = data['id'];
-            document.getElementById('nombre').value = data['name'];
+        $('#tipo_servicio tbody').on('click', 'tr', function () {
+            let data = tipos_servicios.row(this).data();
+            $('#tipo_servicio tr').removeClass("selected");
+            $(this).addClass('selected');
+            document.getElementById('servicio_id').value = data['id'];
+            document.getElementById('nombre').value = data['nombre'];
             $('#di').val(data['di']).trigger('input');
-            $('#salario').val(data['salario']).trigger('input');
-            $('#valor').val(data['salario']).trigger('input');
+            $('#valorbase').val(data['costo']).trigger('input');
+            $('#valor').val(data['costo']).trigger('input');
             $('#parteEfectiva').val(data['salario']).trigger('input');
         });
 
@@ -162,9 +176,9 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            $.post('/api/nominas/crear',
+            $.post('/api/servicios/crear',
                 {
-                    empleado_id: $("#empleado_id").val(),
+                    servicio_id: $("#servicio_id").val(),
                     valor: $("#valor").cleanVal(),
                     fechapago: $("#fechapago").val(),
                 }, function (data) {
@@ -185,9 +199,9 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            $.post('/api/nominas/crearypagar',
+            $.post('/api/servicios/crearypagar',
                 {
-                    empleado_id: $("#empleado_id").val(),
+                    servicio_id: $("#servicio_id").val(),
                     valor: $("#valor").cleanVal(),
                     fechapago: $("#fechapago").val(),
                 }, function (data) {
@@ -232,17 +246,11 @@
                 });
         });
 
-
         /*
         SECCION MODAL
         */
 
         let pagos_table;
-        // $("#modalMovimientos").on('shown.bs.modal', function () {
-        //     $('[name="valor"]').trigger('input');
-        //     $('[name="saldo"]').trigger('input');
-        //     $('[name="valorpagado"]').trigger('input');
-        // });
         $("#verpagos").click(function () {
 
             $.ajax({
@@ -260,7 +268,7 @@
             }
             pagos_table = $('#pagos_table').DataTable($.extend({
                 serverSide: true,
-                ajax: '/api/nominas/' + $("#id").val() + '/pagos',
+                ajax: '/api/servicios/' + $("#id").val() + '/pagos',
                 columns: [
                     {data: 'id', title: 'Id', className: "text-center"},
                     {data: 'empleado.name', title: 'Nombre del empleado', className: "text-center"},
@@ -288,11 +296,12 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            $.post('/api/nominas/pagar',
+            $.post('/api/movimientos/generarPago',
                 {
                     id: $("#id").val(),
                     parteCrediticia: $("#parteCrediticia").cleanVal(),
-                    parteEfectiva: $("#parteEfectiva").cleanVal()
+                    parteEfectiva: $("#parteEfectiva").cleanVal(),
+                    movimientoable: "servicio"
                 }, function (data) {
                     table.ajax.reload();
                     limpiarFormularioModal()

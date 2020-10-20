@@ -238,11 +238,6 @@
         */
 
         let pagos_table;
-        // $("#modalMovimientos").on('shown.bs.modal', function () {
-        //     $('[name="valor"]').trigger('input');
-        //     $('[name="saldo"]').trigger('input');
-        //     $('[name="valorpagado"]').trigger('input');
-        // });
         $("#verpagos").click(function () {
 
             $.ajax({

@@ -7,6 +7,8 @@ use App\Caja;
 use App\Movimiento;
 use App\Nomina;
 use App\ProductoTipo;
+use App\Repositories\Servicios;
+use App\Servicio;
 use App\Venta;
 use App\Entrada;
 use App\Repositories\Cajas;
@@ -19,18 +21,19 @@ use Illuminate\Validation\ValidationException;
 
 class MovimientoController extends Controller
 {
-    protected $cajas, $ventas, $nominas, $entradas;
+    protected $cajas, $ventas, $nominas, $entradas, $servicios;
 
     public $validationRules = [
         'parteEfectiva' => 'required_without:parteCrediticia',
         'parteCrediticia' => 'required_without:parteEfectiva'
     ];
 
-    public function __construct(Cajas $cajas, Ventas $ventas, Nominas $nominas, Entradas $entradas)
+    public function __construct(Cajas $cajas, Ventas $ventas, Nominas $nominas, Entradas $entradas, Servicios $servicios)
     {
         $this->ventas = $ventas;
         $this->nominas = $nominas;
         $this->entradas = $entradas;
+        $this->servicios = $servicios;
         $this->cajas = $cajas;
     }
 
@@ -59,11 +62,17 @@ class MovimientoController extends Controller
             case "entrada":
                 $movimientoable = Entrada::findOrFail($request->id);
                 $repository = $this->entradas;
+                break;
             case "nomina":
                 $movimientoable = Nomina::findOrFail($request->id);
                 $repository = $this->nominas;
+                break;
+            case "servicio":
+                $movimientoable = Servicio::findOrFail($request->id);
+                $repository = $this->servicios;
+                break;
             default:
-                throw ValidationException::withMessages(["movimientoable" => "El tipo de operación a pagar es indefinido"]);
+                throw ValidationException::withMessages(["movimientoable" => "El tipo de transacción a pagar es indefinido"]);
         }
 
         if (!$repository->isProcesable($movimientoable)) {

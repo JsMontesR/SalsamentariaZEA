@@ -1,13 +1,13 @@
 @extends('layouts.app')
 @section('content')
     <div class="card-header py-3">
-        <h1 class="m-0 font-weight-bold text-primary text-center">Nóminas</h1>
+        <h1 class="m-0 font-weight-bold text-primary text-center">Servicios</h1>
     </div>
     <br>
     <div class="container-fluid">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h3 class="m-0 font-weight-bold text-primary text-center">Detalle de la nómina</h3>
+                <h3 class="m-0 font-weight-bold text-primary text-center">Detalle del servicio</h3>
             </div>
             <div class="card-body">
                 <form id="form" name="form" method="POST">
@@ -20,17 +20,17 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-md-4 col-form-label text-md-left">Id del empleado:</label>
+                        <label class="col-md-4 col-form-label text-md-left">Id del servicio:</label>
                         <div class="col-md-8">
-                            <input id="empleado_id" class="form-control"
-                                   name="empleado_id" required
-                                   autocomplete="empleado_id">
+                            <input id="servicio_id" class="form-control"
+                                   name="servicio_id" required
+                                   autocomplete="servicio_id">
                         </div>
                     </div>
                     <div class="card mb-3">
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="empleados"
+                                <table id="tipo_servicio"
                                        class="table table-bordered dt-responsive table-hover row-cursor-hand"
                                        style="width:100%">
                                     <tbody></tbody>
@@ -40,29 +40,25 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-md-4 col-form-label text-md-left">Nombre del empleado:</label>
-                        <div class="col-md-8">
+                        <label class="col-md-4 col-form-label text-md-left">Nombre del servicio:</label>
+                        <div class="input-group col-md-8">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-fw fa-money-bill-alt"></i></span>
+                            </div>
                             <input id="nombre" readonly="readonly"
                                    class="number form-control"
                                    name="nombre">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-md-4 col-form-label text-md-left">Documento de identidad:</label>
-                        <div class="col-md-8">
-                            <input id="di" readonly="readonly" class="number form-control"
-                                   name="di">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-md-4 col-form-label text-md-left">Salario base:</label>
+                        <label class="col-md-4 col-form-label text-md-left">Valor base:</label>
                         <div class="input-group col-md-8">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-fw fa-money-bill-alt"></i></span>
                             </div>
-                            <input id="salario" readonly="readonly"
+                            <input id="valorbase" readonly="readonly"
                                    class="number form-control"
-                                   name="salario">
+                                   name="valorbase">
                         </div>
                     </div>
                     <hr>
@@ -132,7 +128,7 @@
         </div>
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h3 class="m-0 font-weight-bold text-primary text-center">Nóminas registradas</h3>
+                <h3 class="m-0 font-weight-bold text-primary text-center">Servicios registrados</h3>
             </div>
             <div class="card-body">
 
@@ -258,6 +254,6 @@
             </div>
         </div>
     </div>
-    @include("js.nominas")
+    @include("js.servicios")
 @endsection
 

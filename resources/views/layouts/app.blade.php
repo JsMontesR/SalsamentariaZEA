@@ -175,6 +175,10 @@
                             <a class="nav-link" href="{{ route('ingresos') }}"><i class="fas fa-fw fa-sign-in-alt"></i>Ingresos</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="{{ route('servicios') }}"><i
+                                    class="fas fa-fw fa-comments"></i>Servicios</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="{{ route('tiposservicios') }}"><i
                                     class="fas fa-fw fa-comments"></i>Tipos de servicios</a>
                         </li>

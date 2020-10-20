@@ -7,6 +7,7 @@ use App\Cierre;
 use App\Entrada;
 use App\Movimiento;
 use App\Nomina;
+use App\Servicio;
 use App\Venta;
 use Illuminate\Support\Facades\Log;
 
@@ -41,7 +42,7 @@ class Cajas
         $caja->saldo = $caja->saldo - $parteEfectiva;
         $caja->save();
         $caja->refresh();
-        if ($movimientoable instanceof Entrada || $movimientoable instanceof Nomina) {
+        if ($movimientoable instanceof Entrada || $movimientoable instanceof Nomina || $movimientoable instanceof Servicio) {
             $this->actualizarSaldo($movimientoable, $nuevoMovimiento);
             if ($movimientoable->saldo == 0) {
                 $movimientoable->fechapagado = now();
