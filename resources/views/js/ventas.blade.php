@@ -698,6 +698,10 @@
         })
 
         function limpiarFormularioModal() {
+            document.getElementById("imprimirpos").disabled = true;
+            document.getElementById("anularcobro").disabled = true;
+            document.getElementById("cobrar").disabled = false;
+            document.getElementById("otherpay").disabled = false;
             $("#idcobro").val("");
             $("#parteEfectiva").val("");
             $("#efectivoRecibido").val("");
@@ -710,9 +714,15 @@
             limpiarFormularioModal();
             $(this).addClass('selected');
             let data = cobros_table.row(this).data();
+            document.getElementById("imprimirpos").disabled = false;
+            document.getElementById("anularcobro").disabled = false;
+            document.getElementById("cobrar").disabled = true;
+            document.getElementById("otherpay").disabled = true;
             $("#idcobro").val(data["id"]);
             $("#parteEfectiva").val(data["parteEfectiva"]).trigger('input');
             $("#parteCrediticia").val(data["parteCrediticia"]).trigger('input');
+            $("#efectivoRecibido").val(data["efectivoRecibido"]).trigger('input');
+            $("#cambio").val(data["cambio"]).trigger('input');
         });
 
         $('#parteEfectiva,#efectivoRecibido').on('keyup change', function () {
