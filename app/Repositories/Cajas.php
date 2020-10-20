@@ -138,7 +138,7 @@ class Cajas
             } else if ($nuevoMovimiento->tipo == Movimiento::INGRESO) {
                 $movimientoable->saldo -= $nuevoMovimiento->parteEfectiva + $nuevoMovimiento->parteCrediticia;
             }
-        } else if ($movimientoable instanceof Entrada || $movimientoable instanceof Nomina) {
+        } else if ($movimientoable instanceof Entrada || $movimientoable instanceof Nomina || $movimientoable instanceof Servicio) {
             if ($nuevoMovimiento->tipo == Movimiento::EGRESO) {
                 $movimientoable->saldo -= $nuevoMovimiento->parteEfectiva + $nuevoMovimiento->parteCrediticia;
             } else if ($nuevoMovimiento->tipo == Movimiento::INGRESO) {
@@ -192,7 +192,7 @@ class Cajas
         $caja->saldo = $caja->saldo + $nuevoMovimiento->parteEfectiva;
         $caja->save();
         $caja->refresh();
-        if ($movimientoable instanceof Entrada || $movimientoable instanceof Nomina) {
+        if ($movimientoable instanceof Entrada || $movimientoable instanceof Nomina || $movimientoable instanceof Servicio) {
             if ($movimientoable->saldo == 0) {
                 $movimientoable->fechapagado = null;
             };

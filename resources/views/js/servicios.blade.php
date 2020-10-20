@@ -58,13 +58,6 @@
                     className: "text-center"
                 },
                 {
-                    data: 'valor',
-                    name: 'servicios.valor',
-                    title: 'Valor',
-                    render: $.fn.dataTable.render.number(',', '.', 0, '$ '),
-                    className: "text-center"
-                },
-                {
                     data: 'fechapagado',
                     name: 'servicios.fechapagado',
                     title: 'Fecha de pago',
@@ -90,6 +83,19 @@
                             return '<a class="text-warning">Sin fecha límite de pago</a>';
                         }
                     }
+                },
+                {
+                    data: 'saldo',
+                    title: 'Saldo por cobrar',
+                    className: "text-center",
+                    render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
+                },
+                {
+                    data: 'valor',
+                    name: 'servicios.valor',
+                    title: 'Valor',
+                    render: $.fn.dataTable.render.number(',', '.', 0, '$ '),
+                    className: "text-center"
                 },
                 {
                     data: 'created_at',
@@ -216,7 +222,7 @@
         });
 
         $("#limpiar").click(function () {
-            limpiarFormulario();
+            location.href = "{{route('servicios')}}";
         });
 
         $("#eliminar").click(function () {

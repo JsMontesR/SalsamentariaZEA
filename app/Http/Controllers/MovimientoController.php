@@ -75,7 +75,7 @@ class MovimientoController extends Controller
                 throw ValidationException::withMessages(["movimientoable" => "El tipo de transacción a pagar es indefinido"]);
         }
 
-        if (!$repository->isProcesable($movimientoable)) {
+        if (!$this->cajas->isProcesable($movimientoable)) {
             throw ValidationException::withMessages(["valor" => "La " . $tipo . " seleccionada ya fue pagada en su totalidad"]);
         }
         if (!$this->cajas->isMontosPagoValidos($request->parteEfectiva, $request->parteCrediticia, $movimientoable->saldo)) {
