@@ -14,13 +14,17 @@ use App\Repositories\Entradas;
 use App\Repositories\Nominas;
 use App\Repositories\Ventas;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 
 class MovimientoController extends Controller
 {
     protected $cajas, $ventas, $nominas, $entradas;
+
+    public $validationRules = [
+        'parteEfectiva' => 'required_without:parteCrediticia',
+        'parteCrediticia' => 'required_without:parteEfectiva'
+    ];
 
     public function __construct(Cajas $cajas, Ventas $ventas, Nominas $nominas, Entradas $entradas)
     {
@@ -48,6 +52,7 @@ class MovimientoController extends Controller
      */
     public function generarPago(Request $request)
     {
+        $request->validate($this->validationRules);
         $tipo = $request->movimientoable;
         $caja = Caja::findOrFail(1);
         switch ($tipo) {
@@ -102,6 +107,7 @@ class MovimientoController extends Controller
      */
     public function generarCobro(Request $request)
     {
+        $request->validate($this->validationRules);
         $tipo = $request->movimientoable;
         $caja = Caja::findOrFail(1);
         switch ($tipo) {

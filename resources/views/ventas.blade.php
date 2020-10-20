@@ -297,12 +297,12 @@
                                 class="sr-only">Toggle Dropdown</span></button>
                         <div class="dropdown-menu" x-placement="top-start"
                              style="position: absolute; transform: translate3d(99px, -2px, 0px); top: 0px; left: 0px; will-change: transform;">
-                            <button id="cobrareimprimir" class="dropdown-item row-cursor-hand">Cobrar e imprimir
+                            <button id="cobrareimprimir" class="dropdown-item row-cursor-hand">Cobrar y generar recibo
                             </button>
                         </div>
                     </div>
                     <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 py-2">
-                        <input id="imprimirpos" type="button" value="Imprimir"
+                        <input id="imprimirpos" disabled  type="button" value="Generar POS"
                                class="btn btn-info container-fluid"/>
                     </div>
                     <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 py-2">

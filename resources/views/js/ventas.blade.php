@@ -32,6 +32,7 @@
             document.getElementById('cliente_id').value = "";
             document.getElementById('fechapagado').value = "";
             document.getElementById('fechapago').value = "";
+            document.getElementById('lugarentrega').value = "";
             document.getElementById('valor').value = "";
             $('#recurso tr').removeClass("selected");
             $('#clientes tr').removeClass("selected");
@@ -151,6 +152,7 @@
             document.getElementById('id').value = data['id'];
             document.getElementById('cliente_id').value = data['cliente']['id'];
             document.getElementById('fechapago').value = data['fechapago'];
+            document.getElementById('lugarentrega').value = data['lugarentrega'];
             document.getElementById('fechapagado').value = data['fechapagado'];
             $('[name="valor"]').val(data['valor']).trigger('input');
             $('[name="saldo"]').val(data['saldo']).trigger('input');
@@ -189,14 +191,12 @@
                     name: 'cliente.name',
                     title: 'Nombre del cliente',
                     className: "text-center",
-                    orderable: false
                 },
                 {
                     data: 'empleado.name',
                     name: 'empleado.name',
                     title: 'Nombre del vendedor',
                     className: "text-center",
-                    orderable: false
                 },
                 {
                     data: 'fechapagado',
