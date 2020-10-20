@@ -78,6 +78,9 @@
         </tr>
         </tbody>
     </table>
+    <hr>
+    <label> Direccion de entrega: <strong>{{$lugarEntrega}}</strong> </label>
+    <br>
     @if($parteEfectiva != "$ 0")
         <label> Valor pagado en efectivo : <strong>{{$parteEfectiva}}</strong> </label>
         <br>
@@ -97,8 +100,8 @@
         <br>
     @endif
     <label> Le atendió: <strong>{{$tituloEmpleado}}</strong> </label>
-    <hr>
 </div>
+<br>
 <div align="center" style="font-size:12px">
     <div>Por favor conservar este tiquete</div>
     <div>Gracias por su compra</div>

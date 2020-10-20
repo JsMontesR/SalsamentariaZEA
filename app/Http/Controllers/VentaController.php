@@ -197,6 +197,7 @@ class VentaController extends Controller
         $fechaLimitePago = $venta->fechapago;
         $fechaDePago = $venta->fechapagado;
         $descripcion = "Venta # " . $venta->id;
+        $lugarEntrega = $venta->lugarentrega;
         // Datos del cliente
         $tituloParticipante = "Cliente";
         $nombreParticipante = $venta->cliente->name;
@@ -240,7 +241,7 @@ class VentaController extends Controller
         $pdf = \PDF::loadView("print.factura", compact('descripcion', 'fecha', 'fechaActual', 'tituloParticipante',
             'nombreParticipante', 'nombreEmpresa', 'direccionParticipante', 'telefonoParticipante', 'tituloEmpleado', 'emailParticipante',
             'direccionEmpresa', 'telefonoEmpresa', 'emailEmpresa', 'total', 'registros', 'fechaLimitePago', 'fechaDePago', 'razonSocial',
-            'NIT', 'personaNatural', 'saldo', 'dineroAbonado'));
+            'NIT', 'personaNatural', 'saldo', 'dineroAbonado', 'lugarEntrega'));
         return $pdf->stream('factura.pdf');
 
     }

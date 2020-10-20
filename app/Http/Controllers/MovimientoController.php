@@ -173,6 +173,7 @@ class MovimientoController extends Controller
         $fechaActual = now();
         $concepto = "Recibo de pago # " . $movimiento->id;
         $descripcion = "Venta # " . $venta->id;
+        $lugarEntrega = $venta->lugarentrega;
         // Datos del cliente
         $tituloParticipante = "Cliente";
         $nombreParticipante = $venta->cliente->name;
@@ -218,7 +219,7 @@ class MovimientoController extends Controller
         $pdf = \PDF::loadView("print.pos", compact('concepto', 'descripcion', 'fecha', 'fechaActual', 'tituloParticipante',
             'nombreParticipante', 'nombreEmpresa', 'direccionParticipante', 'telefonoParticipante', 'tituloEmpleado', 'emailParticipante',
             'direccionEmpresa', 'telefonoEmpresa', 'emailEmpresa', 'total', 'registros', 'razonSocial', 'NIT', 'personaNatural', 'efectivoRecibido',
-            'cambio', 'parteEfectiva', 'parteCrediticia', 'saldo'));
+            'cambio', 'parteEfectiva', 'parteCrediticia', 'saldo', 'lugarEntrega'));
         return $pdf->stream("pos.pdf");
     }
 

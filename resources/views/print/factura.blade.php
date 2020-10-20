@@ -31,6 +31,9 @@
         @elseif($fechaLimitePago != null)
             <div><label class="bold">Fecha límite de pago: </label><strong>{{ $fechaLimitePago }}</strong></div>
         @endif
+        @if($lugarEntrega != null)
+            <div><label class="bold">Lugar de entrega: </label><strong>{{ $lugarEntrega }}</strong></div>
+        @endif
         {{--        <div><label class="bold">Le atendió: </label>{{ $tituloEmpleado }}</div>--}}
     </div>
 </header>
