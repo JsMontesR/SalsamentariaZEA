@@ -94,10 +94,6 @@
                              style="position: absolute; transform: translate3d(99px, -2px, 0px); top: 0px; left: 0px; will-change: transform;">
                             <button id="registrarypagar" class="dropdown-item row-cursor-hand">Registrar y pagar</button>
                             <div class="dropdown-divider"></div>
-                            <button id="registrareimprimir" class="dropdown-item row-cursor-hand">Registrar e imprimir</button>
-                            <div class="dropdown-divider"></div>
-                            <button id="registrarpagareimprimir" class="dropdown-item row-cursor-hand">Registrar, pagar e imprimir</button>
-
                         </div>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 py-2">
@@ -105,7 +101,7 @@
                                class="btn btn-info container-fluid"/>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 py-2">
-                        <input id="vercobros" type="button" disabled value="Cobros"
+                        <input id="verpagos" type="button" disabled value="Pagos"
                                class="btn btn-success container-fluid" data-toggle="modal"
                                data-target="#modalMovimientos"/>
                     </div>

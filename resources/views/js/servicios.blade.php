@@ -37,7 +37,6 @@
             document.getElementById('registrar').disabled = false;
             document.getElementById('eliminar').disabled = true;
             document.getElementById('modificar').disabled = true;
-            // table.ajax.reload();
         }
 
         let table = $('#recurso').DataTable($.extend({
@@ -46,15 +45,15 @@
             columns: [
                 {data: 'id', name: 'servicios.id', title: 'Id', className: "text-center"},
                 {
-                    data: 'tiposervicio.id',
-                    name: 'tiposervicio.id',
+                    data: 'tipo_servicio.id',
+                    name: 'tipo_servicio.id',
                     title: 'Id del tipo de servicio',
                     visible: false,
                     searchable: false
                 },
                 {
-                    data: 'tiposervicio.nombre',
-                    name: 'tiposervicio.nombre',
+                    data: 'tipo_servicio.nombre',
+                    name: 'tipo_servicio.nombre',
                     title: 'Nombre del tipo de servicio',
                     className: "text-center"
                 },
@@ -81,7 +80,7 @@
                 },
                 {
                     data: 'fechapago',
-                    name: 'nominas.fechapago',
+                    name: 'servicios.fechapago',
                     title: 'Fecha límite de pago',
                     className: "text-center",
                     render: function (data) {
@@ -129,10 +128,10 @@
             $(this).addClass('selected');
             let data = table.row(this).data();
             document.getElementById('id').value = data['id'];
-            document.getElementById('servicio_id').value = data['tiposervicio']['id'];
-            document.getElementById('nombre').value = data['tiposervicio']['nombre'];
-            $('#di').val(data['tiposervicio']['di']).trigger('input');
-            $('#salario').val(data['tiposervicio']['salario']).trigger('input');
+            document.getElementById('servicio_id').value = data['tipo_servicio']['id'];
+            document.getElementById('nombre').value = data['tipo_servicio']['nombre'];
+            $('#di').val(data['tipo_servicio']['di']).trigger('input');
+            $('#salario').val(data['tipo_servicio']['salario']).trigger('input');
             $('[name="valor"]').val(data['valor']).trigger('input');
             $('[name="saldo"]').val(data['saldo']).trigger('input');
             $('[name="valorpagado"]').val(data['valor'] - data['saldo']).trigger('input');
@@ -230,7 +229,7 @@
             })
                 .then((willDelete) => {
                     if (willDelete) {
-                        $.post('api/nominas/anular', {
+                        $.post('api/servicios/anular', {
                             id: $('#id').val()
                         }, function (data) {
                             swal("¡Operación exitosa!", data.msg, "success");
@@ -254,7 +253,7 @@
         $("#verpagos").click(function () {
 
             $.ajax({
-                url: "/api/nominas/" + $("#id").val() + "/pagos",
+                url: "/api/servicios/" + $("#id").val() + "/pagos",
                 type: "get",
                 success: function (data) {
                     console.log(data);
