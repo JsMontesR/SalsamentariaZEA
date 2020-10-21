@@ -15,7 +15,7 @@ class AlterProductosTable extends Migration
     {
         Schema::table('productos', function (Blueprint $table) {
             $table->unsignedBigInteger('tipo_id');
-            $table->foreign('tipo_id')->references('id')->on('producto_tipos')->onDelete('cascade');
+            $table->foreign('tipo_id')->references('id')->on('producto_tipos')->onDelete('restrict');
         });
     }
 

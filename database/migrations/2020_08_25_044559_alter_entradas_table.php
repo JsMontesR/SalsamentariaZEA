@@ -15,9 +15,9 @@ class AlterEntradasTable extends Migration
     {
         Schema::table('entradas', function (Blueprint $table) {
             $table->unsignedBigInteger('empleado_id');
-            $table->foreign('empleado_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('empleado_id')->references('id')->on('users')->onDelete('restrict');
             $table->unsignedBigInteger('proveedor_id');
-            $table->foreign('proveedor_id')->references('id')->on('proveedors')->onDelete('cascade');
+            $table->foreign('proveedor_id')->references('id')->on('proveedors')->onDelete('restrict');
         });
     }
 

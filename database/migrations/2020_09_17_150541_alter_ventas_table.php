@@ -15,9 +15,9 @@ class AlterVentasTable extends Migration
     {
         Schema::table('ventas', function (Blueprint $table) {
             $table->unsignedBigInteger('empleado_id');
-            $table->foreign('empleado_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('empleado_id')->references('id')->on('users')->onDelete('restrict');
             $table->unsignedBigInteger('cliente_id');
-            $table->foreign('cliente_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('cliente_id')->references('id')->on('users')->onDelete('restrict');
         });
     }
 
