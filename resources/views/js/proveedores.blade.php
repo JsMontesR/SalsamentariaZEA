@@ -81,9 +81,7 @@
                             limpiarFormulario()
                             table.ajax.reload();
                         }).fail(function (err) {
-                            $.each(err.responseJSON.errors, function (i, error) {
-                                toastr.error(error[0]);
-                            });
+                            swal("Ha ocurrido un error", "No se puede borrar el recurso, es posible que otra entidad del negocio esté haciendo referencia a este.", "error");
                             console.error(err);
                         })
                     }

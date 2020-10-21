@@ -155,6 +155,10 @@
 /* 0.1. Body / Typography
    ========================================================================== */
 
+.swal-modal .swal-text {
+    text-align: center;
+}
+
 highlight {
     background-color: red !important;
 }

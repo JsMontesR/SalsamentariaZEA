@@ -105,6 +105,7 @@ class Cajas
         $nuevoMovimiento = new Movimiento();
         $nuevoMovimiento->parteEfectiva = $parteEfectiva == null ? $movimiento->parteEfectiva : $parteEfectiva;
         $nuevoMovimiento->parteCrediticia = $parteCrediticia == null ? $movimiento->parteCrediticia : $parteCrediticia;
+        $nuevoMovimiento->total = $nuevoMovimiento->parteEfectiva + $nuevoMovimiento->parteCrediticia;
         $nuevoMovimiento->tipo = Movimiento::EGRESO;
         $nuevoMovimiento->empleado()->associate(auth()->user());
         $caja->saldo = $caja->saldo - $nuevoMovimiento->parteEfectiva;
@@ -188,6 +189,7 @@ class Cajas
         $nuevoMovimiento = new Movimiento();
         $nuevoMovimiento->parteEfectiva = $parteEfectiva == null ? $movimiento->parteEfectiva : $parteEfectiva;
         $nuevoMovimiento->parteCrediticia = $parteCrediticia == null ? $movimiento->parteCrediticia : $parteCrediticia;
+        $nuevoMovimiento->total = $nuevoMovimiento->parteEfectiva + $nuevoMovimiento->parteCrediticia;
         $nuevoMovimiento->tipo = Movimiento::INGRESO;
         $nuevoMovimiento->empleado()->associate(auth()->user());
         $caja->saldo = $caja->saldo + $nuevoMovimiento->parteEfectiva;

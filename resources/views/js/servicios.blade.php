@@ -29,6 +29,7 @@
             document.getElementById('servicio_id').value = "";
             document.getElementById('valorbase').value = "";
             document.getElementById('valor').value = "";
+            document.getElementById('fechapago').value = "";
             document.getElementById('parteEfectiva').value = "";
             document.getElementById('parteCrediticia').value = "";
             document.getElementById('pagar').disabled = false;
@@ -145,6 +146,7 @@
             document.getElementById('id').value = data['id'];
             document.getElementById('servicio_id').value = data['tipo_servicio']['id'];
             document.getElementById('nombre').value = data['tipo_servicio']['nombre'];
+            document.getElementById('fechapago').value = data['fechapago'];
             $('#di').val(data['tipo_servicio']['di']).trigger('input');
             $('#salario').val(data['tipo_servicio']['salario']).trigger('input');
             $('[name="valor"]').val(data['valor']).trigger('input');
@@ -283,9 +285,7 @@
                             limpiarFormulario()
                             table.ajax.reload();
                         }).fail(function (err) {
-                            $.each(err.responseJSON.errors, function (i, error) {
-                                swal("Ha ocurrido un error", error[0], "error");
-                            });
+                            swal("Ha ocurrido un error", "No se puede borrar el recurso, es posible que otra entidad del negocio esté haciendo referencia a este.", "error");
                             console.error(err);
                         })
                     }
