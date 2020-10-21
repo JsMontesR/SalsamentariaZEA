@@ -34,6 +34,7 @@
             document.getElementById('pagar').disabled = false;
             $('#recurso tr').removeClass("selected");
             document.getElementById('verpagos').disabled = true;
+            document.getElementById('imprimir').disabled = true;
             document.getElementById('registrar').disabled = false;
             document.getElementById('eliminar').disabled = true;
             document.getElementById('modificar').disabled = true;
@@ -56,6 +57,12 @@
                     name: 'tipo_servicio.nombre',
                     title: 'Nombre del tipo de servicio',
                     className: "text-center"
+                },
+                {
+                    data: 'empleado.name',
+                    name: 'empleado.name',
+                    title: 'Empleado',
+                    className: "text-center",
                 },
                 {
                     data: 'fechapagado',
@@ -146,6 +153,7 @@
             $('#valorbase').val(data['valor']).trigger('input');
             document.getElementById('registrar').disabled = true;
             document.getElementById('verpagos').disabled = false;
+            document.getElementById('imprimir').disabled = false;
             document.getElementById('eliminar').disabled = false;
             document.getElementById('modificar').disabled = false;
         }
@@ -230,9 +238,33 @@
             })
         });
 
+        $("#imprimir").click(function () {
+            $("#form").attr('action', "{{ route('imprimircomprobanteservicio') }}");
+            $("#form").submit();
+        })
+
         $("#limpiar").click(function () {
             location.href = "{{route('servicios')}}";
         });
+
+        $("#modificar").click(function () {
+            $.post('/api/servicios/modificar',
+                {
+                    id: $("#id").val(),
+                    servicio_id: $("#servicio_id").val(),
+                    valor: $("#valor").cleanVal(),
+                    fechapago: $("#fechapago").val(),
+                }, function (data) {
+                    table.ajax.reload();
+                    limpiarFormulario();
+                    swal("¡Operación exitosa!", data.msg, "success");
+                }).fail(function (err) {
+                $.each(err.responseJSON.errors, function (i, error) {
+                    swal("Ha ocurrido un error", error[0], "error");
+                });
+                console.error(err);
+            })
+        })
 
         $("#eliminar").click(function () {
             swal({
@@ -290,6 +322,12 @@
                     {
                         data: 'parteCrediticia',
                         title: 'Parte crediticia',
+                        className: "text-center",
+                        render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
+                    },
+                    {
+                        data: 'total',
+                        title: 'Total de dinero',
                         className: "text-center",
                         render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
                     },

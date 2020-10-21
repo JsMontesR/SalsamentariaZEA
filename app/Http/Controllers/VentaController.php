@@ -177,14 +177,13 @@ class VentaController extends Controller
         $fechaActual = now();
         $fechaLimitePago = $venta->fechapago;
         $fechaDePago = $venta->fechapagado;
-        $descripcion = "Venta # " . $venta->id;
+        $descripcion = "Factura de venta # " . $venta->id;
         $lugarEntrega = $venta->lugarentrega;
         // Datos del cliente
         $tituloParticipante = "Cliente";
         $nombreParticipante = $venta->cliente->name;
         $direccionParticipante = $venta->cliente->direccion;
         $telefonoParticipante = $venta->cliente->celular;
-        $tituloEmpleado = $venta->cliente->fijo;
         $emailParticipante = $venta->cliente->email;
         $tituloEmpleado = $venta->empleado->name;
         // Datos de la empresa
@@ -217,8 +216,6 @@ class VentaController extends Controller
         $total = "$ " . number_format($venta->valor, 0);
         $saldo = "$ " . number_format($venta->saldo, 0);
         $dineroAbonado = "$ " . number_format($venta->valor - $venta->saldo, 0);
-        $concepto = "Factura de venta";
-        $descripcion = $concepto . " #" . $venta->id;
         $pdf = \PDF::loadView("print.factura", compact('descripcion', 'fecha', 'fechaActual', 'tituloParticipante',
             'nombreParticipante', 'nombreEmpresa', 'direccionParticipante', 'telefonoParticipante', 'tituloEmpleado', 'emailParticipante',
             'direccionEmpresa', 'telefonoEmpresa', 'emailEmpresa', 'total', 'registros', 'fechaLimitePago', 'fechaDePago', 'razonSocial',

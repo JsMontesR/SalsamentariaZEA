@@ -57,7 +57,7 @@ class ServicioController extends Controller
 
     public function list()
     {
-        return datatables()->eloquent(Servicio::query()->with('tipoServicio'))->toJson();
+        return datatables()->eloquent(Servicio::query()->select('servicios.*')->with('tipoServicio', 'empleado'))->toJson();
     }
 
     /**
@@ -91,6 +91,27 @@ class ServicioController extends Controller
     }
 
     /**
+     * Actualiza un servicio.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request)
+    {
+        //Validación de la factibilidad de la transacción
+        $request->validate($this->validationIdRule);
+        $servicio = Servicio::findOrFail($request->id);
+
+        // Ejecución de la transacción
+        $servicio->fechapago = $request->fechapago;
+        $servicio->save();
+
+        return response()->json([
+            'msg' => '¡Datos del servicio actualizados!',
+        ]);
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param \Illuminate\Http\Request $request
@@ -107,5 +128,51 @@ class ServicioController extends Controller
         return response()->json([
             'msg' => '¡Servicio anulado!',
         ]);
+    }
+
+    /**
+     * Print the specified resource from storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function imprimirCombrobante(Request $request)
+    {
+        $servicio = Servicio::findOrFail($request->id);
+        return $this->imprimirLogic($servicio);
+    }
+
+    public function imprimirLogic(Servicio $servicio)
+    {
+        $fecha = $servicio->created_at;
+        $fechaActual = now();
+        $fechaLimitePago = $servicio->fechapago;
+        $fechaDePago = $servicio->fechapagado;
+        $descripcion = "Servicio # " . $servicio->id;
+        // Datos del cliente
+        $tituloParticipante = "Cliente";
+        $numeroServicio = $servicio->tipoServicio->id;
+        $nombreServicio = $servicio->tipoServicio->nombre;
+        $tituloEmpleado = $servicio->empleado->name;
+        // Datos de la empresa
+        $nombreEmpresa = "Salsamentaría ZEA";
+        $direccionEmpresa = "Calle 21 #24-43 B/San José";
+        $telefonoEmpresa = "CEL 3112300293";
+        $emailEmpresa = "salsamentariazea@mail.com";
+        $razonSocial = "SALSAMENTARÍA ZEA";
+        $NIT = "NIT 1856151593-8";
+        $personaNatural = "JOSE WILMAR GUEVARA ZEA";
+        $registros = array();
+        $valorBase = "$ " . number_format($servicio->tipoServicio->costo, 0);
+        $total = "$ " . number_format($servicio->valor, 0);
+        $saldo = "$ " . number_format($servicio->saldo, 0);
+        $dineroAbonado = "$ " . number_format($servicio->valor - $servicio->saldo, 0);
+        $pdf = \PDF::loadView("print.comprobante", compact('descripcion', 'fecha', 'fechaActual',
+            'tituloParticipante', 'nombreServicio', 'numeroServicio', 'nombreEmpresa',
+            'tituloEmpleado', 'direccionEmpresa', 'telefonoEmpresa', 'emailEmpresa',
+            'total', 'registros', 'fechaLimitePago', 'fechaDePago', 'razonSocial', 'NIT', 'personaNatural',
+            'saldo', 'dineroAbonado', 'valorBase'));
+        return $pdf->stream('comprobante.pdf');
+
     }
 }
