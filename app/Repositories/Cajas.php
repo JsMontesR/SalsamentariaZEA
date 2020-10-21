@@ -37,6 +37,7 @@ class Cajas
         $nuevoMovimiento = new Movimiento();
         $nuevoMovimiento->parteEfectiva = $parteEfectiva == null ? 0 : $parteEfectiva;
         $nuevoMovimiento->parteCrediticia = $parteCrediticia == null ? 0 : $parteCrediticia;
+        $nuevoMovimiento->total = $nuevoMovimiento->parteEfectiva + $nuevoMovimiento->parteCrediticia;
         $nuevoMovimiento->tipo = Movimiento::EGRESO;
         $nuevoMovimiento->empleado()->associate(auth()->user());
         $caja->saldo = $caja->saldo - $parteEfectiva;

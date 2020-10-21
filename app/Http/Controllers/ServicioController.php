@@ -83,9 +83,10 @@ class ServicioController extends Controller
     public function store(Request $request)
     {
         $request->validate($this->validationRules, $this->customMessages);
-        $this->servicios->store($request);
+        $servicio = $this->servicios->store($request);
         return response()->json([
             'msg' => '¡Servicio registrado!',
+            'data' => $servicio
         ]);
     }
 

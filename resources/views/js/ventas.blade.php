@@ -149,6 +149,7 @@
             if (data == null) {
                 data = table.row(row).data();
             }
+            $(row).addClass("selected");
             document.getElementById('id').value = data['id'];
             document.getElementById('cliente_id').value = data['cliente']['id'];
             document.getElementById('fechapago').value = data['fechapago'];
@@ -161,7 +162,6 @@
             cargarProductosVenta(data['productos']);
             clienteId = data['cliente']['id'];
             tablaClientes.columns(0).search(data['cliente']['id']).draw();
-            $(row).addClass("selected");
             document.getElementById('registrar').disabled = true;
             document.getElementById('registrarycobrar').disabled = true;
             document.getElementById('otherregister').disabled = true;

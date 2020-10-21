@@ -129,10 +129,12 @@
             });
         });
 
-        $('#recurso tbody').on('click', 'tr', function () {
+        function cargarServicio(row, data = null) {
             limpiarFormulario();
-            $(this).addClass('selected');
-            let data = table.row(this).data();
+            if (data == null) {
+                data = table.row(row).data();
+            }
+            $(row).addClass('selected');
             document.getElementById('id').value = data['id'];
             document.getElementById('servicio_id').value = data['tipo_servicio']['id'];
             document.getElementById('nombre').value = data['tipo_servicio']['nombre'];
@@ -146,6 +148,10 @@
             document.getElementById('verpagos').disabled = false;
             document.getElementById('eliminar').disabled = false;
             document.getElementById('modificar').disabled = false;
+        }
+
+        $('#recurso tbody').on('click', 'tr', function () {
+            cargarServicio(this);
         });
 
         let tipos_servicios = $('#tipo_servicio').DataTable($.extend({
@@ -204,14 +210,17 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            $.post('/api/servicios/crearypagar',
+            $.post('/api/servicios/crear',
                 {
                     servicio_id: $("#servicio_id").val(),
                     valor: $("#valor").cleanVal(),
                     fechapago: $("#fechapago").val(),
                 }, function (data) {
-                    swal("¡Operación exitosa!", data.msg, "success");
+                    toastr.success(data.msg);
+                    $("#modalMovimientos").modal('show');
                     limpiarFormulario();
+                    cargarServicio(null, data.data);
+                    cargarModalPagos(data.data.id);
                     table.ajax.reload();
                 }).fail(function (err) {
                 $.each(err.responseJSON.errors, function (i, error) {
@@ -254,26 +263,21 @@
         /*
         SECCION MODAL
         */
-
         let pagos_table;
-        $("#verpagos").click(function () {
 
-            $.ajax({
-                url: "/api/servicios/" + $("#id").val() + "/pagos",
-                type: "get",
-                success: function (data) {
-                    console.log(data);
-                },
-                error: function (err) {
-                    console.warn(err);
-                }
-            })
+        $("#verpagos").click(function () {
+            cargarModalPagos()
+        })
+
+        function cargarModalPagos(idDeServicio = null) {
+            darFormatoNumerico();
+            let id = idDeServicio == null ? $("#id").val() : idDeServicio;
             if ($.fn.DataTable.isDataTable('#pagos_table')) {
                 pagos_table.destroy();
             }
             pagos_table = $('#pagos_table').DataTable($.extend({
                 serverSide: true,
-                ajax: '/api/servicios/' + $("#id").val() + '/pagos',
+                ajax: '/api/servicios/' + id + '/pagos',
                 columns: [
                     {data: 'id', title: 'Id', className: "text-center"},
                     {data: 'empleado.name', title: 'Nombre del empleado', className: "text-center"},
@@ -293,7 +297,8 @@
                 ],
                 responsive: true
             }, options));
-        })
+        }
+
 
         $("#pagar").click(function () {
             $.ajaxSetup({

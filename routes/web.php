@@ -120,7 +120,6 @@ Route::prefix('api')->group(function () {
         Route::get('listar', 'VentaController@list')->middleware('auth');
         Route::get('{id}/cobros', 'VentaController@cobros')->middleware('auth');
         Route::post('crear', 'VentaController@store')->middleware('auth');
-        Route::post('crearycobrar', 'VentaController@storeCharge')->middleware('auth');
         Route::post('modificar', 'VentaController@update')->middleware('auth');
         Route::post('anular', 'VentaController@anular')->middleware('auth');
     });

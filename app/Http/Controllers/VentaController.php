@@ -93,25 +93,6 @@ class VentaController extends Controller
     }
 
     /**
-     * Registra una venta y la cobra en efectivo y en su totalidad.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function storeCharge(Request $request)
-    {
-        //Validación de la factibilidad de la transacción
-        $this->validarVenta($request, $this->validationRules);
-        // Ejecución de la transacción
-        $venta = $this->ventas->store($request);
-        $caja = Caja::findOrFail(1);
-        $this->cajas->cobrar($caja, $venta, $venta->saldo);
-        return response()->json([
-            'msg' => '¡Venta registrada y cobrada en efectivo!',
-        ]);
-    }
-
-    /**
      *
      * Valida una venta
      * @param Request $request

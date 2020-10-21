@@ -68,6 +68,13 @@
                                     msg = "Pago de nómina";
                                 }
                                 return '<i class="fas fa-hand-holding-usd"></i><br>' + msg;
+                            case "App\\Servicio":
+                                if (row["tipo"] == "Ingreso") {
+                                    msg = "Devolución de servicio";
+                                } else if (row["tipo"] == "Egreso") {
+                                    msg = "Pago de servicio";
+                                }
+                                return '<i class="fas fa-building"></i><br>' + msg;
                         }
                     }
                 },
@@ -90,7 +97,7 @@
                     className: "text-center",
                     render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
                 },
-                {data: 'created_at', title: 'Fecha de creación', className: "text-center"}
+                {data: 'created_at', title: 'Fecha de realización', className: "text-center"}
             ],
             order: [[0, "desc"]]
         }, options));
