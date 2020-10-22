@@ -15,9 +15,9 @@ class CreateProductoVentaTable extends Migration
     {
         Schema::create('producto_venta', function (Blueprint $table) {
             $table->unsignedBigInteger('venta_id');
-            $table->foreign('venta_id')->references('id')->on('ventas')->onDelete('cascade');
+            $table->foreign('venta_id')->references('id')->on('ventas')->onDelete('restrict');
             $table->unsignedBigInteger('producto_id');
-            $table->foreign('producto_id')->references('id')->on('productos')->onDelete('cascade');
+            $table->foreign('producto_id')->references('id')->on('productos')->onDelete('restrict');
             $table->unsignedBigInteger('cantidad')->nullable();
             $table->string('unidad')->nullable();
             $table->unsignedBigInteger('costo');

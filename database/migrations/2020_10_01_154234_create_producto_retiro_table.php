@@ -15,9 +15,9 @@ class CreateProductoRetiroTable extends Migration
     {
         Schema::create('producto_retiro', function (Blueprint $table) {
             $table->unsignedBigInteger('retiro_id');
-            $table->foreign('retiro_id')->references('id')->on('retiros')->onDelete('cascade');
+            $table->foreign('retiro_id')->references('id')->on('retiros')->onDelete('restrict');
             $table->unsignedBigInteger('producto_id');
-            $table->foreign('producto_id')->references('id')->on('productos')->onDelete('cascade');
+            $table->foreign('producto_id')->references('id')->on('productos')->onDelete('restrict');
             $table->unsignedBigInteger('cantidad')->nullable();
             $table->string('unidad')->nullable();
             $table->unsignedBigInteger('costo');

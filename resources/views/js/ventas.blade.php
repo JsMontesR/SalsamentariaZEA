@@ -98,8 +98,13 @@
 
             return $.extend({
                 'btnEliminar': "<input " + activated + " name='btn_eliminar_productos_carrito' type='button' value='Eliminar' class='btn btn-warning container-fluid'/>",
-                'cantidad': "<div class='input-group mb-1'><div class='input-group-prepend'><span class='input-group-text'>" + gadget + "</span></div><input " + cantidad + " id='cantidad_producto_carrito'" + data['id'] + " precio=" + data['precio'] + " class='money form-control' type='text' placeholder='" + tipoDeCantidad + "'/></div>",
-                'costoTotal': "<div class='input-group mb-1'><div class='input-group-prepend'><span class='input-group-text'>💵</span></div><input " + costo + " id='precio_producto_carrito" + data['id'] + "' " + " name='precio_producto_carrito" + data['id'] + "' class='money form-control' type='text' placeholder='Costo total'/></div>"
+                'cantidad': "<div class='input-group mb-1'><div class='input-group-prepend'><span class='input-group-text'>" +
+                    gadget + "</span></div><input " + cantidad + " id='cantidad_producto_carrito" + data['id'] +
+                    "' precio=" + data['precio'] + " class='money form-control' type='text' placeholder='" + tipoDeCantidad +
+                    "'/></div>",
+                'costoTotal': "<div class='input-group mb-1'><div class='input-group-prepend'><span class='input-group-text'>💵</span></div><input " + costo
+                    + " id='precio_producto_carrito" + data['id'] + "' " + " name='precio_producto_carrito" + data['id'] +
+                    "' class='money form-control' type='text' placeholder='Costo total'/></div>"
             }, data)
         }
 
@@ -452,7 +457,7 @@
             if (unidades == "gramos") {
                 precio = precio / 1000;
             }
-            let total = isNaN(parseInt(cantidad * precio, 10)) ? 0 : parseInt(cantidad * precio, 10)
+            let total = isNaN(parseInt(cantidad * precio, 10)) ? 0 : parseInt(cantidad * precio, 10);
             $("[name='" + idPrecio + "']").val(total).trigger('input');
             calcularTotal();
         });
@@ -468,7 +473,6 @@
                 precio = precio / 1000;
             }
             let total = isNaN(parseInt(cantidad * precio, 10)) ? 0 : parseInt(cantidad * precio, 10)
-            console.log(total);
             $("[name='" + idPrecio + "']").val(total).trigger('input');
             calcularTotal();
         });

@@ -15,9 +15,9 @@ class CreateEntradaProductoTable extends Migration
     {
         Schema::create('entrada_producto', function (Blueprint $table) {
             $table->unsignedBigInteger('entrada_id');
-            $table->foreign('entrada_id')->references('id')->on('entradas')->onDelete('cascade');
+            $table->foreign('entrada_id')->references('id')->on('entradas')->onDelete('restrict');
             $table->unsignedBigInteger('producto_id');
-            $table->foreign('producto_id')->references('id')->on('productos')->onDelete('cascade');
+            $table->foreign('producto_id')->references('id')->on('productos')->onDelete('restrict');
             $table->unsignedBigInteger('cantidad')->nullable();
             $table->string('unidad')->nullable();
             $table->unsignedBigInteger('costo');
