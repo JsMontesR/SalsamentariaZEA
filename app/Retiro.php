@@ -15,7 +15,7 @@ class Retiro extends Model
 
     public function productos()
     {
-        return $this->belongsToMany('App\Producto')->withPivot('cantidad', 'costo');;
+        return $this->belongsToMany('App\Producto')->withPivot('cantidad', 'costo', 'unidad');;
     }
 
     public function empleado()

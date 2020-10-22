@@ -133,7 +133,7 @@
                                class="btn btn-info container-fluid"/>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 py-2">
-                        <input id="vercobros" type="button" disabled value="Cobros"
+                        <input id="verpagos" type="button" disabled value="Pagos"
                                class="btn btn-success container-fluid" data-toggle="modal"
                                data-target="#modalMovimientos"/>
                     </div>

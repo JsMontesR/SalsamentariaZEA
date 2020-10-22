@@ -26,15 +26,17 @@ class Entradas
         $entrada->save();
         $costo = 0;
         foreach ($request->productos_entrada as $producto) {
-            $entrada->productos()->attach($producto["id"], ['cantidad' => $producto["cantidad"], 'costo' => $producto["costo"]]);
             $productoActual = Producto::findOrFail($producto["id"]);
-            $productoActual->costo = $producto["costo"] / $producto["cantidad"];
-            $precio = $productoActual->costo * (1 + $productoActual->utilidad / 100);
-            $productoActual->precio = $precio;
             if ($productoActual->categoria == ProductoTipo::UNITARIO) {
                 $productoActual->stock = $productoActual->stock + $producto["cantidad"];
+                $entrada->productos()->attach($producto["id"], ['cantidad' => $producto["cantidad"], 'costo' => $producto["costo"]]);
             } elseif ($productoActual->categoria == ProductoTipo::GRANEL) {
-                $productoActual->stock = $productoActual->stock + ($producto["cantidad"] * 1000);
+                if ($producto["unidad"] == ProductoTipo::GRAMOS) {
+                    $productoActual->stock = $productoActual->stock + $producto["cantidad"];
+                } else if ($producto["unidad"] == ProductoTipo::KILOGRAMOS) {
+                    $productoActual->stock = $productoActual->stock + ($producto["cantidad"] * 1000);
+                }
+                $entrada->productos()->attach($producto["id"], ['cantidad' => $producto["cantidad"], 'unidad' => $producto["unidad"], 'costo' => $producto["costo"]]);
             }
             $productoActual->save();
             $costo += $producto["costo"];
@@ -55,12 +57,17 @@ class Entradas
     public function getNoDescontable(Entrada $entrada)
     {
         foreach ($entrada->productos as $producto) {
-            $cantidad = $producto->pivot->cantidad;
-            if ($producto->categoria == ProductoTipo::GRANEL) {
-                $cantidad *= 1000;
+            $productoActual = Producto::findOrFail($producto["id"]);
+            $cantidad = $producto["cantidad"];
+            if ($productoActual->categoria == ProductoTipo::GRANEL) {
+                if ($producto["unidad"] == ProductoTipo::GRAMOS) {
+                    $cantidad = $cantidad;
+                } else if ($producto["unidad"] == ProductoTipo::KILOGRAMOS) {
+                    $cantidad = $cantidad * 1000;
+                }
             }
-            if ($producto->stock < $cantidad) {
-                return $producto->nombre . " (Con el id: " . $producto->id . ") faltan " . ($cantidad - $producto->stock) . " " . ($producto->categoria == ProductoTipo::GRANEL ? "Gramos " : "Unidades ");
+            if ($cantidad > $productoActual->stock) {
+                return $productoActual->nombre . " (Con el id: " . $productoActual->id . ") faltan " . ($cantidad - $productoActual->stock) . " " . ($productoActual->categoria == ProductoTipo::GRANEL ? "gramos " : "unidades ");
             }
         }
         return null;
@@ -76,8 +83,12 @@ class Entradas
         foreach ($entrada->productos as $producto) {
             if ($producto->categoria == ProductoTipo::UNITARIO) {
                 $producto->stock = $producto->stock - $producto->pivot->cantidad;
-            } elseif ($producto->categoria == ProductoTipo::GRANEL) {
-                $producto->stock = $producto->stock - ($producto->pivot->cantidad * 1000);
+            } else if ($producto->categoria == ProductoTipo::GRANEL) {
+                if ($producto->pivot->unidad == ProductoTipo::GRAMOS) {
+                    $producto->stock = $producto->stock - $producto->pivot->cantidad;
+                } else if ($producto->pivot->unidad == ProductoTipo::KILOGRAMOS) {
+                    $producto->stock = $producto->stock - ($producto->pivot->cantidad * 1000);
+                }
             }
             $producto->save();
         }
@@ -85,5 +96,4 @@ class Entradas
     }
 
 }
-
 ?>

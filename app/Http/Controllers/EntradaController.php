@@ -26,13 +26,11 @@ class EntradaController extends Controller
 
     public $validationRules = [
         'proveedor_id' => 'required|integer|min:1',
-        'fechapago' => 'required|date',
         'productos_entrada' => 'required',
     ];
 
     public $customMessages = [
         'productos_entrada.required' => 'La tabla de productos de la entrada debe contener productos',
-        'fechapago.required' => 'Por favor ingrese la fecha límite del pago',
         'proveedor_id.required' => 'Por favor seleccione un proveedor de la tabla'
     ];
 
@@ -55,7 +53,7 @@ class EntradaController extends Controller
 
     public function list()
     {
-        return datatables(Entrada::query()->with(['empleado', 'proveedor', 'productos']))
+        return datatables(Entrada::query()->select('entradas.*')->with(['empleado', 'proveedor', 'productos']))
             ->toJson();
     }
 

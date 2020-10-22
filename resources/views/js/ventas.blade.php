@@ -1,5 +1,6 @@
 <script>
     $(document).ready(function () {
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -57,7 +58,7 @@
             productos_carrito_table.row(row).remove().draw();
         }
 
-        function isFilaenCarrito(newRow) {
+        function isFilaEnCarrito(newRow) {
             let data = productos_carrito_table.rows().data();
             let existe = false;
             data.each(function (value) {
@@ -97,7 +98,7 @@
 
             return $.extend({
                 'btnEliminar': "<input " + activated + " name='btn_eliminar_productos_carrito' type='button' value='Eliminar' class='btn btn-warning container-fluid'/>",
-                'cantidad': "<div class='input-group mb-1'><div class='input-group-prepend'><span class='input-group-text'>" + gadget + "</span></div><input " + cantidad + " id='cantidad_producto_carrito" + data['id'] + "' name='cantidad_producto_carrito" + data['id'] + "' precio=" + data['precio'] + " class='money form-control' type='text' placeholder='" + tipoDeCantidad + "'/></div>",
+                'cantidad': "<div class='input-group mb-1'><div class='input-group-prepend'><span class='input-group-text'>" + gadget + "</span></div><input " + cantidad + " id='cantidad_producto_carrito'" + data['id'] + " precio=" + data['precio'] + " class='money form-control' type='text' placeholder='" + tipoDeCantidad + "'/></div>",
                 'costoTotal': "<div class='input-group mb-1'><div class='input-group-prepend'><span class='input-group-text'>💵</span></div><input " + costo + " id='precio_producto_carrito" + data['id'] + "' " + " name='precio_producto_carrito" + data['id'] + "' class='money form-control' type='text' placeholder='Costo total'/></div>"
             }, data)
         }
@@ -415,7 +416,7 @@
             let row = productos_table.row($(this).closest('tr'));
             let data = productos_table.row(row).data();
             let newRow = crearFilaDeCarrito(data);
-            if (!isFilaenCarrito(newRow)) {
+            if (!isFilaEnCarrito(newRow)) {
                 productos_carrito_table.row.add(newRow).draw();
                 productos_carrito_table.responsive.rebuild();
                 productos_carrito_table.responsive.recalc();
@@ -492,11 +493,6 @@
         });
 
         $("#registrarycobrar").click(function () {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
             $.post('/api/ventas/crear',
                 {
                     cliente_id: $("#cliente_id").val(),
@@ -712,10 +708,8 @@
             limpiarFormularioModal();
             $(this).addClass('selected');
             let data = cobros_table.row(this).data();
-            document.getElementById("imprimirpos").disabled = false;
             document.getElementById("anularcobro").disabled = false;
             document.getElementById("cobrar").disabled = true;
-            document.getElementById("otherpay").disabled = true;
             $("#idcobro").val(data["id"]);
             $("#parteEfectiva").val(data["parteEfectiva"]).trigger('input');
             $("#parteCrediticia").val(data["parteCrediticia"]).trigger('input');

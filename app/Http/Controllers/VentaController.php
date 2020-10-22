@@ -32,7 +32,6 @@ class VentaController extends Controller
 
     public $customMessages = [
         'productos_venta.required' => 'La tabla de productos de la venta debe contener productos',
-        'fechapago.required' => 'Por favor ingrese la fecha límite del pago',
         'cliente_id.required' => 'Por favor seleccione un cliente de la tabla'
     ];
 
