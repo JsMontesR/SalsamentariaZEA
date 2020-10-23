@@ -21,7 +21,7 @@ class Servicios
         $servicio = new Servicio();
         $servicio->tipoServicio()->associate(TipoServicio::findOrFail($request->servicio_id));
         $servicio->empleado()->associate(auth()->user());
-        $servicio->valor = $request->valor;
+        $servicio->valor = $request->valortotal;
         $servicio->saldo = $request->valor;
         $servicio->fechapago = $request->fechapago;
         $servicio->save();

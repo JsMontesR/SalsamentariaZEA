@@ -163,6 +163,7 @@
             document.getElementById('fechapagado').value = data['fechapagado'];
             $('[name="valor"]').val(data['valor']).trigger('input');
             $('[name="saldo"]').val(data['saldo']).trigger('input');
+            $('#parteEfectiva').val(data['saldo']).trigger('input');
             $('[name="valorcobrado"]').val(data['valor'] - data['saldo']).trigger('input');
             $('#productos_container').hide();
             cargarProductosVenta(data['productos']);
@@ -241,6 +242,18 @@
                     title: 'Valor de la venta',
                     className: "text-center",
                     render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
+                },
+                {
+                    data: 'lugarentrega',
+                    title: 'Lugar de entrega',
+                    className: "text-center",
+                    render: function (data) {
+                        if (data) {
+                            return '<a>' + data + '</a>';
+                        } else {
+                            return '<a>Sin lugar de entrega</a>';
+                        }
+                    }
                 },
                 {
                     data: 'created_at',
@@ -422,6 +435,7 @@
         $(document).on('click', '[name="btn_eliminar_productos_carrito"]', function () {
             let row = $(this).closest('tr');
             quitarProductoDelCarrito(row)
+            calcularTotal();
         });
 
         $(document).on('click', '[name="btn_agregar_productos_tabla"]', function () {
@@ -721,6 +735,7 @@
             let data = cobros_table.row(this).data();
             document.getElementById("anularcobro").disabled = false;
             document.getElementById("cobrar").disabled = true;
+            document.getElementById("imprimirpos").disabled = false;
             $("#idcobro").val(data["id"]);
             $("#parteEfectiva").val(data["parteEfectiva"]).trigger('input');
             $("#parteCrediticia").val(data["parteCrediticia"]).trigger('input');

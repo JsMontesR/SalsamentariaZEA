@@ -28,11 +28,12 @@
             document.getElementById('id').value = "";
             document.getElementById('servicio_id').value = "";
             document.getElementById('valorbase').value = "";
-            document.getElementById('valor').value = "";
+            document.getElementById('valortotal').value = "";
             document.getElementById('fechapago').value = "";
             document.getElementById('parteEfectiva').value = "";
             document.getElementById('parteCrediticia').value = "";
             document.getElementById('pagar').disabled = false;
+            $("#valortotal").prop("readonly", false);
             $('#recurso tr').removeClass("selected");
             document.getElementById('verpagos').disabled = true;
             document.getElementById('imprimir').disabled = true;
@@ -126,7 +127,7 @@
             if (title == "Id") {
                 id = 'id = "specific"'
             }
-            $(this).html(title + ' <input ' + id + 'type="text" class="col-search-input form-control-sm" placeholder="Buscar" />');
+            $(this).html(title + ' <input ' + id + 'type="text" class="col-search-input container-fluid" placeholder="Buscar" />');
         });
         table.columns().every(function (index) {
             var col = this;
@@ -136,6 +137,8 @@
                 }
             });
         });
+
+        let tipoServicioId;
 
         function cargarServicio(row, data = null) {
             limpiarFormulario();
@@ -147,12 +150,16 @@
             document.getElementById('servicio_id').value = data['tipo_servicio']['id'];
             document.getElementById('nombre').value = data['tipo_servicio']['nombre'];
             document.getElementById('fechapago').value = data['fechapago'];
+            $("#valortotal").prop("readonly", true);
             $('#di').val(data['tipo_servicio']['di']).trigger('input');
             $('#salario').val(data['tipo_servicio']['salario']).trigger('input');
             $('[name="valor"]').val(data['valor']).trigger('input');
+            $('#valortotal').val(data['valor']).trigger('input');
             $('[name="saldo"]').val(data['saldo']).trigger('input');
             $('[name="valorpagado"]').val(data['valor'] - data['saldo']).trigger('input');
             $('#valorbase').val(data['valor']).trigger('input');
+            tipoServicioId = data['tipo_servicio']['id'];
+            tipos_servicios.columns(0).search(tipoServicioId).draw();
             document.getElementById('registrar').disabled = true;
             document.getElementById('verpagos').disabled = false;
             document.getElementById('imprimir').disabled = false;
@@ -164,6 +171,7 @@
             cargarServicio(this);
         });
 
+        let tipoServicioSpecific;
         let tipos_servicios = $('#tipo_servicio').DataTable($.extend({
             serverSide: true,
             ajax: 'api/tiposervicios/listar',
@@ -176,20 +184,34 @@
                     className: "text-center",
                     render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
                 },
-            ]
+            ],
+            drawCallback: function () {
+                if (tipoServicioId) {
+                    tipoServicioSpecific = tipos_servicios.row({search: 'applied'});
+                    let foundId = tipoServicioSpecific.data().id;
+                    if (foundId == tipoServicioId) {
+                        cargarTipoServicio(tipoServicioSpecific.node());
+                    }
+                    tipoServicioId = null;
+                }
+            }
         }, options));
 
         $('#tipo_servicio tbody').on('click', 'tr', function () {
-            let data = tipos_servicios.row(this).data();
+            cargarTipoServicio(this);
+        });
+
+        function cargarTipoServicio(row) {
+            let data = tipos_servicios.row(row).data();
             $('#tipo_servicio tr').removeClass("selected");
-            $(this).addClass('selected');
+            $(row).addClass('selected');
             document.getElementById('servicio_id').value = data['id'];
             document.getElementById('nombre').value = data['nombre'];
             $('#di').val(data['di']).trigger('input');
             $('#valorbase').val(data['costo']).trigger('input');
-            $('#valor').val(data['costo']).trigger('input');
+            $('#valortotal').val(data['costo']).trigger('input');
             $('#parteEfectiva').val(data['salario']).trigger('input');
-        });
+        }
 
         $("#registrar").click(function () {
             $.ajaxSetup({
@@ -200,7 +222,7 @@
             $.post('/api/servicios/crear',
                 {
                     servicio_id: $("#servicio_id").val(),
-                    valor: $("#valor").cleanVal(),
+                    valortotal: $("#valortotal").cleanVal(),
                     fechapago: $("#fechapago").val(),
                 }, function (data) {
                     swal("¡Operación exitosa!", data.msg, "success");
@@ -223,7 +245,7 @@
             $.post('/api/servicios/crear',
                 {
                     servicio_id: $("#servicio_id").val(),
-                    valor: $("#valor").cleanVal(),
+                    valortotal: $("#valortotal").cleanVal(),
                     fechapago: $("#fechapago").val(),
                 }, function (data) {
                     toastr.success(data.msg);
@@ -254,7 +276,6 @@
                 {
                     id: $("#id").val(),
                     servicio_id: $("#servicio_id").val(),
-                    valor: $("#valor").cleanVal(),
                     fechapago: $("#fechapago").val(),
                 }, function (data) {
                     table.ajax.reload();

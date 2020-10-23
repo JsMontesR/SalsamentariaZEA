@@ -128,6 +128,7 @@ class VentaController extends Controller
 
         // Ejecución de la transacción
         $venta->fechapago = $request->fechapago;
+        $venta->lugarentrega = $request->lugarentrega;
         $venta->save();
 
         return response()->json([

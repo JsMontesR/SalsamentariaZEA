@@ -155,6 +155,7 @@
             document.getElementById('fechapagado').value = data['fechapagado'];
             $('[name="valor"]').val(data['valor']).trigger('input');
             $('[name="saldo"]').val(data['saldo']).trigger('input');
+            $('#parteEfectiva').val(data['saldo']).trigger('input');
             $('[name="valorpagado"]').val(data['valor'] - data['saldo']).trigger('input');
             $('#productos_container').hide();
             cargarProductosEntrada(data['productos']);
@@ -189,14 +190,12 @@
                     name: 'proveedor.nombre',
                     title: 'Nombre del proveedor',
                     className: "text-center",
-                    orderable: false
                 },
                 {
                     data: 'empleado.name',
                     name: 'empleado.name',
                     title: 'Nombre del empleado',
                     className: "text-center",
-                    orderable: false
                 },
                 {
                     data: 'fechapagado',
@@ -257,6 +256,7 @@
             }
             $(this).html(title + ' <input ' + id + 'type="text" class="col-search-input container-fluid" placeholder="Buscar" />');
         });
+
         table.columns().every(function (index) {
             var col = this;
             $('input', this.header()).on('keyup', function () {
@@ -408,6 +408,7 @@
         $(document).on('click', '[name="btn_eliminar_productos_entrada_table"]', function () {
             let row = $(this).closest('tr');
             quitarProductoDeEntrada(row)
+            calcularTotal();
         });
 
         $(document).on('click', '[name="btn_agregar_productos_tabla"]', function () {

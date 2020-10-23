@@ -29,14 +29,14 @@ class ServicioController extends Controller
 
     public $validationRules = [
         'servicio_id' => 'required|integer|min:1',
-        'valor' => 'required|integer|min:0',
+        'valortotal' => 'required|integer|min:0',
     ];
 
     public $validationIdRule = ['id' => 'required|integer|min:0'];
 
     public $customMessages = [
         'servicio_id.required' => 'Por favor seleccione un tipo de servicio de la tabla',
-        'valor.required' => 'Por favor especifique el total a pagar'
+        'valortotal.required' => 'Por favor especifique el total a pagar'
     ];
 
     /**

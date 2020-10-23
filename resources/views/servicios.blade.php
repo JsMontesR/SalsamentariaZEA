@@ -43,7 +43,7 @@
                         <label class="col-md-4 col-form-label text-md-left">Nombre del servicio:</label>
                         <div class="input-group col-md-8">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-fw fa-money-bill-alt"></i></span>
+                                <span class="input-group-text"><i class="fas fa-fw fa-building"></i></span>
                             </div>
                             <input id="nombre" readonly="readonly"
                                    class="number form-control"
@@ -68,9 +68,9 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">$</span>
                             </div>
-                            <input id="valor"
+                            <input id="valortotal"
                                    class="number form-control"
-                                   name="valor" required="required">
+                                   name="valortotal" required="required">
                         </div>
                     </div>
                     <div class="form-group row">
