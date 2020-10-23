@@ -55,7 +55,7 @@
                 table.ajax.reload();
             }).fail(function (err) {
                 $.each(err.responseJSON.errors, function (i, error) {
-                    toastr.error(error[0]);
+                    swal("Ha ocurrido un error", error[0], "error");
                 });
                 console.error(err);
             })
@@ -72,7 +72,7 @@
                 table.ajax.reload();
             }).fail(function (err) {
                 $.each(err.responseJSON.errors, function (i, error) {
-                    toastr.error(error[0]);
+                    swal("Ha ocurrido un error", error[0], "error");
                 });
                 console.error(err);
             })

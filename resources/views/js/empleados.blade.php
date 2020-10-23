@@ -21,7 +21,7 @@
             ajax: 'api/empleados/listar',
             columns: [
                 {data: 'id', name: 'users.id', title: 'Id', className: "text-center"},
-                {data: 'name', name: 'users.name', title: 'Nombre'},
+                {data: 'name', name: 'users.name', title: 'Nombre', className: "text-center"},
                 {
                     data: 'di',
                     name: 'users.di',
@@ -50,7 +50,12 @@
                 },
                 {data: 'rol.nombre', name: 'rol.nombre', title: 'Rol', className: "text-center"},
                 {data: 'created_at', name: 'users.created_at', title: 'Fecha de creación', className: "text-center"},
-                {data: 'updated_at', name: 'users.updated_at', title: 'Fecha de actualización', className: "text-center"},
+                {
+                    data: 'updated_at',
+                    name: 'users.updated_at',
+                    title: 'Fecha de actualización',
+                    className: "text-center"
+                },
             ]
         }, options));
 
@@ -77,7 +82,7 @@
                 table.ajax.reload();
             }).fail(function (err) {
                 $.each(err.responseJSON.errors, function (i, error) {
-                    toastr.error(error[0]);
+                    swal("Ha ocurrido un error", error[0], "error");
                 });
                 console.error(err);
             })
@@ -94,7 +99,7 @@
                 table.ajax.reload();
             }).fail(function (err) {
                 $.each(err.responseJSON.errors, function (i, error) {
-                    toastr.error(error[0]);
+                    swal("Ha ocurrido un error", error[0], "error");
                 });
                 console.error(err);
             })

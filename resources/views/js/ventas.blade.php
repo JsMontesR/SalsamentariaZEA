@@ -221,7 +221,14 @@
                     data: 'fechapago',
                     name: 'ventas.fechapago',
                     title: 'Fecha límite de pago',
-                    className: "text-center"
+                    className: "text-center",
+                    render: function (data) {
+                        if (data) {
+                            return '<a>' + data + '</a>';
+                        } else {
+                            return '<a class="text-warning">Sin fecha límite de pago</a>';
+                        }
+                    }
                 },
                 {
                     data: 'saldo',
@@ -254,7 +261,7 @@
             if (title == "Id") {
                 id = 'id = "specific"'
             }
-            $(this).html(title + ' <input ' + id + 'type="text" class="col-search-input form-control-sm" placeholder="Buscar" />');
+            $(this).html(title + ' <input ' + id + 'type="text" class="col-search-input container-fluid" placeholder="Buscar" />');
         });
         table.columns().every(function (index) {
             var col = this;

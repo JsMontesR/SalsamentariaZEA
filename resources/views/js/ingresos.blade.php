@@ -176,7 +176,7 @@
             if (title == "Id") {
                 id = 'id = "specific"'
             }
-            $(this).html(title + ' <input ' + id + 'type="text" class="col-search-input form-control-sm" placeholder="Buscar" />');
+            $(this).html(title + ' <input ' + id + 'type="text" class="col-search-input container-fluid" placeholder="Buscar" />');
         });
         table.columns().every(function (index) {
             var col = this;
