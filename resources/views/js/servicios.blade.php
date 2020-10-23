@@ -13,17 +13,6 @@
             }
         });
 
-        $.ajax({
-            url: "/api/servicios/listar",
-            type: "get",
-            success: function (data) {
-                console.log(data);
-            },
-            error: function (err) {
-                console.warn(err);
-            }
-        })
-
         function limpiarFormulario() {
             document.getElementById('id').value = "";
             document.getElementById('servicio_id').value = "";
@@ -156,6 +145,7 @@
             $('[name="valor"]').val(data['valor']).trigger('input');
             $('#valortotal').val(data['valor']).trigger('input');
             $('[name="saldo"]').val(data['saldo']).trigger('input');
+            $('[name="parteEfectiva"]').val(data['saldo']).trigger('input');
             $('[name="valorpagado"]').val(data['valor'] - data['saldo']).trigger('input');
             $('#valorbase').val(data['valor']).trigger('input');
             tipoServicioId = data['tipo_servicio']['id'];
