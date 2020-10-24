@@ -93,7 +93,6 @@
                         <div class="dropdown-menu" x-placement="top-start"
                              style="position: absolute; transform: translate3d(99px, -2px, 0px); top: 0px; left: 0px; will-change: transform;">
                             <button id="registrarypagar" class="dropdown-item row-cursor-hand">Registrar y pagar</button>
-                            <div class="dropdown-divider"></div>
                         </div>
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 py-2">
@@ -201,7 +200,7 @@
                                 </div>
                                 <input id="parteEfectiva"
                                        class="form-control number"
-                                       name="parteEfectiva" required="required">
+                                       name="parteEfectiva">
                             </div>
                         </div>
 

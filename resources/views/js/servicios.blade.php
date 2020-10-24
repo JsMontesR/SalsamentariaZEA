@@ -38,7 +38,7 @@
                 {data: 'id', name: 'servicios.id', title: 'Id', className: "text-center"},
                 {
                     data: 'tipo_servicio.id',
-                    name: 'tipo_servicio.id',
+                    name: 'tipo_servicios.id',
                     title: 'Id del tipo de servicio',
                     visible: false,
                     searchable: false
@@ -144,10 +144,9 @@
             $('#salario').val(data['tipo_servicio']['salario']).trigger('input');
             $('[name="valor"]').val(data['valor']).trigger('input');
             $('#valortotal').val(data['valor']).trigger('input');
+            $('#parteEfectiva').val(data['saldo']).trigger('input');
             $('[name="saldo"]').val(data['saldo']).trigger('input');
-            $('[name="parteEfectiva"]').val(data['saldo']).trigger('input');
             $('[name="valorpagado"]').val(data['valor'] - data['saldo']).trigger('input');
-            $('#valorbase').val(data['valor']).trigger('input');
             tipoServicioId = data['tipo_servicio']['id'];
             tipos_servicios.columns(0).search(tipoServicioId).draw();
             document.getElementById('registrar').disabled = true;
@@ -204,11 +203,6 @@
         }
 
         $("#registrar").click(function () {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
             $.post('/api/servicios/crear',
                 {
                     servicio_id: $("#servicio_id").val(),
@@ -227,11 +221,6 @@
         });
 
         $("#registrarypagar").click(function () {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
             $.post('/api/servicios/crear',
                 {
                     servicio_id: $("#servicio_id").val(),
@@ -342,7 +331,7 @@
                         className: "text-center",
                         render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
                     },
-                    {data: 'created_at', title: 'Fecha de creación', className: "text-center"}
+                    {data: 'created_at', title: 'Fecha de realización', className: "text-center"}
                 ],
                 responsive: true
             }, options));
@@ -350,11 +339,6 @@
 
 
         $("#pagar").click(function () {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
             $.post('/api/movimientos/generarPago',
                 {
                     id: $("#id").val(),
@@ -375,11 +359,6 @@
         })
 
         $("#anularpago").click(function () {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
             $.post('/api/movimientos/anularPago',
                 {
                     id: $("#idpago").val(),
