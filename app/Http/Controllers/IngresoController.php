@@ -98,7 +98,7 @@ class IngresoController extends Controller
         // Ejecución de la transacción
 
         $movimiento = $ingreso->movimientos()->first();
-        $this->cajas->anularPago($movimiento);
+        $this->cajas->anularCobro($movimiento);
         $this->ingresos->anular($ingreso);
         return response()->json([
             'msg' => '¡Ingreso anulado!',
