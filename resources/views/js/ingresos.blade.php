@@ -1,14 +1,15 @@
 <script>
     $(document).ready(function () {
-        let btnAgregar = "<input name='btn_agregar_productos_tabla' type='button' value='Agregar' class='btn btn-success container-fluid'/>";
-
-        darFormatoNumerico();
 
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+
+        let btnAgregar = "<input name='btn_agregar_productos_tabla' type='button' value='Agregar' class='btn btn-success container-fluid'/>";
+
+        darFormatoNumerico();
 
         function darFormatoNumerico() {
             $('.money').mask('#.##0', {reverse: true});
@@ -21,7 +22,8 @@
                 let id = data['id'];
                 arr.push({
                     id: id,
-                    cantidad: $('#cantidad_producto_tabla_ingreso' + id).cleanVal()
+                    cantidad: $('#cantidad_producto_tabla_ingreso' + id).cleanVal(),
+                    unidad: $('#unidades' + id).val()
                 });
             });
             return arr;
@@ -61,26 +63,32 @@
 
         function crearFilaTablaIngreso(data) {
             let tipoDeCantidad = "";
-            let emoji = "";
+            let gadget = "";
             let activated = "";
             let cantidad = "";
             let costo = "";
+            let unidad = "";
 
             if (data['categoria'] == "Unitario") {
                 tipoDeCantidad = "# de unidades";
-                emoji = "📦";
+                gadget = "📦";
             } else {
-                tipoDeCantidad = "# de kilos";
-                emoji = "🌾";
+                tipoDeCantidad = "";
+                gadget = '<select onchange="" ' + unidad + ' id= "unidades' + data['id'] + '"><option value="gramos">g</option><option value="kilogramos">Kg</option></select>';
             }
+
             if (data['pivot'] != undefined) {
                 cantidad = "readonly value=" + data['pivot']['cantidad']
                 costo = "readonly value=" + data['pivot']['costo'];
                 activated = "disabled";
+                if (data['categoria'] == "Granel") {
+                    gadget = gadget.replace(data['pivot']['unidad'] + '"', data['pivot']['unidad'] + '" selected');
+                }
             }
             return $.extend({
                 'btnEliminar': "<input " + activated + " name='btn_eliminar_productos_tabla_ingreso' type='button' value='Eliminar' class='btn btn-warning container-fluid'/>",
-                'cantidad': "<div class='input-group mb-1'><div class='input-group-prepend'><span class='input-group-text'>" + emoji + "</span></div><input " + cantidad + " id='cantidad_producto_tabla_ingreso" + data['id'] + "' name='cantidad_producto_tabla_ingreso" + data['id'] + "' precio=" + data['precio'] + " class='money form-control' type='text' placeholder='" + tipoDeCantidad + "'/></div>"
+                'cantidad': "<div class='input-group mb-1'><div class='input-group-prepend'><span class='input-group-text'>" + gadget + "</span></div><input " + cantidad + " id='cantidad_producto_tabla_ingreso" + data['id'] + "' name='cantidad_producto_tabla_ingreso" + data['id'] + "' precio=" + data['precio'] + " class='money form-control' type='text' placeholder='" + tipoDeCantidad + "'/></div>",
+
             }, data)
         }
 

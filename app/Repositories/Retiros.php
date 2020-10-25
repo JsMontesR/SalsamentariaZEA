@@ -5,8 +5,6 @@ namespace App\Repositories;
 use App\Producto;
 use App\ProductoTipo;
 use App\Retiro;
-use App\User;
-use App\Venta;
 use Illuminate\Http\Request;
 
 class Retiros
@@ -26,14 +24,19 @@ class Retiros
         $costoRetiro = 0;
         foreach ($request->productos_retiro as $producto) {
             $productoActual = Producto::findOrFail($producto["id"]);
-            $retiro->productos()->attach($producto["id"], ['cantidad' => $producto["cantidad"], 'costo' => $productoActual->costo]);
             if ($productoActual->categoria == ProductoTipo::UNITARIO) {
                 $productoActual->stock = $productoActual->stock - $producto["cantidad"];
+                $retiro->productos()->attach($producto["id"], ['cantidad' => $producto["cantidad"], 'costo' => $producto["costo"]]);
             } elseif ($productoActual->categoria == ProductoTipo::GRANEL) {
-                $productoActual->stock = $productoActual->stock - ($producto["cantidad"] * 1000);
+                if ($producto["unidad"] == ProductoTipo::GRAMOS) {
+                    $productoActual->stock = $productoActual->stock - $producto["cantidad"];
+                } else if ($producto["unidad"] == ProductoTipo::KILOGRAMOS) {
+                    $productoActual->stock = $productoActual->stock - ($producto["cantidad"] * 1000);
+                }
+                $retiro->productos()->attach($producto["id"], ['cantidad' => $producto["cantidad"], 'unidad' => $producto["unidad"], 'costo' => $producto["costo"]]);
             }
-            $costoRetiro += $productoActual->costo * $producto["cantidad"];
             $productoActual->save();
+            $costo += $producto["costo"];
         }
         $retiro->costo = $costoRetiro;
         $retiro->valor = $request->valor;
@@ -53,10 +56,14 @@ class Retiros
             $productoActual = Producto::findOrFail($producto["id"]);
             $cantidad = $producto["cantidad"];
             if ($productoActual->categoria == ProductoTipo::GRANEL) {
-                $cantidad *= 1000;
+                if ($producto["unidad"] == ProductoTipo::GRAMOS) {
+                    $cantidad = $cantidad;
+                } else if ($producto["unidad"] == ProductoTipo::KILOGRAMOS) {
+                    $cantidad = $cantidad * 1000;
+                }
             }
             if ($cantidad > $productoActual->stock) {
-                return $productoActual->nombre . " (Con el id: " . $productoActual->id . ") faltan " . ($cantidad - $productoActual->stock) . " " . ($productoActual->categoria == ProductoTipo::GRANEL ? "Gramos " : "Unidades ");
+                return $productoActual->nombre . " (Con el id: " . $productoActual->id . ") faltan " . ($cantidad - $productoActual->stock) . " " . ($productoActual->categoria == ProductoTipo::GRANEL ? "gramos " : "unidades ");
             }
         }
         return null;
@@ -72,8 +79,12 @@ class Retiros
         foreach ($retiro->productos as $producto) {
             if ($producto->categoria == ProductoTipo::UNITARIO) {
                 $producto->stock = $producto->stock + $producto->pivot->cantidad;
-            } elseif ($producto->categoria == ProductoTipo::GRANEL) {
-                $producto->stock = $producto->stock + ($producto->pivot->cantidad * 1000);
+            } else if ($producto->categoria == ProductoTipo::GRANEL) {
+                if ($producto->pivot->unidad == ProductoTipo::GRAMOS) {
+                    $producto->stock = $producto->stock + $producto->pivot->cantidad;
+                } else if ($producto->pivot->unidad == ProductoTipo::KILOGRAMOS) {
+                    $producto->stock = $producto->stock + ($producto->pivot->cantidad * 1000);
+                }
             }
             $producto->save();
         }

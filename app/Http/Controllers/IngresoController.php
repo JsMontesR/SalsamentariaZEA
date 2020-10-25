@@ -70,7 +70,7 @@ class IngresoController extends Controller
         // Ejecución de la transacción
         $caja = Caja::findOrFail(1);
         $ingreso = $this->ingresos->store($request);
-        $this->cajas->cobrar($caja, $ingreso, $request->valor);
+        $this->cajas->cobrar($caja, $ingreso, $request->valor, $request->valor);
         return response()->json([
             'msg' => '¡Ingreso realizado!',
         ]);
