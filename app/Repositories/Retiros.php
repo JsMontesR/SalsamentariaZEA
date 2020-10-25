@@ -21,24 +21,27 @@ class Retiros
         $retiro = new Retiro();
         $retiro->empleado()->associate(auth()->user());
         $retiro->save();
-        $costoRetiro = 0;
+        $costo = 0;
         foreach ($request->productos_retiro as $producto) {
             $productoActual = Producto::findOrFail($producto["id"]);
             if ($productoActual->categoria == ProductoTipo::UNITARIO) {
                 $productoActual->stock = $productoActual->stock - $producto["cantidad"];
-                $retiro->productos()->attach($producto["id"], ['cantidad' => $producto["cantidad"], 'costo' => $producto["costo"]]);
+                $subCosto = $producto["cantidad"] * $productoActual->costo;
+                $retiro->productos()->attach($producto["id"], ['cantidad' => $producto["cantidad"], 'costo' => $subCosto]);
             } elseif ($productoActual->categoria == ProductoTipo::GRANEL) {
                 if ($producto["unidad"] == ProductoTipo::GRAMOS) {
                     $productoActual->stock = $productoActual->stock - $producto["cantidad"];
+                    $subCosto = $producto["cantidad"] * ($productoActual->costo / 1000);
                 } else if ($producto["unidad"] == ProductoTipo::KILOGRAMOS) {
                     $productoActual->stock = $productoActual->stock - ($producto["cantidad"] * 1000);
+                    $subCosto = $producto["cantidad"] * $productoActual->costo;
                 }
-                $retiro->productos()->attach($producto["id"], ['cantidad' => $producto["cantidad"], 'unidad' => $producto["unidad"], 'costo' => $producto["costo"]]);
+                $retiro->productos()->attach($producto["id"], ['cantidad' => $producto["cantidad"], 'unidad' => $producto["unidad"], 'costo' => $subCosto]);
             }
             $productoActual->save();
-            $costo += $producto["costo"];
+            $costo += $subCosto;
         }
-        $retiro->costo = $costoRetiro;
+        $retiro->costo = $costo;
         $retiro->valor = $request->valor;
         $retiro->save();
         return $retiro;
