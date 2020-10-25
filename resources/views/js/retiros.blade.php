@@ -155,7 +155,6 @@
                     name: 'empleado.name',
                     title: 'Empleado que retiró',
                     className: "text-center",
-                    orderable: false
                 },
                 {
                     data: 'valor',

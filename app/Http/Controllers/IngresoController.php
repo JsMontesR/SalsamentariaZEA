@@ -47,7 +47,7 @@ class IngresoController extends Controller
 
     public function list()
     {
-        return datatables(Ingreso::query()->with(['empleado', 'productos']))
+        return datatables(Ingreso::query()->select('ingresos.*')->with(['empleado', 'productos']))
             ->toJson();
     }
 

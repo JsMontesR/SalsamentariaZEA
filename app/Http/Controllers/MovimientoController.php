@@ -239,7 +239,7 @@ class MovimientoController extends Controller
      */
     public function list()
     {
-        return datatables()->eloquent(Movimiento::query()->with('empleado')->withTrashed()
+        return datatables()->eloquent(Movimiento::query()->select('movimientos.*')->with('empleado')->withTrashed()
         )->addColumn('valor', function (Movimiento $movimiento) {
             return $movimiento->movimientoable->valor;
         })->filterColumn('valor', function ($query, $keyword) {

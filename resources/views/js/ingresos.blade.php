@@ -156,7 +156,6 @@
                     name: 'empleado.name',
                     title: 'Empleado que ingresó',
                     className: "text-center",
-                    orderable: false
                 },
                 {
                     data: 'valor',

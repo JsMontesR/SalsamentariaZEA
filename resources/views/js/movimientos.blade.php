@@ -37,7 +37,7 @@
                                 if (row["tipo"] == "Ingreso") {
                                     msg = "Devolución de entrada";
                                 } else if (row["tipo"] == "Egreso") {
-                                    msg = "Entrada a inventario";
+                                    msg = "Pago de entrada a inventario";
                                 }
                                 return '<i class="fas fa-dolly"></i><br>' + msg;
                             case "App\\Retiro":
@@ -56,7 +56,7 @@
                                 return '<i class="fas fa-sign-in-alt"></i><br>' + msg;
                             case "App\\Venta":
                                 if (row["tipo"] == "Ingreso") {
-                                    msg = "Venta";
+                                    msg = "Pago de venta";
                                 } else if (row["tipo"] == "Egreso") {
                                     msg = "Devolución de venta";
                                 }

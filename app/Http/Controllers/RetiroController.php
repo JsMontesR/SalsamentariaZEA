@@ -47,7 +47,7 @@ class RetiroController extends Controller
 
     public function list()
     {
-        return datatables(Retiro::query()->with(['empleado', 'productos']))
+        return datatables(Retiro::query()->select('retiros.*')->with(['empleado', 'productos']))
             ->toJson();
     }
 
