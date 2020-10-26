@@ -46,9 +46,21 @@
                     className: "text-center"
                 },
                 {
+                    data: 'abonado',
+                    title: 'Valor pagado',
+                    className: "text-center",
+                    render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
+                },
+                {
+                    data: 'saldo',
+                    title: 'Saldo por pagar',
+                    className: "text-center",
+                    render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
+                },
+                {
                     data: 'valor',
                     name: 'nominas.valor',
-                    title: 'Valor',
+                    title: 'Valor de la nómina',
                     render: $.fn.dataTable.render.number(',', '.', 0, '$ '),
                     className: "text-center"
                 },

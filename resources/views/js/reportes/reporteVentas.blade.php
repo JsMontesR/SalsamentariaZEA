@@ -62,6 +62,12 @@
                         className: "text-center"
                     },
                     {
+                        data: 'abonado',
+                        title: 'Valor cobrado',
+                        className: "text-center",
+                        render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
+                    },
+                    {
                         data: 'saldo',
                         title: 'Saldo por cobrar',
                         className: "text-center",
@@ -100,21 +106,38 @@
         $('#cierres tbody').on('click', 'tr', function () {
             $('#cierres tr').removeClass("selected");
             $(this).addClass("selected");
-            let data = tablaCierres.row(row).data();
-            $('cierre_id').val(data.id);
+            let data = tablaCierres.row(this).data();
+            console.log(data.id);
+            $('#cierre_id').val(data.id);
+            limpiarFiltroFechas();
             aplicarFiltros();
         });
 
-        $('[name="filtro"]').change(function () {
+        $('#fechaFin,#fechaInicio').change(function () {
+            limpiarFiltroCierres();
             aplicarFiltros();
         });
 
         $('#limpiar').click(function () {
-            $('[name="filtro"]').val("");
-            $('#cierres tr').removeClass("selected");
+            limpiarFiltroCierres();
+            limpiarFiltroFechas();
             llenarTabla();
         });
 
+        $('#verimpresion').click(function () {
+            $("#form").attr('action', "{{ route('listarventas') }}");
+            $("#form").submit();
+        });
+
+        function limpiarFiltroCierres() {
+            $('#cierre_id').val("");
+            $('#cierres tr').removeClass("selected");
+        }
+
+        function limpiarFiltroFechas() {
+            $('#fechaInicio').val("");
+            $('#fechaFin').val("");
+        }
 
         function aplicarFiltros() {
             llenarTabla($("#fechaInicio").val(), $("#fechaFin").val(), $("#cierre_id").val());

@@ -22,6 +22,7 @@ class Nominas
         $nomina->empleado()->associate(User::findOrFail($request->empleado_id));
         $nomina->valor = $request->valor;
         $nomina->saldo = $request->valor;
+        $nomina->abonado = 0;
         $nomina->fechapago = $request->fechapago;
         $nomina->save();
         $nomina->refresh();

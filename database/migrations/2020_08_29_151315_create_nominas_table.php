@@ -19,6 +19,7 @@ class CreateNominasTable extends Migration
             $table->date('fechapagado')->nullable();
             $table->unsignedBigInteger('valor')->nullable();
             $table->unsignedBigInteger('saldo')->nullable();
+            $table->unsignedBigInteger('abonado')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -83,11 +83,18 @@
                     }
                 },
                 {
+                    data: 'abonado',
+                    title: 'Valor cobrado',
+                    className: "text-center",
+                    render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
+                },
+                {
                     data: 'saldo',
                     title: 'Saldo por cobrar',
                     className: "text-center",
                     render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
                 },
+
                 {
                     data: 'valor',
                     name: 'servicios.valor',

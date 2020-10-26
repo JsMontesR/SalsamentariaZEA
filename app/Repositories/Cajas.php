@@ -47,7 +47,7 @@ class Cajas
             $this->actualizarSaldo($movimientoable, $nuevoMovimiento);
             if ($movimientoable->saldo == 0) {
                 $movimientoable->fechapagado = now();
-            };
+            }
             $movimientoable->save();
             $movimientoable->refresh();
         }
@@ -147,6 +147,7 @@ class Cajas
                 $movimientoable->saldo += $nuevoMovimiento->parteEfectiva + $nuevoMovimiento->parteCrediticia;
             }
         }
+        $movimientoable->abonado = $movimientoable->valor - $movimientoable->saldo;
     }
 
     public function anularTodosLosPagos($movimientoable)
@@ -219,6 +220,7 @@ class Cajas
     {
         $nuevoCierre = new Cierre();
         $nuevoCierre->caja()->associate($caja);
+        $nuevoCierre->cierreAnterior()->associate(Cierre::latest()->first());
         $nuevoCierre->save();
     }
 

@@ -44,6 +44,7 @@ class Ventas
         }
         $venta->valor = $costo;
         $venta->saldo = $costo;
+        $venta->abonado = 0;
         $venta->save();
         $venta->refresh();
         return $venta;

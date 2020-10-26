@@ -20,6 +20,7 @@ class CreateVentasTable extends Migration
             $table->string('lugarentrega')->nullable();
             $table->unsignedBigInteger('valor')->nullable();
             $table->unsignedBigInteger('saldo')->nullable();
+            $table->unsignedBigInteger('abonado')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

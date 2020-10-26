@@ -23,4 +23,9 @@ class Cierre extends Model
         return $this->belongsTo('App\Caja', 'caja_id');
     }
 
+    public function cierreAnterior()
+    {
+        return $this->belongsTo('App\Cierre', 'cierre_id');
+    }
+
 }

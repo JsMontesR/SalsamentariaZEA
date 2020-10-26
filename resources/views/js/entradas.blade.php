@@ -224,6 +224,12 @@
                     }
                 },
                 {
+                    data: 'abonado',
+                    title: 'Valor pagado',
+                    className: "text-center",
+                    render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
+                },
+                {
                     data: 'saldo',
                     title: 'Saldo por pagar',
                     className: "text-center",

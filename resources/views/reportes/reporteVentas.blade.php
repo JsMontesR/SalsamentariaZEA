@@ -11,18 +11,18 @@
                 <h6 class="m-0 font-weight-bold text-primary">Filtros</h6>
             </div>
             <div class="card-body">
-                <form id="form1" name="form1">
+                <form id="form" name="form">
                     <div class="form-group row">
                         <label class="col-md-4 col-form-label text-md-left">Fecha inicio:</label>
                         <div class="col-md-8">
-                            <input id="fechaInicio" type="date" class="form-control" value="{{old('fechaInicio')}}"
+                            <input id="fechaInicio" type="date" class="form-control"
                                    name="filtro" required autocomplete="fechaInicio">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-4 col-form-label text-md-left">Fecha fin:</label>
                         <div class="col-md-8">
-                            <input id="fechaFin" type="date" class="form-control" value="{{old('fechaFin')}}"
+                            <input id="fechaFin" type="date" class="form-control"
                                    name="filtro" required autocomplete="fechaFin">
                         </div>
                     </div>

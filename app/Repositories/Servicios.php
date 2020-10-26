@@ -23,6 +23,7 @@ class Servicios
         $servicio->empleado()->associate(auth()->user());
         $servicio->valor = $request->valortotal;
         $servicio->saldo = $request->valortotal;
+        $servicio->abonado = 0;
         $servicio->fechapago = $request->fechapago;
         $servicio->save();
         $servicio->refresh();
