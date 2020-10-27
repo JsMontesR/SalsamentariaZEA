@@ -16,19 +16,20 @@
                         <label class="col-md-4 col-form-label text-md-left">Fecha inicio:</label>
                         <div class="col-md-8">
                             <input id="fechaInicio" type="date" class="form-control"
-                                   name="filtro" required autocomplete="fechaInicio">
+                                   name="fechaInicio" required autocomplete="fechaInicio">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-4 col-form-label text-md-left">Fecha fin:</label>
                         <div class="col-md-8">
                             <input id="fechaFin" type="date" class="form-control"
-                                   name="filtro" required autocomplete="fechaFin">
+                                   name="fechaFin" required autocomplete="fechaFin">
                         </div>
                     </div>
                     <hr>
                     <div class="form-group row">
-                        <label class="col-md-4 col-form-label text-md-left">Por cierre de caja (número de cierre):</label>
+                        <label class="col-md-4 col-form-label text-md-left">Por cierre de caja (número de
+                            cierre):</label>
                         <div class="col-md-8">
                             <input id="cierre_id" readonly
                                    class="form-control"
@@ -47,18 +48,18 @@
                             </div>
                         </div>
                     </div>
-                    <hr>
-                    <div class="row btn-toolbar justify-content-center">
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 py-2">
-                            <input id="verimpresion" type="button" value="Ver impresión"
-                                   class="btn btn-primary text-light container-fluid"/>
-                        </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 py-2">
-                            <input id="limpiar" type="button" value="Limpiar filtros"
-                                   class="btn btn-light container-fluid"/>
-                        </div>
-                    </div>
                 </form>
+                <hr>
+                <div class="row btn-toolbar justify-content-center">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 py-2">
+                        <input id="verimpresion" type="button" value="Ver impresión"
+                               class="btn btn-primary text-light container-fluid"/>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 py-2">
+                        <input id="limpiar" type="button" value="Limpiar filtros"
+                               class="btn btn-light container-fluid"/>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="card shadow mb-4">

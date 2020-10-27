@@ -156,6 +156,7 @@ Route::prefix('api')->group(function () {
 
     Route::prefix('reportes')->group(function () {
         Route::get('/listarventas', 'ReportesController@listarVentas')->name('listarventas')->middleware('auth');
+        Route::get('/listarProductos', 'ReportesController@listarProductos')->name('listarproductos')->middleware('auth');
     });
 
     /*

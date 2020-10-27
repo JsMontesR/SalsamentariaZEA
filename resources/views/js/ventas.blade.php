@@ -104,7 +104,7 @@
                     "'/></div>",
                 'costoTotal': "<div class='input-group mb-1'><div class='input-group-prepend'><span class='input-group-text'>💵</span></div><input " + costo
                     + " id='precio_producto_carrito" + data['id'] + "' " + " name='precio_producto_carrito" + data['id'] +
-                    "' class='money form-control' type='text' placeholder='Costo total'/></div>"
+                    "' class='money form-control' type='text' placeholder='Valor total'/></div>"
             }, data)
         }
 
@@ -246,6 +246,18 @@
                 {
                     data: 'valor',
                     title: 'Valor de la venta',
+                    className: "text-center",
+                    render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
+                },
+                {
+                    data: 'costo',
+                    title: 'Costo de la venta',
+                    className: "text-center",
+                    render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
+                },
+                {
+                    data: 'utilidad',
+                    title: 'Utilidad de la venta',
                     className: "text-center",
                     render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
                 },
@@ -400,7 +412,7 @@
                 },
                 {
                     data: 'costoTotal',
-                    title: 'Costo total',
+                    title: 'Valor total',
                     className: "text-center",
                     render: function (data, type, row, meta) {
                         return renderChange(data, type, row, meta);

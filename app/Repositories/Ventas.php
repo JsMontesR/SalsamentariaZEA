@@ -25,25 +25,31 @@ class Ventas
         $venta->cliente()->associate(User::findOrFail($request->cliente_id));
         $venta->empleado()->associate(auth()->user());
         $venta->save();
-        $costo = 0;
+        $valorTotal = 0;
+        $costoTotal = 0;
         foreach ($request->productos_venta as $producto) {
             $productoActual = Producto::findOrFail($producto["id"]);
             if ($productoActual->categoria == ProductoTipo::UNITARIO) {
                 $productoActual->stock = $productoActual->stock - $producto["cantidad"];
                 $venta->productos()->attach($producto["id"], ['cantidad' => $producto["cantidad"], 'costo' => $producto["costo"]]);
+                $costoTotal += $producto["cantidad"] * $productoActual->costo;
             } elseif ($productoActual->categoria == ProductoTipo::GRANEL) {
                 if ($producto["unidad"] == ProductoTipo::GRAMOS) {
                     $productoActual->stock = $productoActual->stock - $producto["cantidad"];
+                    $costoTotal += $producto["cantidad"] * $productoActual->costo / 1000;
                 } else if ($producto["unidad"] == ProductoTipo::KILOGRAMOS) {
                     $productoActual->stock = $productoActual->stock - ($producto["cantidad"] * 1000);
+                    $costoTotal += $producto["cantidad"] * $productoActual->costo;
                 }
                 $venta->productos()->attach($producto["id"], ['cantidad' => $producto["cantidad"], 'unidad' => $producto["unidad"], 'costo' => $producto["costo"]]);
             }
             $productoActual->save();
-            $costo += $producto["costo"];
+            $valorTotal += $producto["costo"];
         }
-        $venta->valor = $costo;
-        $venta->saldo = $costo;
+        $venta->valor = $valorTotal;
+        $venta->saldo = $valorTotal;
+        $venta->costo = $costoTotal;
+        $venta->utilidad = $valorTotal - $costoTotal;
         $venta->abonado = 0;
         $venta->save();
         $venta->refresh();
@@ -97,4 +103,5 @@ class Ventas
     }
 
 }
+
 ?>
