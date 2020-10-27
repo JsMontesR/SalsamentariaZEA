@@ -7,6 +7,15 @@
         }
 
         table {
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        table td th {
+            word-wrap: break-word;
+        }
+
+        table {
             border: #b2b2b2 1px solid;
         }
 
@@ -17,6 +26,8 @@
         th {
             border: black 1px solid;
         }
+
+
     </style>
     <meta charset="utf-8">
     <title>Example 1</title>
@@ -36,13 +47,13 @@
         <th>Id</th>
         <th class="service">Nombre</th>
         <th class="service">Categoría</th>
-        <th>Costo Unitario/Kg</th>
-        <th>Utilidad unitaria/kg</th>
-        <th>Precio unitario/kg</th>
-        <th>Unidades/g en stock</th>
+        <th>Costo Un/Kg</th>
+        <th>Utilidad Un/kg</th>
+        <th>Precio Un/kg</th>
+        <th>Un/g en stock</th>
         <th>Tipo de producto</th>
-        <th>Fecha de creación</th>
-        <th>Fecha de actualización</th>
+        <th>F/ creación</th>
+        <th>F/ actualización</th>
     </tr>
     </thead>
     <tbody>
@@ -55,19 +66,17 @@
             <td class="qty">{{ "% ". number_format($registro->utilidad,0) }}</td>
             <td class="qty">{{ "$ ". number_format($registro->precio,0) }}</td>
             <td class="service">{{ $registro->stock }}</td>
-            <td class="service">{{ $registro->tipo_producto->nombre }}</td>
+            <td class="service">{{ $registro->tipo->nombre }}</td>
             <td class="service">{{ $registro->created_at }}</td>
             <td class="service">{{ $registro->updated_at }}</td>
         </tr>
     @endforeach
     <tr style="font-weight: bold">
         <td class="grand total" colspan="3">Totales</td>
-        <td class="grand total">Total vendido: {{$totalVendido}}</td>
-        <td class="grand total">Total abonado: {{$totalAbonado}}</td>
-        <td class="grand total">Total saldo: {{$totalSaldo}}</td>
-        <td class="grand total">Total costo: {{$totalCosto}}</td>
-        <td class="grand total">Total utilidades: {{$totalUtilidades}}</td>
-        <td class="grand total">Utilidades devengadas: {{$utilidadesDevengadas}}</td>
+        <td class="grand total" colspan="2">Total costo de inventario: {{$costoTotal}}</td>
+        <td class="grand total" colspan="2">Utilidades totales en inventario: {{$utilidadTotal}}</td>
+        <td class="grand total" colspan="2">Total precio del inventario: {{$precioTotal}}</td>
+        <td class="grand total"></td>
     </tr>
     </tbody>
 </table>

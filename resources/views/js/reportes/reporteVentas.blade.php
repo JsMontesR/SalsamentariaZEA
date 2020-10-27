@@ -18,7 +18,7 @@
                         fechaFin: fechaFin,
                         cierre_id: cierre_id,
                     },
-                    url: "/api/reportes/listarventas",
+                    url: "/api/reportes/listarVentas",
                 },
                 columns: [
                     {data: 'id', name: 'ventas.id', title: 'Id', className: "text-center font-weight-bold"},

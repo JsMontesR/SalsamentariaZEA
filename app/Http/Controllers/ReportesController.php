@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Caja;
 use App\Cierre;
+use App\Entrada;
 use App\Producto;
+use App\ProductoTipo;
 use App\Venta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -113,8 +115,13 @@ class ReportesController extends Controller
             $utilidadTotal = 0;
 
             foreach ($registros as $producto) {
-                $costoTotal += ($producto->costo / 1000) * $producto->stock;
-                $precioTotal += ($producto->precio / 1000) * $producto->stock;
+                if ($producto->categoria == ProductoTipo::GRANEL) {
+                    $costoTotal += ($producto->costo / 1000) * $producto->stock;
+                    $precioTotal += ($producto->precio / 1000) * $producto->stock;
+                } else if ($producto->categoria == ProductoTipo::UNITARIO) {
+                    $costoTotal += ($producto->costo) * $producto->stock;
+                    $precioTotal += ($producto->precio) * $producto->stock;
+                }
                 $utilidadTotal += $precioTotal - $costoTotal;
             }
 
@@ -124,11 +131,39 @@ class ReportesController extends Controller
 
             $fechaActual = now();
 
-            $pdf = \PDF::loadView("print.reportes.reporteInventario", compact('registros', 'costoTotal', 'precioTotal', 'utilidadTotal'));
+            $pdf = \PDF::loadView("print.reportes.reporteInventario", compact('registros', 'fechaActual', 'costoTotal', 'precioTotal', 'utilidadTotal'));
             return $pdf->stream('reporteVentas.pdf');;
         }
+    }
 
+    /**
+     * Return list of the resource in storage.
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
 
+    public function listarFacturasPorCobrar(Request $request)
+    {
+        $query = Venta::query()->select('ventas.*')->with('cliente', 'empleado')->where('fechapagado', null);
+
+        if ($request->ajax()) {
+            return datatables($query)->toJson();
+        }
+    }
+
+    /**
+     * Return list of the resource in storage.
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+
+    public function listarCuentasPorPagar(Request $request)
+    {
+        $query = Entrada::query()->select('entradas.*')->with('proveedor', 'empleado')->where('fechapagado', null);
+
+        if ($request->ajax()) {
+            return datatables($query)->toJson();
+        }
     }
 
     /**

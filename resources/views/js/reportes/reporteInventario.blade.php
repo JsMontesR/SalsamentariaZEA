@@ -3,7 +3,7 @@
 
         let table = $('#recurso').DataTable($.extend({
             serverSide: true,
-            ajax: '/api/productos/listar',
+            ajax: '/api/reportes/listarProductos',
             columns: [
                 {data: 'id', name: 'productos.id', title: 'Id', className: "text-center"},
                 {data: 'nombre', name: 'productos.nombre', title: 'Nombre', className: "text-center"},
