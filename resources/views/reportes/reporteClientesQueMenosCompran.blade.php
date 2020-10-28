@@ -2,13 +2,13 @@
 
 @section('content')
     <div class="card-header py-3">
-        <h1 class="m-0 font-weight-bold text-primary text-center">Productos más vendidos</h1>
+        <h1 class="m-0 font-weight-bold text-primary text-center">Compras por cliente</h1>
     </div>
     <br>
     <div class="container-fluid">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h3 class="m-0 font-weight-bold text-primary text-center">Listado de unidades/kg vendidos por producto</h3>
+                <h3 class="m-0 font-weight-bold text-primary text-center">Listado de cantidad de compras</h3>
             </div>
             <div class="card-body">
                 <table id="recurso" class="table table-bordered dt-responsive table-hover row-cursor-hand"
@@ -18,6 +18,6 @@
             </div>
         </div>
     </div>
-    @include("js.reportes.reporteProductosMenosVendidos")
+    @include("js.reportes.reporteClientesQueMenosCompran")
 @endsection
 

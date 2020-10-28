@@ -167,6 +167,36 @@ class ReportesController extends Controller
     }
 
     /**
+     * Return list of the resource in storage.
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+
+    public function listarClientesQueMenosCompran(Request $request)
+    {
+        $query = Venta::query()->select('ventas.*')->with('cliente', 'empleado')->where('fechapagado', null);
+
+        if ($request->ajax()) {
+            return datatables($query)->toJson();
+        }
+    }
+
+    /**
+     * Return list of the resource in storage.
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+
+    public function listarProductosMenosVendidos(Request $request)
+    {
+        $query = Venta::query()->select('ventas.*')->with('cliente', 'empleado')->where('fechapagado', null);
+
+        if ($request->ajax()) {
+            return datatables($query)->toJson();
+        }
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -194,6 +224,16 @@ class ReportesController extends Controller
     public function productosMenosVendidos()
     {
         return view("reportes.reporteProductosMenosVendidos");
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function clientesQueMenosCompran()
+    {
+        return view("reportes.reporteClientesQueMenosCompran");
     }
 
     /**
