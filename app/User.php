@@ -43,16 +43,6 @@ class User extends Authenticatable
         return $this->belongsTo('App\Rol');
     }
 
-    public function ventasRealizadas()
-    {
-        return $this->hasMany('App\Venta');
-    }
-
-    public function ventasQueLeRealizaron()
-    {
-        return $this->hasMany('App\Venta');
-    }
-
     public function entradas()
     {
         return $this->hasMany('App\Entrada');

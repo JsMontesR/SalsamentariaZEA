@@ -18,6 +18,6 @@
             </div>
         </div>
     </div>
-    @include("js.reportes.reporteClientesQueMenosCompran")
+    @include("js.reportes.reporteClientesQueMasCompran")
 @endsection
 

@@ -112,11 +112,11 @@
 
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                    <a href="{{route('reporteProductosMenosVendidos')}}">
+                    <a href="{{route('reporteProductosMasVendidos')}}">
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-inline-block ">
-                                    <h3 class="text-dark">Productos menos vendidos</h3>
+                                    <h3 class="text-dark">Productos más vendidos</h3>
                                 </div>
                                 <div class="float-right icon-circle-medium  icon-box-lg  bg-secondary mt-1">
                                     <i class="fa fa-cart-arrow-down fa-fw fa-sm text-light"></i>
@@ -133,11 +133,11 @@
                     </a>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                    <a href="{{route("reporteClientesQueMenosCompran")}}">
+                    <a href="{{route("reporteClientesQueMasCompran")}}">
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-inline-block ">
-                                    <h3 class="text-dark">Clientes que menos compran</h3>
+                                    <h3 class="text-dark">Clientes que más compran</h3>
                                 </div>
                                 <div class="float-right icon-circle-medium  icon-box-lg bg-warning mt-1">
                                     <i class="fa fa-meh fa-fw fa-sm text-light"></i>

@@ -9,7 +9,7 @@ use App\Producto;
 use App\ProductoTipo;
 use App\Venta;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use DB;
 
 class ReportesController extends Controller
 {
@@ -172,9 +172,10 @@ class ReportesController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-    public function listarClientesQueMenosCompran(Request $request)
+    public function listarClientesQueMasCompran(Request $request)
     {
-        $query = Venta::query()->select('ventas.*')->with('cliente', 'empleado')->where('fechapagado', null);
+        $query = DB::table('ventas')->select(DB::raw('users.id'), DB::raw('users.name'), DB::raw('users.di'), DB::raw('COUNT(users.id) AS "count"'))
+            ->join('users', 'ventas.cliente_id', '=', 'users.id')->groupBy(DB::raw('users.id'));
 
         if ($request->ajax()) {
             return datatables($query)->toJson();
@@ -187,9 +188,14 @@ class ReportesController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-    public function listarProductosMenosVendidos(Request $request)
+    public function listarProductosMasVendidos(Request $request)
     {
-        $query = Venta::query()->select('ventas.*')->with('cliente', 'empleado')->where('fechapagado', null);
+        $query = DB::select('SELECT w.id, w.nombre,w.categoria,SUM(w.total) as "total" FROM (
+         SELECT productos.id, productos.nombre, productos.categoria, SUM(producto_venta.cantidad) AS "total" from productos
+         JOIN producto_venta ON productos.id = producto_venta.producto_id WHERE producto_venta.unidad = "gramos" OR producto_venta.unidad IS NULL GROUP BY (productos.id)
+          UNION SELECT productos.id, productos.nombre, productos.categoria, SUM(producto_venta.cantidad*1000) AS "total" from productos JOIN
+          producto_venta ON productos.id = producto_venta.producto_id WHERE producto_venta.unidad = "kilogramos" GROUP BY
+          (productos.id) ) w GROUP BY w.id, w.nombre, w.categoria');
 
         if ($request->ajax()) {
             return datatables($query)->toJson();
@@ -221,9 +227,9 @@ class ReportesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function productosMenosVendidos()
+    public function productosMasVendidos()
     {
-        return view("reportes.reporteProductosMenosVendidos");
+        return view("reportes.reporteProductosMasVendidos");
     }
 
     /**
@@ -231,9 +237,9 @@ class ReportesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function clientesQueMenosCompran()
+    public function clientesQueMasCompran()
     {
-        return view("reportes.reporteClientesQueMenosCompran");
+        return view("reportes.reporteClientesQueMasCompran");
     }
 
     /**
