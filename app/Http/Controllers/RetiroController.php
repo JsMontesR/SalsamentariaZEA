@@ -62,9 +62,11 @@ class RetiroController extends Controller
     {
         //Validación de la factibilidad de la transacción
         $request->validate($this->validationRules);
-        foreach ($request->productos_retiro as $producto) {
-            if (empty($producto["cantidad"])) {
-                throw ValidationException::withMessages(['producto_retiro' => 'La tabla de productos del retiro debe contener productos con sus respectivas cantidades']);
+        if($request->productos_retiro != null){
+            foreach ($request->productos_retiro as $producto) {
+                if (empty($producto["cantidad"])) {
+                    throw ValidationException::withMessages(['producto_retiro' => 'La tabla de productos del retiro debe contener productos con sus respectivas cantidades']);
+                }
             }
         }
         if (($problem = $this->retiros->getNoDescontable($request)) != null) {

@@ -16,6 +16,8 @@ class AlterNominasTable extends Migration
         Schema::table('nominas', function (Blueprint $table) {
             $table->unsignedBigInteger('empleado_id');
             $table->foreign('empleado_id')->references('id')->on('users')->onDelete('restrict');
+            $table->unsignedBigInteger('pagador_id');
+            $table->foreign('pagador_id')->references('id')->on('users')->onDelete('restrict');
         });
     }
 
@@ -29,6 +31,8 @@ class AlterNominasTable extends Migration
         Schema::table('nominas', function (Blueprint $table) {
             $table->dropForeign(['empleado_id']);
             $table->dropColumn('empleado_id');
+            $table->dropForeign(['pagador_id']);
+            $table->dropColumn('pagador_id');
         });
     }
 }

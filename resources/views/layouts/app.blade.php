@@ -137,9 +137,6 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav flex-column">
-                        <li class="nav-divider">
-                            Tablero de control
-                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('ventas') }}"><i class="fas fa-fw fa-shopping-cart"></i>Ventas</a>
                         </li>

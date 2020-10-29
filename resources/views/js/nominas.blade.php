@@ -36,15 +36,15 @@
             ajax: 'api/nominas/listar',
             columns: [
                 {data: 'id', name: 'nominas.id', title: 'Id', className: "text-center"},
-                {data: 'empleado.id', name: 'empleado.id', title: 'Id del empleado', visible: false, searchable: false},
                 {data: 'empleado.name', name: 'empleado.name', title: 'Nombre del empleado', className: "text-center"},
                 {
                     data: 'empleado.di',
                     name: 'empleado.di',
-                    title: 'Documento de identidad',
+                    title: 'DI del empleado',
                     render: $.fn.dataTable.render.number('.', '.', 0),
                     className: "text-center"
                 },
+                {data: 'pagador.name', name: 'pagador.name', title: 'Nombre del pagador', className: "text-center"},
                 {
                     data: 'abonado',
                     title: 'Valor pagado',

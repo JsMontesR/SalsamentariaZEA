@@ -1,6 +1,17 @@
 <script>
     $(document).ready(function () {
 
+        $.ajax({
+            url: "/api/reportes/listarPartesBalance",
+            type: "get",
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (err) {
+                console.warn(err);
+            }
+        })
+
         llenarTabla();
 
         function llenarTabla(fechaInicio = '', fechaFin = '', cierre_id = '') {
@@ -18,64 +29,23 @@
                         fechaFin: fechaFin,
                         cierre_id: cierre_id,
                     },
-                    url: "/api/reportes/listarventas",
+                    url: "/api/reportes/listarPartesBalance",
                 },
                 columns: [
-                    {data: 'id', name: 'ventas.id', title: 'Id', className: "text-center font-weight-bold"},
+                    {data: 'id', name: 'id', title: 'Id', className: "text-center font-weight-bold"},
+                    {data: 'concepto', name: 'concepto', title: 'Concepto', className: "text-center font-weight-bold"},
                     {
-                        data: 'cliente.id',
-                        name: 'cliente.id',
-                        title: 'Id del cliente',
-                        visible: false,
-                        searchable: false,
-                        orderable: false
-                    },
-                    {
-                        data: 'cliente.name',
-                        name: 'cliente.name',
-                        title: 'Nombre del cliente',
-                        className: "text-center",
-                    },
-                    {
-                        data: 'empleado.name',
-                        name: 'empleado.name',
-                        title: 'Nombre del vendedor',
-                        className: "text-center",
-                    },
-                    {
-                        data: 'fechapagado',
-                        name: 'ventas.fechapagado',
-                        title: 'Fecha de pago',
-                        className: "text-center",
-                        render: function (data) {
-                            if (data) {
-                                return '<a class="text-success">' + data + '</a>';
-                            } else {
-                                return '<a class="text-danger">Sin pagar</a>';
+                        data: 'naturaleza', name: 'naturaleza', title: 'Naturaleza', className: "text-center", render: function (data) {
+                            if (data == "Ingreso") {
+                                return '<span class="text-success"><i class="fas fa-dollar-sign"></i><br>' + data + '</span>';
+                            } else if (data == "Egreso") {
+                                return '<span class="text-danger"><i class="fas fa-dollar-sign"></i><br>' + data + '</span>';
                             }
                         }
                     },
                     {
-                        data: 'fechapago',
-                        name: 'ventas.fechapago',
-                        title: 'Fecha límite de pago',
-                        className: "text-center"
-                    },
-                    {
-                        data: 'abonado',
-                        title: 'Valor cobrado',
-                        className: "text-center",
-                        render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
-                    },
-                    {
-                        data: 'saldo',
-                        title: 'Saldo por cobrar',
-                        className: "text-center",
-                        render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
-                    },
-                    {
-                        data: 'valor',
-                        title: 'Valor de la venta',
+                        data: 'total',
+                        title: 'Total aporte',
                         className: "text-center",
                         render: $.fn.dataTable.render.number(',', '.', 0, '$ ')
                     },
@@ -83,12 +53,7 @@
                         data: 'created_at',
                         title: 'Fecha de creación',
                         className: "text-center"
-                    },
-                    {
-                        data: 'updated_at',
-                        title: 'Fecha de actualización',
-                        className: "text-center"
-                    },
+                    }
                 ]
             }, options));
         }
@@ -122,11 +87,6 @@
             limpiarFiltroCierres();
             limpiarFiltroFechas();
             llenarTabla();
-        });
-
-        $('#verimpresion').click(function () {
-            $("#form").attr('action', "{{ route('listarventas') }}");
-            $("#form").submit();
         });
 
         function limpiarFiltroCierres() {

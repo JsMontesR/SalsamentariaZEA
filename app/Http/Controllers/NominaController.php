@@ -56,7 +56,7 @@ class NominaController extends Controller
 
     public function list()
     {
-        return datatables()->eloquent(Nomina::query()->select('nominas.*')->with('empleado'))->toJson();
+        return datatables()->eloquent(Nomina::query()->select('nominas.*')->with('empleado','pagador'))->toJson();
     }
 
     /**

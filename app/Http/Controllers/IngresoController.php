@@ -8,6 +8,7 @@ use App\Repositories\Cajas;
 use App\Caja;
 use App\Repositories\Ingresos;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 class IngresoController extends Controller
@@ -62,9 +63,11 @@ class IngresoController extends Controller
     {
         //Validación de la factibilidad de la transacción
         $request->validate($this->validationRules);
-        foreach ($request->productos_ingreso as $producto) {
-            if (empty($producto["cantidad"])) {
-                throw ValidationException::withMessages(['producto_ingreso' => 'La tabla de productos del ingreso debe contener productos con sus respectivas cantidades']);
+        if($request->productos_ingreso != null){
+            foreach ($request->productos_ingreso as $producto) {
+                if (empty($producto["cantidad"])) {
+                    throw ValidationException::withMessages(['producto_ingreso' => 'La tabla de productos del ingreso debe contener productos con sus respectivas cantidades']);
+                }
             }
         }
         // Ejecución de la transacción

@@ -156,6 +156,7 @@ Route::prefix('api')->group(function () {
 
     Route::prefix('reportes')->group(function () {
         Route::get('/listarVentas', 'ReportesController@listarVentas')->name('listarventas')->middleware('auth');
+        Route::get('/listarPartesBalance', 'ReportesController@listarPartesBalance')->name('listarpartesbalance')->middleware('auth');
         Route::get('/listarProductos', 'ReportesController@listarProductos')->name('listarproductos')->middleware('auth');
         Route::get('/listarFacturasPorCobrar', 'ReportesController@listarFacturasPorCobrar')->name('listarfacturasporcobrar')->middleware('auth');
         Route::get('/listarCuentasPorPagar', 'ReportesController@listarCuentasPorPagar')->name('listarcuentasporpagar')->middleware('auth');
@@ -182,7 +183,7 @@ Route::prefix('reportes')->group(function () {
     Route::get('/ventas', 'ReportesController@reporteVentas')->name('reporteVentas')->middleware('auth');
     Route::get('/productosMasVendidos', 'ReportesController@productosMasVendidos')->name('reporteProductosMasVendidos')->middleware('auth');
     Route::get('/clientesQueMasCompran', 'ReportesController@clientesQueMasCompran')->name('reporteClientesQueMasCompran')->middleware('auth');
-    Route::get('/balance', 'ReportesController@balance')->name('reporteBalance')->middleware('auth');
+    Route::get('/balance', 'ReportesController@reporteBalance')->name('reporteBalance')->middleware('auth');
     Route::get('/facturasPorCobrar', 'ReportesController@facturasPorCobrar')->name('reporteFacturasPorCobrar')->middleware('auth');
     Route::get('/cuentasPorPagar', 'ReportesController@cuentasPorPagar')->name('reporteCuentasPorPagar')->middleware('auth');
 });

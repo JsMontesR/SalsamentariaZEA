@@ -5,11 +5,17 @@ namespace App\Http\Controllers;
 use App\Caja;
 use App\Cierre;
 use App\Entrada;
+use App\Ingreso;
+use App\Movimiento;
+use App\Nomina;
 use App\Producto;
 use App\ProductoTipo;
+use App\Retiro;
+use App\Servicio;
 use App\Venta;
 use Illuminate\Http\Request;
 use DB;
+use Illuminate\Support\Facades\Log;
 
 class ReportesController extends Controller
 {
@@ -92,6 +98,144 @@ class ReportesController extends Controller
             $pdf = \PDF::loadView("print.reportes.reporteVentas", compact('registros', 'fechaInicio', 'fechaFin',
                 'totalVendido', 'totalAbonado', 'totalSaldo', 'fechaActual', 'totalCosto', 'totalUtilidades', 'utilidadesDevengadas'));
             return $pdf->stream('reporteVentas.pdf');;
+        }
+    }
+
+    /**
+     * Return list of the resource in storage.
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+
+    public function listarPartesBalance(Request $request)
+    {
+        $fechaInicio = null;
+        $fechaFin = null;
+        $cierre_id = $request->cierre_id;
+
+        if ($cierre_id != null) {
+            $cierre = Cierre::findOrFail($cierre_id);
+            $cierreAnterior = $cierre->cierreAnterior;
+            $fechaInicio = $cierreAnterior == null ? null : $cierreAnterior->created_at->toDateTimeString();
+            $fechaFin = $cierre->created_at->toDateTimeString();
+        } else {
+            if ($request->fechaInicio != null) {
+                $fechaInicio = $request->fechaInicio;
+            }
+            if ($request->fechaFin != null) {
+                $fechaFin = $request->fechaFin;
+            }
+        }
+
+        $ventas = Venta::query()->select('ventas.id', DB::raw('"Venta" as "concepto"'), DB::raw('"Ingreso" as "naturaleza"'), 'ventas.created_at')->with(['movimientos' => function ($query) use ($fechaInicio, $fechaFin) {
+            $this->filtrarMovimientos($fechaInicio, $fechaFin, $query, Movimiento::INGRESO);
+        }]);
+
+        $servicios = Servicio::query()->select('servicios.id', DB::raw('"Servicio" as "concepto"'), DB::raw('"Egreso" as "naturaleza"'), 'servicios.created_at')->with(['movimientos' => function ($query) use ($fechaInicio, $fechaFin) {
+            $this->filtrarMovimientos($fechaInicio, $fechaFin, $query, Movimiento::EGRESO);
+        }]);
+
+        $entradas = Entrada::query()->select('entradas.id', DB::raw('"Entrada" as "concepto"'), DB::raw('"Egreso" as "naturaleza"'), 'entradas.created_at')->with(['movimientos' => function ($query) use ($fechaInicio, $fechaFin) {
+            $this->filtrarMovimientos($fechaInicio, $fechaFin, $query, Movimiento::EGRESO);
+        }]);
+
+        $nominas = Nomina::query()->select('nominas.id', DB::raw('"Nómina" as "concepto"'), DB::raw('"Egreso" as "naturaleza"'), 'nominas.created_at')->with(['movimientos' => function ($query) use ($fechaInicio, $fechaFin) {
+            $this->filtrarMovimientos($fechaInicio, $fechaFin, $query, Movimiento::EGRESO);
+        }]);
+
+        $retiros = Retiro::query()->select('retiros.id', DB::raw('"Retiro" as "concepto"'), DB::raw('"Egreso" as "naturaleza"'), 'retiros.created_at')->with(['movimientos' => function ($query) use ($fechaInicio, $fechaFin) {
+            $this->filtrarMovimientos($fechaInicio, $fechaFin, $query, Movimiento::EGRESO);
+        }]);
+
+        $ingresos = Ingreso::query()->select('ingresos.id', DB::raw('"Ingreso" as "concepto"'), DB::raw('"Ingreso" as "naturaleza"'), 'ingresos.created_at')->with(['movimientos' => function ($query) use ($fechaInicio, $fechaFin) {
+            $this->filtrarMovimientos($fechaInicio, $fechaFin, $query, Movimiento::INGRESO);
+        }]);
+
+        if ($fechaInicio != null) {
+            $ventas = $ventas->whereDate('ventas.created_at', '>=', $fechaInicio);
+            $servicios = $servicios->whereDate('servicio.created_at', '>=', $fechaInicio);
+            $entradas = $entradas->whereDate('entrada.created_at', '>=', $fechaInicio);
+            $nominas = $nominas->whereDate('nomina.created_at', '>=', $fechaInicio);
+            $retiros = $retiros->whereDate('retiros.created_at', '>=', $fechaInicio);
+            $ingresos = $ingresos->whereDate('ingresos.created_at', '>=', $fechaInicio);
+        }
+
+        if ($fechaFin != null) {
+            $ventas = $ventas->whereDate('ventas.created_at', '<=', $fechaFin);
+            $servicios = $servicios->whereDate('servicio.created_at', '<=', $fechaFin);
+            $entradas = $entradas->whereDate('entrada.created_at', '<=', $fechaFin);
+            $nominas = $nominas->whereDate('nomina.created_at', '<=', $fechaFin);
+            $retiros = $retiros->whereDate('retiros.created_at', '<=', $fechaFin);
+            $ingresos = $ingresos->whereDate('ingresos.created_at', '<=', $fechaFin);
+        }
+
+        if ($request->ajax()) {
+
+            $ventas = $ventas->get();
+            $servicios = $servicios->get();
+            $entradas = $entradas->get();
+            $nominas = $nominas->get();
+            $retiros = $retiros->get();
+            $ingresos = $ingresos->get();
+
+            foreach ($ventas as $venta) {
+                $total = 0;
+                foreach ($venta->movimientos as $movimiento)
+                    $total += $movimiento->total;
+                $venta->total = $total;
+            }
+
+            foreach ($servicios as $servicio) {
+                $total = 0;
+                foreach ($servicio->movimientos as $movimiento)
+                    $total += $movimiento->total;
+                $servicio->total = (-1) * $total;
+            }
+
+            foreach ($entradas as $entrada) {
+                $total = 0;
+                foreach ($entrada->movimientos as $movimiento)
+                    $total += $movimiento->total;
+                $entrada->total = (-1) * $total;
+            }
+
+            foreach ($nominas as $nomina) {
+                $total = 0;
+                foreach ($nomina->movimientos as $movimiento)
+                    $total += $movimiento->total;
+                $nomina->total = (-1) * $total;
+            }
+
+            foreach ($retiros as $retiro) {
+                $total = 0;
+                foreach ($retiro->movimientos as $movimiento)
+                    $total += $movimiento->total;
+                $retiro->total = (-1) * $total;
+            }
+
+            foreach ($ingresos as $ingreso) {
+                $total = 0;
+                foreach ($ingreso->movimientos as $movimiento)
+                    $total += $movimiento->total;
+                $ingreso->total = $total;
+            }
+
+            $balance = collect([]);
+            $balance = $balance->merge($ventas)->merge($servicios)->merge($entradas)->merge($nominas)->merge($entradas)->merge($ingresos);
+            Log::info($balance);
+
+            return datatables($balance)->toJson();
+        }
+    }
+
+    public function filtrarMovimientos($fechaInicio, $fechaFin, $query, $tipo)
+    {
+        $query->where('movimientos.tipo', $tipo);
+        if ($fechaInicio != null) {
+            $query->whereDate('movimientos.created_at', '>=', $fechaInicio);
+        }
+        if ($fechaFin != null) {
+            $query->whereDate('movimientos.created_at', '<=', $fechaFin);
         }
     }
 
