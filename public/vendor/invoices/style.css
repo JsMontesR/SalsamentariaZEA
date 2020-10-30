@@ -38,8 +38,8 @@ header {
 }
 
 h1 {
-    border-top: 1px solid #5D6975;
-    border-bottom: 1px solid #5D6975;
+    border-top: 1px solid #403d3d;
+    border-bottom: 1px solid #403d3d;
     color: #001028;
     font-size: 2.4em;
     line-height: 1.4em;
@@ -103,7 +103,7 @@ table .desc {
 }
 
 table td {
-    padding: 10px;
+    padding: 1px;
 }
 
 table td.service,

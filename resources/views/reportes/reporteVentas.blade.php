@@ -6,6 +6,9 @@
     </div>
     <br>
     <div class="container-fluid">
+        @if(session()->has('error'))
+            <div class="alert alert-warning" role="alert"><i class="fas fa-fw fa-exclamation-circle"></i> {{session('error')}}</div>
+        @endif
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary">Filtros</h6>
@@ -51,13 +54,17 @@
                 </form>
                 <hr>
                 <div class="row btn-toolbar justify-content-center">
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 py-2">
-                        <input id="verimpresion" type="button" value="Ver impresión"
-                               class="btn btn-primary text-light container-fluid"/>
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 py-2">
+                        <input id="aplicarFiltros" type="button" value="Aplicar filtros"
+                               class="btn btn-success text-light container-fluid"/>
                     </div>
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 py-2">
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 py-2">
                         <input id="limpiar" type="button" value="Limpiar filtros"
                                class="btn btn-light container-fluid"/>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 py-2">
+                        <input id="verimpresion" type="button" value="Ver impresión"
+                               class="btn btn-primary text-light container-fluid"/>
                     </div>
                 </div>
             </div>

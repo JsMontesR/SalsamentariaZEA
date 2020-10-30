@@ -1,24 +1,17 @@
 <script>
     $(document).ready(function () {
 
-        $.ajax({
-            url: "/api/reportes/listarPartesBalance",
-            type: "get",
-            success: function (data) {
-                console.log(data);
-            },
-            error: function (err) {
-                console.warn(err);
+        function borrarTabla() {
+            if ($.fn.DataTable.isDataTable('#recurso')) {
+                $('#recurso').DataTable().destroy();
             }
-        })
+        }
 
         llenarTabla();
 
         function llenarTabla(fechaInicio = '', fechaFin = '', cierre_id = '') {
 
-            if ($.fn.DataTable.isDataTable('#recurso')) {
-                $('#recurso').DataTable().destroy();
-            }
+            borrarTabla();
 
             let table = $('#recurso').DataTable($.extend({
                 serverSide: true,
@@ -35,7 +28,11 @@
                     {data: 'id', name: 'id', title: 'Id', className: "text-center font-weight-bold"},
                     {data: 'concepto', name: 'concepto', title: 'Concepto', className: "text-center font-weight-bold"},
                     {
-                        data: 'naturaleza', name: 'naturaleza', title: 'Naturaleza', className: "text-center", render: function (data) {
+                        data: 'naturaleza',
+                        name: 'naturaleza',
+                        title: 'Naturaleza',
+                        className: "text-center",
+                        render: function (data) {
                             if (data == "Ingreso") {
                                 return '<span class="text-success"><i class="fas fa-dollar-sign"></i><br>' + data + '</span>';
                             } else if (data == "Egreso") {
@@ -75,18 +72,24 @@
             console.log(data.id);
             $('#cierre_id').val(data.id);
             limpiarFiltroFechas();
-            aplicarFiltros();
         });
 
         $('#fechaFin,#fechaInicio').change(function () {
             limpiarFiltroCierres();
-            aplicarFiltros();
         });
 
         $('#limpiar').click(function () {
             limpiarFiltroCierres();
             limpiarFiltroFechas();
-            llenarTabla();
+        });
+
+        $('#aplicarFiltros').click(function () {
+            aplicarFiltros();
+        });
+
+        $('#verimpresion').click(function () {
+            $("#form").attr('action', "{{ route('listarpartesbalance') }}");
+            $("#form").submit();
         });
 
         function limpiarFiltroCierres() {

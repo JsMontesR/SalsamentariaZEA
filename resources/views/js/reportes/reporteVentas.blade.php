@@ -1,13 +1,17 @@
 <script>
     $(document).ready(function () {
 
+        function borrarTabla() {
+            if ($.fn.DataTable.isDataTable('#recurso')) {
+                $('#recurso').DataTable().destroy();
+            }
+        }
+
         llenarTabla();
 
         function llenarTabla(fechaInicio = '', fechaFin = '', cierre_id = '') {
 
-            if ($.fn.DataTable.isDataTable('#recurso')) {
-                $('#recurso').DataTable().destroy();
-            }
+            borrarTabla();
 
             let table = $('#recurso').DataTable($.extend({
                 serverSide: true,
@@ -110,18 +114,19 @@
             console.log(data.id);
             $('#cierre_id').val(data.id);
             limpiarFiltroFechas();
-            aplicarFiltros();
         });
 
         $('#fechaFin,#fechaInicio').change(function () {
             limpiarFiltroCierres();
-            aplicarFiltros();
         });
 
         $('#limpiar').click(function () {
             limpiarFiltroCierres();
             limpiarFiltroFechas();
-            llenarTabla();
+        });
+
+        $('#aplicarFiltros').click(function () {
+            aplicarFiltros();
         });
 
         $('#verimpresion').click(function () {

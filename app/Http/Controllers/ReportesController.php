@@ -48,12 +48,18 @@ class ReportesController extends Controller
             $cierreAnterior = $cierre->cierreAnterior;
             $fechaInicio = $cierreAnterior == null ? null : $cierreAnterior->created_at->toDateTimeString();
             $fechaFin = $cierre->created_at->toDateTimeString();
-        } else {
+        } else if ($request->fechaInicio != null || $request->fechaFin != null) {
             if ($request->fechaInicio != null) {
                 $fechaInicio = $request->fechaInicio;
             }
             if ($request->fechaFin != null) {
                 $fechaFin = $request->fechaFin;
+            }
+        } else {
+            if ($request->ajax()) {
+                return datatables(collect([]))->toJson();
+            } else {
+                return back()->with('error', 'Debe seleccionar algún filtro');
             }
         }
 
@@ -118,12 +124,18 @@ class ReportesController extends Controller
             $cierreAnterior = $cierre->cierreAnterior;
             $fechaInicio = $cierreAnterior == null ? null : $cierreAnterior->created_at->toDateTimeString();
             $fechaFin = $cierre->created_at->toDateTimeString();
-        } else {
+        } else if ($request->fechaInicio != null || $request->fechaFin != null) {
             if ($request->fechaInicio != null) {
                 $fechaInicio = $request->fechaInicio;
             }
             if ($request->fechaFin != null) {
                 $fechaFin = $request->fechaFin;
+            }
+        } else {
+            if ($request->ajax()) {
+                return datatables(collect([]))->toJson();
+            } else {
+                return back()->with('error', 'Debe seleccionar algún filtro');
             }
         }
 
@@ -153,78 +165,106 @@ class ReportesController extends Controller
 
         if ($fechaInicio != null) {
             $ventas = $ventas->whereDate('ventas.created_at', '>=', $fechaInicio);
-            $servicios = $servicios->whereDate('servicio.created_at', '>=', $fechaInicio);
-            $entradas = $entradas->whereDate('entrada.created_at', '>=', $fechaInicio);
-            $nominas = $nominas->whereDate('nomina.created_at', '>=', $fechaInicio);
+            $servicios = $servicios->whereDate('servicios.created_at', '>=', $fechaInicio);
+            $entradas = $entradas->whereDate('entradas.created_at', '>=', $fechaInicio);
+            $nominas = $nominas->whereDate('nominas.created_at', '>=', $fechaInicio);
             $retiros = $retiros->whereDate('retiros.created_at', '>=', $fechaInicio);
             $ingresos = $ingresos->whereDate('ingresos.created_at', '>=', $fechaInicio);
         }
 
         if ($fechaFin != null) {
             $ventas = $ventas->whereDate('ventas.created_at', '<=', $fechaFin);
-            $servicios = $servicios->whereDate('servicio.created_at', '<=', $fechaFin);
-            $entradas = $entradas->whereDate('entrada.created_at', '<=', $fechaFin);
-            $nominas = $nominas->whereDate('nomina.created_at', '<=', $fechaFin);
+            $servicios = $servicios->whereDate('servicios.created_at', '<=', $fechaFin);
+            $entradas = $entradas->whereDate('entradas.created_at', '<=', $fechaFin);
+            $nominas = $nominas->whereDate('nominas.created_at', '<=', $fechaFin);
             $retiros = $retiros->whereDate('retiros.created_at', '<=', $fechaFin);
             $ingresos = $ingresos->whereDate('ingresos.created_at', '<=', $fechaFin);
         }
 
+        $ventas = $ventas->get();
+        $servicios = $servicios->get();
+        $entradas = $entradas->get();
+        $nominas = $nominas->get();
+        $retiros = $retiros->get();
+        $ingresos = $ingresos->get();
+
+        foreach ($ventas as $venta) {
+            $total = 0;
+            foreach ($venta->movimientos as $movimiento)
+                $total += $movimiento->total;
+            $venta->total = $total;
+        }
+
+        foreach ($servicios as $servicio) {
+            $total = 0;
+            foreach ($servicio->movimientos as $movimiento)
+                $total += $movimiento->total;
+            $servicio->total = (-1) * $total;
+        }
+
+        foreach ($entradas as $entrada) {
+            $total = 0;
+            foreach ($entrada->movimientos as $movimiento)
+                $total += $movimiento->total;
+            $entrada->total = (-1) * $total;
+        }
+
+        foreach ($nominas as $nomina) {
+            $total = 0;
+            foreach ($nomina->movimientos as $movimiento)
+                $total += $movimiento->total;
+            $nomina->total = (-1) * $total;
+        }
+
+        foreach ($retiros as $retiro) {
+            $total = 0;
+            foreach ($retiro->movimientos as $movimiento)
+                $total += $movimiento->total;
+            $retiro->total = (-1) * $total;
+        }
+
+        foreach ($ingresos as $ingreso) {
+            $total = 0;
+            foreach ($ingreso->movimientos as $movimiento)
+                $total += $movimiento->total;
+            $ingreso->total = $total;
+        }
+
+        $registros = collect([]);
+        $registros = $registros->merge($ventas)->merge($servicios)->merge($entradas)->merge($nominas)->merge($entradas)->merge($ingresos);
+        Log::info($registros);
+
         if ($request->ajax()) {
+            return datatables($registros)->toJson();
+        } else {
 
-            $ventas = $ventas->get();
-            $servicios = $servicios->get();
-            $entradas = $entradas->get();
-            $nominas = $nominas->get();
-            $retiros = $retiros->get();
-            $ingresos = $ingresos->get();
+            $ingresosOrdinarios = 0;
+            $egresosOrdinarios = 0;
+            $ingresosExtraordinarios = 0;
+            $egresosExtraordinarios = 0;
 
-            foreach ($ventas as $venta) {
-                $total = 0;
-                foreach ($venta->movimientos as $movimiento)
-                    $total += $movimiento->total;
-                $venta->total = $total;
+            foreach ($registros as $item) {
+                if ($item->naturaleza == Movimiento::INGRESO) {
+                    if ($item->concepto == "Venta") {
+                        $ingresosOrdinarios += $item->total;
+                    } else if ($item->concepto == "Ingreso") {
+                        $ingresosExtraordinarios += $item->total;
+                    }
+                } else if ($item->naturaleza == Movimiento::EGRESO) {
+                    if ($item->concepto == "Entrada" || $item->concepto == "Servicio" || $item->concepto == "Nómina") {
+                        $egresosOrdinarios += $item->total;
+                    } else if ($item->concepto == "Retiro") {
+                        $egresosExtraordinarios += $item->total;
+                    }
+                }
             }
 
-            foreach ($servicios as $servicio) {
-                $total = 0;
-                foreach ($servicio->movimientos as $movimiento)
-                    $total += $movimiento->total;
-                $servicio->total = (-1) * $total;
-            }
+            $balance = $ingresosOrdinarios + $egresosOrdinarios + $ingresosExtraordinarios + $egresosExtraordinarios;
+            $fechaActual = now();
 
-            foreach ($entradas as $entrada) {
-                $total = 0;
-                foreach ($entrada->movimientos as $movimiento)
-                    $total += $movimiento->total;
-                $entrada->total = (-1) * $total;
-            }
-
-            foreach ($nominas as $nomina) {
-                $total = 0;
-                foreach ($nomina->movimientos as $movimiento)
-                    $total += $movimiento->total;
-                $nomina->total = (-1) * $total;
-            }
-
-            foreach ($retiros as $retiro) {
-                $total = 0;
-                foreach ($retiro->movimientos as $movimiento)
-                    $total += $movimiento->total;
-                $retiro->total = (-1) * $total;
-            }
-
-            foreach ($ingresos as $ingreso) {
-                $total = 0;
-                foreach ($ingreso->movimientos as $movimiento)
-                    $total += $movimiento->total;
-                $ingreso->total = $total;
-            }
-
-            $balance = collect([]);
-            $balance = $balance->merge($ventas)->merge($servicios)->merge($entradas)->merge($nominas)->merge($entradas)->merge($ingresos);
-            Log::info($balance);
-
-            return datatables($balance)->toJson();
+            $pdf = \PDF::loadView("print.reportes.reporteBalance", compact('registros', 'fechaInicio', 'fechaFin',
+                'ingresosOrdinarios', 'ingresosExtraordinarios', 'egresosOrdinarios', 'egresosExtraordinarios', 'balance', 'fechaActual'));
+            return $pdf->stream('balance.pdf');;
         }
     }
 
