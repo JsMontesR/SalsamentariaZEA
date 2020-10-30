@@ -39,15 +39,15 @@ class GenerarRecordatoriosCobroVentas implements ShouldQueue
             ->whereNotNull('fechapago')
             ->whereNull('fechapagado')
             ->whereDate('fechapago', '<=', now()->toDateTimeString())
-            ->whereRaw('DATEDIFF(NOW(),fechapago) <= ' . ActualizarNotificaciones::DIASANTICIPACION)
+            ->whereRaw('DATEDIFF(NOW(),fechapago) <= ' . ActualizarNotificacionesYAlertas::DIASANTICIPACION)
             ->get();
 
         Log::info("Generando notificaciones de cuentas por cobrar");
         foreach ($ventas as $venta) {
             $empleadosANotificar = User::query()->where('rol_id', '<>', 3)->whereDoesntHave('notifications', function ($query) use ($venta) {
                 $query->whereRaw("JSON_EXTRACT(data,'$.id') = " . $venta->id);
-                $query->whereRaw('JSON_EXTRACT(data,"$.endpoint") = "' . ActualizarNotificaciones::VENTA . '"');
-                $query->whereRaw('JSON_EXTRACT(data,"$.tipo") = "' . ActualizarNotificaciones::RECORDATORIO . '"');
+                $query->whereRaw('JSON_EXTRACT(data,"$.endpoint") = "' . ActualizarNotificacionesYAlertas::VENTA . '"');
+                $query->whereRaw('JSON_EXTRACT(data,"$.tipo") = "' . ActualizarNotificacionesYAlertas::RECORDATORIO . '"');
             })->get();
             Notification::send($empleadosANotificar, new RecordatorioFacturaPorCobrarNotification($venta, "Recuerde cobrar al cliente " . $venta->cliente->name . " la venta #" . $venta->id . ", el saldo pendiente es de $" . number_format($venta->saldo, 0)));
         }

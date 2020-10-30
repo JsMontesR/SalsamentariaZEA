@@ -10,7 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class ActualizarNotificaciones implements ShouldQueue
+class ActualizarNotificacionesYAlertas implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -48,14 +48,12 @@ class ActualizarNotificaciones implements ShouldQueue
     public function handle()
     {
         Log::info("Generando notificaciones a usuarios");
-        Log::info("Las notificaciones se generan con " . ActualizarNotificaciones::DIASANTICIPACION . " días de anticipación");
+        Log::info("Las notificaciones se generan con " . ActualizarNotificacionesYAlertas::DIASANTICIPACION . " días de anticipación");
         dispatch(new GenerarRecordatoriosPagoEntradas());
         dispatch(new GenerarRecordatoriosCobroVentas());
         dispatch(new GenerarAlertasCobroVentasMora());
         dispatch(new GenerarAlertasPagoEntradasMora());
 //        dispatch(new GenerarRecordatoriosPagoNominas($usuarios));
         dispatch(new LimpiarNotificacionesAntiguas());
-
-
     }
 }

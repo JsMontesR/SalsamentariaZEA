@@ -33,7 +33,7 @@ class LimpiarNotificacionesAntiguas implements ShouldQueue
     {
         $empleadosANotificar = User::where('rol_id', '<>', 3)->get();
         foreach ($empleadosANotificar as $empleadoANotificar) {
-            $empleadoANotificar->notifications()->whereRaw('DATEDIFF(NOW(),created_at) >= ' . ActualizarNotificaciones::DIASDEVENCIMIENTO)->delete();
+            $empleadoANotificar->notifications()->whereRaw('DATEDIFF(NOW(),created_at) >= ' . ActualizarNotificacionesYAlertas::DIASDEVENCIMIENTO)->delete();
         }
     }
 }

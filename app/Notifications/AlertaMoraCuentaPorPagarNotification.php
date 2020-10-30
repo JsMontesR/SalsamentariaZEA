@@ -3,7 +3,7 @@
 namespace App\Notifications;
 
 use App\Entrada;
-use App\Jobs\ActualizarNotificaciones;
+use App\Jobs\ActualizarNotificacionesYAlertas;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -63,8 +63,8 @@ class AlertaMoraCuentaPorPagarNotification extends Notification
     {
         return [
             "id" => $this->entrada->id,
-            "tipo" => ActualizarNotificaciones::ALERTA,
-            "endpoint" => ActualizarNotificaciones::ENTRADA,
+            "tipo" => ActualizarNotificacionesYAlertas::ALERTA,
+            "endpoint" => ActualizarNotificacionesYAlertas::ENTRADA,
             "mensaje" => $this->message
         ];
     }

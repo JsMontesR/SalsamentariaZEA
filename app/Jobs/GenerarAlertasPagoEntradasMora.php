@@ -44,8 +44,8 @@ class GenerarAlertasPagoEntradasMora implements ShouldQueue
         foreach ($entradas as $entrada) {
             $empleadosANotificar = User::query()->where('rol_id', '<>', 3)->whereDoesntHave('notifications', function ($query) use ($entrada) {
                 $query->whereRaw("JSON_EXTRACT(data,'$.id') = " . $entrada->id);
-                $query->whereRaw('JSON_EXTRACT(data,"$.endpoint") = "' . ActualizarNotificaciones::ENTRADA . '"');
-                $query->whereRaw('JSON_EXTRACT(data,"$.tipo") = "' . ActualizarNotificaciones::ALERTA . '"');
+                $query->whereRaw('JSON_EXTRACT(data,"$.endpoint") = "' . ActualizarNotificacionesYAlertas::ENTRADA . '"');
+                $query->whereRaw('JSON_EXTRACT(data,"$.tipo") = "' . ActualizarNotificacionesYAlertas::ALERTA . '"');
             })->get();
             Notification::send($empleadosANotificar, new AlertaMoraCuentaPorPagarNotification($entrada, "La cuenta por pagar para la entrada #" . $entrada->id . " con el proveedor " . $entrada->proveedor->nombre . " se encuentra en mora, el saldo pendiente es de $ " . number_format($entrada->saldo, 0)));
         }

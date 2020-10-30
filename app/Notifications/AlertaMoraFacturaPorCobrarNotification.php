@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Jobs\ActualizarNotificaciones;
+use App\Jobs\ActualizarNotificacionesYAlertas;
 use App\Venta;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -62,8 +62,8 @@ class AlertaMoraFacturaPorCobrarNotification extends Notification
     {
         return [
             "id" => $this->venta->id,
-            "tipo" => ActualizarNotificaciones::ALERTA,
-            "endpoint" => ActualizarNotificaciones::VENTA,
+            "tipo" => ActualizarNotificacionesYAlertas::ALERTA,
+            "endpoint" => ActualizarNotificacionesYAlertas::VENTA,
             "mensaje" => $this->message
         ];
     }
