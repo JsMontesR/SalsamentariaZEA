@@ -15,7 +15,7 @@ class ActualizarNotificaciones implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     const DIASANTICIPACION = 7;
-    const DIASDEVENCIMIENTO = 60;
+    const DIASDEVENCIMIENTO = 40;
 
     /*
      * Definición de tipos de modelos asociados a una notifiación

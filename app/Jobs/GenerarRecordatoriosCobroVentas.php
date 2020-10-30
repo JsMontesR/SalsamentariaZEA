@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Notifications\CuentaPorPagarNotification;
+use App\Notifications\FacturaPorCobrarNotification;
 use App\User;
 use App\Venta;
 use Illuminate\Bus\Queueable;
@@ -41,7 +42,7 @@ class GenerarRecordatoriosCobroVentas implements ShouldQueue
             $empleadosANotificar = User::query()->where('rol_id', '<>', 3)->whereDoesntHave('notifications', function ($query) use ($venta) {
                 $query->whereRaw("JSON_EXTRACT(data,'$.id') = " . $venta->id);
             })->get();
-            Notification::send($empleadosANotificar, new CuentaPorPagarNotification($venta, "Cobrar al cliente " . $venta->cliente->name . " la venta #" . $venta->id . ", el saldo pendiente es de $" . number_format($venta->saldo, 0)));
+            Notification::send($empleadosANotificar, new FacturaPorCobrarNotification($venta, "Cobrar al cliente " . $venta->cliente->name . " la venta #" . $venta->id . ", el saldo pendiente es de $" . number_format($venta->saldo, 0)));
         }
         Log::info("Notificaciones de cuentas por cobrar generadas satisfactoriamente");
     }
