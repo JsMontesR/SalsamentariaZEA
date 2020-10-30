@@ -25,6 +25,7 @@
             document.getElementById('pagar').disabled = false;
             $('#recurso tr').removeClass("selected");
             document.getElementById('verpagos').disabled = true;
+            document.getElementById('imprimir').disabled = true;
             document.getElementById('registrar').disabled = false;
             document.getElementById('eliminar').disabled = true;
             document.getElementById('modificar').disabled = true;
@@ -144,6 +145,7 @@
             empleados_table.columns(0).search(empleadoId).draw();
             document.getElementById('registrar').disabled = true;
             document.getElementById('verpagos').disabled = false;
+            document.getElementById('imprimir').disabled = false;
             document.getElementById('eliminar').disabled = false;
             document.getElementById('modificar').disabled = false;
         }
@@ -257,6 +259,11 @@
                 });
                 console.error(err);
             })
+        })
+
+        $("#imprimir").click(function () {
+            $("#form").attr('action', "{{ route('imprimircomprobantenomina') }}");
+            $("#form").submit();
         })
 
         $("#limpiar").click(function () {

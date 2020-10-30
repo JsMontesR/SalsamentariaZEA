@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Example 1</title>
+    <title>Comprobante de nómina</title>
     <link rel="stylesheet" href="{{asset('vendor/invoices/style.css')}}" media="all"/>
 </head>
 <body>
@@ -20,11 +20,19 @@
         <div>{{$emailEmpresa}}</div>
     </div>
     <div style="float: left">
-        <div><label class="bold">Fecha del servicio: </label><strong>{{ $fecha }}</strong></div>
-        <div><label> <strong>Datos del servicio</strong> </label></div>
-        <div><label class="bold">Servicio: </label><strong>{{$numeroServicio}} - {{$nombreServicio}}</strong></div>
-        <div><label class="bold">Valor de referencia del servicio: </label><strong>{{$valorBase}}</strong></div>
-        <div><label class="bold">Valor del servicio: </label><strong>{{$total}}</strong></div>
+        <div><label class="bold">Fecha de la nómina: </label><strong>{{ $fecha }}</strong></div>
+        <br>
+        <div><label> <strong>Datos del empleado al que se pagó</strong> </label></div>
+        <div><label class="bold">Nombre del empleado: </label><strong>{{$nombreParticipante}}</strong>
+        </div>
+        @if($diParticipante != null)
+            <div><label class="bold">Documento de identidad del empleado: </label><strong>{{$diParticipante}}</strong>
+            </div>
+        @endif
+        <div><label class="bold">Salario base del empleado: </label><strong>{{$valorBase}}</strong></div>
+        <br>
+        <div><label> <strong>Datos de la operación</strong> </label></div>
+        <div><label class="bold">Valor de la nómina: </label><strong>{{$total}}</strong></div>
         <div><label class="bold">Dinero total abonado: </label><strong>{{$dineroAbonado}}</strong></div>
         <div><label class="bold">Saldo pendiente: </label><strong>{{$saldo}}</strong></div>
 
@@ -33,7 +41,7 @@
         @elseif($fechaLimitePago != null)
             <div><label class="bold">Fecha límite de pago: </label><strong>{{ $fechaLimitePago }}</strong></div>
         @endif
-        <div><label class="bold">Empleado que realizó la transacción: </label>{{ $tituloEmpleado }}</div>
+        <div><label class="bold">Empleado que realizó la transacción: </label><strong>{{ $tituloEmpleado }}</strong></div>
     </div>
 </header>
 <br>

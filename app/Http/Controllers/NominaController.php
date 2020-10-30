@@ -56,7 +56,7 @@ class NominaController extends Controller
 
     public function list()
     {
-        return datatables()->eloquent(Nomina::query()->select('nominas.*')->with('empleado','pagador'))->toJson();
+        return datatables()->eloquent(Nomina::query()->select('nominas.*')->with('empleado', 'pagador'))->toJson();
     }
 
     /**
@@ -127,5 +127,51 @@ class NominaController extends Controller
         return response()->json([
             'msg' => '¡Nomina anulada!',
         ]);
+    }
+
+    /**
+     * Print the specified resource from storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function imprimirComprobante(Request $request)
+    {
+        $nomina = Nomina::findOrFail($request->id);
+        return $this->imprimirLogic($nomina);
+    }
+
+    public function imprimirLogic(Nomina $nomina)
+    {
+        $fecha = $nomina->created_at;
+        $fechaActual = now();
+        $fechaLimitePago = $nomina->fechapago;
+        $fechaDePago = $nomina->fechapagado;
+        $descripcion = "Comprobante de nómina # " . $nomina->id;
+        // Datos del cliente
+        $tituloParticipante = "Cliente";
+        $nombreParticipante = $nomina->empleado->name;
+        $diParticipante = $nomina->empleado->di;
+        $tituloEmpleado = $nomina->pagador->name;
+        // Datos de la empresa
+        $nombreEmpresa = "Salsamentaría ZEA";
+        $direccionEmpresa = "Calle 21 #24-43 B/San José";
+        $telefonoEmpresa = "CEL 3112300293";
+        $emailEmpresa = "salsamentariazea@mail.com";
+        $razonSocial = "SALSAMENTARÍA ZEA";
+        $NIT = "NIT 1856151593-8";
+        $personaNatural = "JOSE WILMAR GUEVARA ZEA";
+        $registros = array();
+        $valorBase = "$ " . number_format($nomina->empleado->salario, 0);
+        $total = "$ " . number_format($nomina->valor, 0);
+        $saldo = "$ " . number_format($nomina->saldo, 0);
+        $dineroAbonado = "$ " . number_format($nomina->abonado, 0);
+        $pdf = \PDF::loadView("print.comprobanteNomina", compact('descripcion', 'fecha', 'fechaActual',
+            'tituloParticipante', 'nombreEmpresa',
+            'tituloEmpleado', 'direccionEmpresa', 'telefonoEmpresa', 'emailEmpresa',
+            'total', 'registros', 'fechaLimitePago', 'fechaDePago', 'razonSocial', 'NIT', 'personaNatural',
+            'saldo', 'dineroAbonado', 'valorBase', 'nombreParticipante', 'diParticipante'));
+        return $pdf->stream('comprobante.pdf');
+
     }
 }
