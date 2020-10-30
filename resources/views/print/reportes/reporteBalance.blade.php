@@ -83,6 +83,8 @@
     <label>Total egresos extraordinarios: <strong> {{"$ ". number_format($egresosExtraordinarios,0) }}</strong></label>
     <br>
     <label>Utilidades devengadas en el periodo de tiempo: <strong>{{"$ ". number_format($balance,0) }}</strong></label>
+    <br>
+    <label>Dinero de caja en el periodo de tiempo: <strong>{{"$ ". number_format($valorEnCaja,0) }}</strong></label>
 </div>
 <br>
 <div>

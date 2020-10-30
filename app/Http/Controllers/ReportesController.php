@@ -13,6 +13,7 @@ use App\ProductoTipo;
 use App\Retiro;
 use App\Servicio;
 use App\Venta;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use DB;
 use Illuminate\Support\Facades\Log;
@@ -231,12 +232,22 @@ class ReportesController extends Controller
         }
 
         $registros = collect([]);
-        $registros = $registros->merge($ventas)->merge($servicios)->merge($entradas)->merge($nominas)->merge($entradas)->merge($ingresos);
+        $registros = $registros->merge($ventas)->merge($servicios)->merge($entradas)->merge($nominas)->merge($retiros)->merge($ingresos);
         Log::info($registros);
 
         if ($request->ajax()) {
             return datatables($registros)->toJson();
         } else {
+
+            $ingresosQ = Movimiento::query()->where('tipo', '=', Movimiento::INGRESO);
+            $egresosQ = Movimiento::query()->where('tipo', '=', Movimiento::EGRESO);
+
+            if ($fechaFin != null) {
+                $ingresosQ = $ingresosQ->whereDate('movimientos.created_at', '<=', $fechaFin);
+                $egresosQ = $egresosQ->whereDate('movimientos.created_at', '<=', $fechaFin);
+            }
+
+            $valorEnCaja = $ingresosQ->sum('parteEfectiva') - $egresosQ->sum('parteEfectiva');
 
             $ingresosOrdinarios = 0;
             $egresosOrdinarios = 0;
@@ -263,7 +274,7 @@ class ReportesController extends Controller
             $fechaActual = now();
 
             $pdf = \PDF::loadView("print.reportes.reporteBalance", compact('registros', 'fechaInicio', 'fechaFin',
-                'ingresosOrdinarios', 'ingresosExtraordinarios', 'egresosOrdinarios', 'egresosExtraordinarios', 'balance', 'fechaActual'));
+                'ingresosOrdinarios', 'ingresosExtraordinarios', 'egresosOrdinarios', 'egresosExtraordinarios', 'valorEnCaja','balance', 'fechaActual'));
             return $pdf->stream('balance.pdf');;
         }
     }
