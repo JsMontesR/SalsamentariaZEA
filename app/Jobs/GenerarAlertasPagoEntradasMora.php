@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Entrada;
+use App\Notifications\AlertaMoraCuentaPorPagarNotification;
 use App\Notifications\RecordatorioCuentaPorPagarNotification;
 use App\User;
 use Illuminate\Bus\Queueable;
@@ -13,7 +14,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class GenerarRecordatoriosPagoEntradas implements ShouldQueue
+class GenerarAlertasPagoEntradasMora implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -24,7 +25,6 @@ class GenerarRecordatoriosPagoEntradas implements ShouldQueue
      */
     public function __construct()
     {
-        //
     }
 
     /**
@@ -37,19 +37,18 @@ class GenerarRecordatoriosPagoEntradas implements ShouldQueue
         $entradas = Entrada::query()
             ->whereNotNull('fechapago')
             ->whereNull('fechapagado')
-            ->whereDate('fechapago', '<=', now()->toDateTimeString())
-            ->whereRaw('DATEDIFF(NOW(),fechapago) <= ' . ActualizarNotificaciones::DIASANTICIPACION)
+            ->whereDate('fechapago', '>', now()->toDateTimeString())
             ->get();
 
-        Log::info("Generando notificaciones de cuentas por pagar");
+        Log::info("Generando alertas de cuentas por pagar en mora");
         foreach ($entradas as $entrada) {
             $empleadosANotificar = User::query()->where('rol_id', '<>', 3)->whereDoesntHave('notifications', function ($query) use ($entrada) {
                 $query->whereRaw("JSON_EXTRACT(data,'$.id') = " . $entrada->id);
                 $query->whereRaw('JSON_EXTRACT(data,"$.endpoint") = "' . ActualizarNotificaciones::ENTRADA . '"');
-                $query->whereRaw('JSON_EXTRACT(data,"$.tipo") = "' . ActualizarNotificaciones::RECORDATORIO . '"');
+                $query->whereRaw('JSON_EXTRACT(data,"$.tipo") = "' . ActualizarNotificaciones::ALERTA . '"');
             })->get();
-            Notification::send($empleadosANotificar, new RecordatorioCuentaPorPagarNotification($entrada, "Recuerde pagar al proveedor " . $entrada->proveedor->nombre . " la entrada #" . $entrada->id . ", el saldo pendiente es de $" . number_format($entrada->saldo, 0)));
+            Notification::send($empleadosANotificar, new AlertaMoraCuentaPorPagarNotification($entrada, "La cuenta por pagar para la entrada #" . $entrada->id . " con el proveedor " . $entrada->proveedor->nombre . " se encuentra en mora, el saldo pendiente es de $ " . number_format($entrada->saldo, 0)));
         }
-        Log::info("Notificaciones de cuentas por pagar generadas satisfactoriamente");
+        Log::info("Alertas de cuentas por pagar generadas satisfactoriamente");
     }
 }

@@ -2,14 +2,13 @@
 
 namespace App\Notifications;
 
-use App\Entrada;
 use App\Jobs\ActualizarNotificaciones;
+use App\Venta;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class CuentaPorPagarNotification extends Notification
+class AlertaMoraFacturaPorCobrarNotification extends Notification
 {
     use Queueable;
 
@@ -19,13 +18,13 @@ class CuentaPorPagarNotification extends Notification
     /**
      * Create a new notification instance.
      *
-     * @param Entrada $entrada
+     * @param Venta $venta
      * @param $message
      */
-    public function __construct(Entrada $entrada, $message)
+    public function __construct(Venta $venta, $message)
     {
         $this->message = $message;
-        $this->entrada = $entrada;
+        $this->venta = $venta;
     }
 
     /**
@@ -62,8 +61,9 @@ class CuentaPorPagarNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            "id" => $this->entrada->id,
-            "endpoint" => ActualizarNotificaciones::ENTRADA,
+            "id" => $this->venta->id,
+            "tipo" => ActualizarNotificaciones::ALERTA,
+            "endpoint" => ActualizarNotificaciones::VENTA,
             "mensaje" => $this->message
         ];
     }

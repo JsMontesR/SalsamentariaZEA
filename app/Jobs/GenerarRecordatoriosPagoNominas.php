@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Nomina;
-use App\Notifications\NominaPorPagarNotification;
+use App\Notifications\RecordatorioNominaPorPagarNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -39,7 +39,7 @@ class GenerarRecordatoriosPagoNominas implements ShouldQueue
 //        foreach ($nominas as $nomina) {
 //            foreach ($this->empleados as $empleado) {
 //                $empleado->notify(
-//                    new NominaPorPagarNotification("Recuerde pagar al empleado " . $entrada->proveedor->nombre . " la entrada #" . $entrada->id . ", el saldo pendiente es de $" . number_format($entrada->saldo, 0)));
+//                    new RecordatorioNominaPorPagarNotification("Recuerde pagar al empleado " . $entrada->proveedor->nombre . " la entrada #" . $entrada->id . ", el saldo pendiente es de $" . number_format($entrada->saldo, 0)));
 //            }
 //            Log::info($entrada);
 //        }

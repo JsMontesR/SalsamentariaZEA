@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Notifications\CuentaPorPagarNotification;
+use App\Notifications\RecordatorioCuentaPorPagarNotification;
 use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

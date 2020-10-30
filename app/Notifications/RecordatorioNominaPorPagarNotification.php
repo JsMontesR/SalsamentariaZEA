@@ -2,29 +2,25 @@
 
 namespace App\Notifications;
 
-use App\Jobs\ActualizarNotificaciones;
-use App\Venta;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class FacturaPorCobrarNotification extends Notification
+class RecordatorioNominaPorPagarNotification extends Notification
 {
     use Queueable;
 
     protected $message;
-    protected $entrada;
 
     /**
      * Create a new notification instance.
      *
-     * @param Venta $venta
-     * @param $message
+     * @return void
      */
-    public function __construct(Venta $venta, $message)
+    public function __construct($message)
     {
         $this->message = $message;
-        $this->venta = $venta;
     }
 
     /**
@@ -35,7 +31,7 @@ class FacturaPorCobrarNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['mail'];
     }
 
     /**
@@ -61,9 +57,7 @@ class FacturaPorCobrarNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            "id" => $this->venta->id,
-            "endpoint" => ActualizarNotificaciones::VENTA,
-            "mensaje" => $this->message
+            //
         ];
     }
 }

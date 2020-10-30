@@ -24,6 +24,11 @@ class ActualizarNotificaciones implements ShouldQueue
     const VENTA = "ventas";
     const NOMINA = "nomina";
 
+    /*
+    * Definición de tipos de notificación
+    */
+    const RECORDATORIO = "recordatorio";
+    const ALERTA = "alerta";
 
     /**
      * Create a new job instance.
@@ -46,6 +51,8 @@ class ActualizarNotificaciones implements ShouldQueue
         Log::info("Las notificaciones se generan con " . ActualizarNotificaciones::DIASANTICIPACION . " días de anticipación");
         dispatch(new GenerarRecordatoriosPagoEntradas());
         dispatch(new GenerarRecordatoriosCobroVentas());
+        dispatch(new GenerarAlertasCobroVentasMora());
+        dispatch(new GenerarAlertasPagoEntradasMora());
 //        dispatch(new GenerarRecordatoriosPagoNominas($usuarios));
         dispatch(new LimpiarNotificacionesAntiguas());
 
