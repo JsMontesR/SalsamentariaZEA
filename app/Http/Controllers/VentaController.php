@@ -215,7 +215,7 @@ class VentaController extends Controller
         }
         $total = "$ " . number_format($venta->valor, 0);
         $saldo = "$ " . number_format($venta->saldo, 0);
-        $dineroAbonado = "$ " . number_format($venta->valor - $venta->saldo, 0);
+        $dineroAbonado = "$ " . number_format($venta->abonado, 0);
         $pdf = \PDF::loadView("print.factura", compact('descripcion', 'fecha', 'fechaActual', 'tituloParticipante',
             'nombreParticipante', 'nombreEmpresa', 'direccionParticipante', 'telefonoParticipante', 'tituloEmpleado', 'emailParticipante',
             'direccionEmpresa', 'telefonoEmpresa', 'emailEmpresa', 'total', 'registros', 'fechaLimitePago', 'fechaDePago', 'razonSocial',

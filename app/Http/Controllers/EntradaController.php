@@ -6,6 +6,7 @@ use App\Caja;
 use App\Entrada;
 use App\Exceptions\FondosInsuficientesException;
 use App\Movimiento;
+use App\ProductoTipo;
 use App\Repositories\Cajas;
 use App\Repositories\Entradas;
 use Illuminate\Database\Eloquent\Builder;
@@ -135,4 +136,69 @@ class EntradaController extends Controller
             'msg' => '¡Entrada anulada!',
         ]);
     }
+
+    /**
+     * Print the specified resource from storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function imprimirComprobante(Request $request)
+    {
+        $entrada = Entrada::findOrFail($request->id);
+        return $this->imprimirLogic($entrada);
+    }
+
+    public function imprimirLogic(Entrada $entrada)
+    {
+        $fecha = $entrada->created_at;
+        $fechaActual = now();
+        $fechaLimitePago = $entrada->fechapago;
+        $fechaDePago = $entrada->fechapagado;
+        $descripcion = "Comprobante de entrada # " . $entrada->id;
+        $lugarEntrega = $entrada->lugarentrega;
+        // Datos del cliente
+        $tituloParticipante = "Proveedor";
+        $nombreParticipante = $entrada->proveedor->nombre;
+        $direccionParticipante = $entrada->proveedor->direccion;
+        $telefonoParticipante = $entrada->proveedor->celular;
+        $emailParticipante = $entrada->proveedor->email;
+        $tituloEmpleado = $entrada->empleado->name;
+        // Datos de la empresa
+        $nombreEmpresa = "Salsamentaría ZEA";
+        $direccionEmpresa = "Calle 21 #24-43 B/San José";
+        $telefonoEmpresa = "CEL 3112300293";
+        $emailEmpresa = "salsamentariazea@mail.com";
+        $razonSocial = "SALSAMENTARÍA ZEA";
+        $NIT = "NIT 1856151593-8";
+        $personaNatural = "JOSE WILMAR GUEVARA ZEA";
+        $registros = array();
+        $count = 1;
+        foreach ($entrada->productos as $producto) {
+            $registro = new \stdClass();
+            $registro->numero = $count++;
+            $registro->nombre = $producto->nombre;
+            if ($producto->pivot->unidad == ProductoTipo::GRAMOS) {
+                $registro->valorUnitario = "$ " . number_format(1000 * ($producto->pivot->costo / $producto->pivot->cantidad), 0);
+                $registro->cantidad = $producto->pivot->cantidad . " g";
+            } else if ($producto->pivot->unidad == ProductoTipo::KILOGRAMOS) {
+                $registro->valorUnitario = "$ " . number_format($producto->pivot->costo / $producto->pivot->cantidad, 0);
+                $registro->cantidad = $producto->pivot->cantidad . " kg";
+            } else {
+                $registro->valorUnitario = "$ " . number_format($producto->pivot->costo / $producto->pivot->cantidad, 0);
+                $registro->cantidad = $producto->pivot->cantidad . " un";
+            }
+            $registro->total = "$ " . number_format($producto->pivot->costo, 0);
+            array_push($registros, $registro);
+        }
+        $total = "$ " . number_format($entrada->valor, 0);
+        $saldo = "$ " . number_format($entrada->saldo, 0);
+        $dineroAbonado = "$ " . number_format($entrada->abonado, 0);
+        $pdf = \PDF::loadView("print.comprobanteEntrada", compact('descripcion', 'fecha', 'fechaActual', 'tituloParticipante',
+            'nombreParticipante', 'nombreEmpresa', 'direccionParticipante', 'telefonoParticipante', 'tituloEmpleado', 'emailParticipante',
+            'direccionEmpresa', 'telefonoEmpresa', 'emailEmpresa', 'total', 'registros', 'fechaLimitePago', 'fechaDePago', 'razonSocial',
+            'NIT', 'personaNatural', 'saldo', 'dineroAbonado', 'lugarEntrega'));
+        return $pdf->stream('comprobante.pdf');
+    }
+
 }

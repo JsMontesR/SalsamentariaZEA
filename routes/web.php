@@ -29,9 +29,9 @@ Route::get('/notificaciones', 'NotificacionController@index')->name('notificacio
  */
 
 Route::post('/imprimirventa', 'VentaController@imprimirfactura')->name('imprimirfactura')->middleware('auth');
-Route::post('/imprimirservicio', 'ServicioController@imprimircombrobante')->name('imprimircomprobanteservicio')->middleware('auth');
-Route::post('/imprimirentrada', 'EntradaController@imprimircombrobante')->name('imprimircomprobanteentrada')->middleware('auth');
-Route::post('/imprimirnomina', 'NominaController@imprimircombrobante')->name('imprimircomprobantenomina')->middleware('auth');
+Route::post('/imprimirservicio', 'ServicioController@imprimircomprobante')->name('imprimircomprobanteservicio')->middleware('auth');
+Route::post('/imprimirentrada', 'EntradaController@imprimircomprobante')->name('imprimircomprobanteentrada')->middleware('auth');
+Route::post('/imprimirnomina', 'NominaController@imprimircomprobante')->name('imprimircomprobantenomina')->middleware('auth');
 Route::post('/imprimirpos', 'MovimientoController@imprimir')->name('imprimirpos')->middleware('auth');
 
 /*

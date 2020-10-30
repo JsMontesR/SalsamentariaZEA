@@ -136,7 +136,7 @@ class ServicioController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function imprimirCombrobante(Request $request)
+    public function imprimirComprobante(Request $request)
     {
         $servicio = Servicio::findOrFail($request->id);
         return $this->imprimirLogic($servicio);
@@ -148,7 +148,7 @@ class ServicioController extends Controller
         $fechaActual = now();
         $fechaLimitePago = $servicio->fechapago;
         $fechaDePago = $servicio->fechapagado;
-        $descripcion = "Servicio # " . $servicio->id;
+        $descripcion = "Comprobante de servicio # " . $servicio->id;
         // Datos del cliente
         $tituloParticipante = "Cliente";
         $numeroServicio = $servicio->tipoServicio->id;
@@ -166,8 +166,8 @@ class ServicioController extends Controller
         $valorBase = "$ " . number_format($servicio->tipoServicio->costo, 0);
         $total = "$ " . number_format($servicio->valor, 0);
         $saldo = "$ " . number_format($servicio->saldo, 0);
-        $dineroAbonado = "$ " . number_format($servicio->valor - $servicio->saldo, 0);
-        $pdf = \PDF::loadView("print.comprobante", compact('descripcion', 'fecha', 'fechaActual',
+        $dineroAbonado = "$ " . number_format($servicio->abonado, 0);
+        $pdf = \PDF::loadView("print.comprobanteServicio", compact('descripcion', 'fecha', 'fechaActual',
             'tituloParticipante', 'nombreServicio', 'numeroServicio', 'nombreEmpresa',
             'tituloEmpleado', 'direccionEmpresa', 'telefonoEmpresa', 'emailEmpresa',
             'total', 'registros', 'fechaLimitePago', 'fechaDePago', 'razonSocial', 'NIT', 'personaNatural',
