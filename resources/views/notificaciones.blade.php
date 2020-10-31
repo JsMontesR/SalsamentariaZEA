@@ -20,7 +20,7 @@
                                       class="pull-right">
                                     @csrf
                                     @method('PATCH')
-                                    <button class="btn btn-danger btn-xs"></button>
+                                    <button class="btn btn-danger btn-xs">X</button>
                                 </form>
                             </div>
                             <p class="mb-1"> {{ $unreadNotificacion->data["mensaje"] }}</p>

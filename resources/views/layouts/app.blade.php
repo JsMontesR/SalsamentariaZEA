@@ -58,7 +58,7 @@
                         <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-fw fa-bell"></i>
-                            @if(Auth::user()->notifications->count() > 0)
+                            @if(Auth::user()->unreadNotifications->count() > 0)
                                 <span class="indicator"></span>
                             @endif
                         </a>
@@ -67,7 +67,7 @@
                                 <div class="notification-title font-bold">Notificaciones</div>
                                 <div class="notification-list">
                                     <div class="list-group">
-                                        @forelse(Auth::user()->notifications as $notification)
+                                        @forelse(Auth::user()->unreadNotifications as $notification)
                                             <a href="#" class="list-group-item list-group-item-action">
                                                 <div
                                                     class="notification-list-user-img float-left icon-circle-medium icon-box-md mt-1">
@@ -144,13 +144,15 @@
                             <a class="nav-link" href="{{route('entradas')}}"><i class="fas fa-fw fa-truck"></i>Entradas
                                 a inventario</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{route("productos")}}"><i class="fas fa-fw fa-cubes"></i>Productos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{route('tiposproductos')}}"><i
-                                    class="fas fa-fw fa-info-circle"></i>Tipos de productos</a>
-                        </li>
+                        @if(auth()->user()->rol->id == 1)
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{route("productos")}}"><i class="fas fa-fw fa-cubes"></i>Productos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{route('tiposproductos')}}"><i
+                                        class="fas fa-fw fa-info-circle"></i>Tipos de productos</a>
+                            </li>
+                        @endif
                         <li class="nav-item">
                             <a class="nav-link" href="{{route('clientes')}}"><i class="fas fa-fw fa-users"></i>Clientes</a>
                         </li>
@@ -158,33 +160,39 @@
                             <a class="nav-link" href="{{route('proveedores')}}"><i
                                     class="fas fa-fw fa-people-carry"></i>Proveedores</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{route('empleados')}}"><i class="fas fa-fw fa-id-badge"></i>Empleados</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{route('nominas')}}"><i
-                                    class="fas fa-fw fa-hand-holding-usd"></i>Nómina</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('retiros') }}"><i class="fas fa-fw fa-sign-out-alt"></i>Retiros</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('ingresos') }}"><i class="fas fa-fw fa-sign-in-alt"></i>Ingresos</a>
-                        </li>
+                        @if(auth()->user()->rol->id == 1)
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{route('empleados')}}"><i class="fas fa-fw fa-id-badge"></i>Empleados</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{route('nominas')}}"><i
+                                        class="fas fa-fw fa-hand-holding-usd"></i>Nómina</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('retiros') }}"><i
+                                        class="fas fa-fw fa-sign-out-alt"></i>Retiros</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('ingresos') }}"><i
+                                        class="fas fa-fw fa-sign-in-alt"></i>Ingresos</a>
+                            </li>
+                        @endif
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('servicios') }}"><i
                                     class="fas fa-fw fa-calculator"></i>Servicios</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('tiposservicios') }}"><i
-                                    class="fas fa-fw fa-bolt"></i>Tipos de servicios</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('movimientos') }}"><i class="fas fa-fw fa-cogs"></i>Movimientos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('reportes') }}"><i class="fab fa-fw fa-wpforms"></i>Reportes</a>
-                        </li>
+                        @if(auth()->user()->rol->id == 1)
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('tiposservicios') }}"><i
+                                        class="fas fa-fw fa-bolt"></i>Tipos de servicios</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('movimientos') }}"><i class="fas fa-fw fa-cogs"></i>Movimientos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('reportes') }}"><i class="fab fa-fw fa-wpforms"></i>Reportes</a>
+                            </li>
+                        @endif
                     </ul>
                 </div>
             </nav>
