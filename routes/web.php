@@ -81,7 +81,7 @@ Route::prefix('api')->group(function () {
 
     // CRUD Tipos de productos
     Route::prefix('tiposproductos')->group(function () {
-        Route::get('listar', 'ProductoTipoController@list')->middleware('auth')->middleware('onlyadmin');
+        Route::get('listar', 'ProductoTipoController@list')->middleware('auth');
         Route::post('crear', 'ProductoTipoController@store')->middleware('auth')->middleware('onlyadmin');
         Route::post('modificar', 'ProductoTipoController@update')->middleware('auth')->middleware('onlyadmin');
         Route::post('borrar', 'ProductoTipoController@destroy')->middleware('auth')->middleware('onlyadmin');
@@ -89,7 +89,7 @@ Route::prefix('api')->group(function () {
 
     // CRUD productos
     Route::prefix('productos')->group(function () {
-        Route::get('listar', 'ProductoController@list')->middleware('auth')->middleware('onlyadmin');
+        Route::get('listar', 'ProductoController@list')->middleware('auth');
         Route::post('crear', 'ProductoController@store')->middleware('auth')->middleware('onlyadmin');
         Route::post('modificar', 'ProductoController@update')->middleware('auth')->middleware('onlyadmin');
         Route::post('borrar', 'ProductoController@destroy')->middleware('auth')->middleware('onlyadmin');
@@ -105,7 +105,7 @@ Route::prefix('api')->group(function () {
 
     // CRUD Tipos de servicios
     Route::prefix('tiposervicios')->group(function () {
-        Route::get('listar', 'TipoServicioController@list')->middleware('auth')->middleware('onlyadmin');
+        Route::get('listar', 'TipoServicioController@list')->middleware('auth');
         Route::post('crear', 'TipoServicioController@store')->middleware('auth')->middleware('onlyadmin');
         Route::post('modificar', 'TipoServicioController@update')->middleware('auth')->middleware('onlyadmin');
         Route::post('borrar', 'TipoServicioController@destroy')->middleware('auth')->middleware('onlyadmin');
