@@ -5,19 +5,25 @@
             <h5 class="card-header">Registro de notificaciones</h5>
             <div class="card-body">
                 <div class="list-group">
-                    @forelse(Auth::user()->notifications as $notification)
+                    @forelse($notificaciones as $unreadNotificacion)
                         <a class="list-group-item list-group-item-action flex-column align-items-start">
                             <div class="d-flex w-100 justify-content-between">
-                                @if($notification->data["endpoint"] == "entradas")
+                                @if($unreadNotificacion->data["endpoint"] == "entradas")
                                     <h5 class="mb-1 text-dark">Notificación de pago de factura</h5>
-                                @elseif($notification->data["endpoint"] == "ventas")
+                                @elseif($unreadNotificacion->data["endpoint"] == "ventas")
                                     <h5 class="mb-1 text-dark">Notificación de cobro de factura</h5>
-                                @elseif($notification->data["endpoint"] == "nominas")
+                                @elseif($unreadNotificacion->data["endpoint"] == "nominas")
                                     <h5 class="mb-1 text-dark">Notificación de pago de nómina</h5>
                                 @endif
-                                <small> {{ $notification->created_at }}</small>
+                                <small> {{ $unreadNotificacion->created_at }}</small>
+                                <form method="POST" action="{{route('marcarNotificacionComoLeida',$unreadNotificacion->id)}}"
+                                      class="pull-right">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button class="btn btn-danger btn-xs"></button>
+                                </form>
                             </div>
-                            <p class="mb-1"> {{ $notification->data["mensaje"] }}</p>
+                            <p class="mb-1"> {{ $unreadNotificacion->data["mensaje"] }}</p>
                         </a>
                     @empty
                         <a class="list-group-item flex-column align-items-start">

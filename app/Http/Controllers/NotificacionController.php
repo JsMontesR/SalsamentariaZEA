@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Support\Facades\Auth;
 
 class NotificacionController extends Controller
 {
@@ -13,6 +15,20 @@ class NotificacionController extends Controller
      */
     public function index()
     {
-        return view("notificaciones");
+        $notificaciones = Auth::user()->unreadNotifications;
+        return view("notificaciones", compact('notificaciones'));
+    }
+
+    /**
+     *
+     * Marca una notificación como leida
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function marcarNotificacionComoLeida(Request $request)
+    {
+        DatabaseNotification::find($request->id)->markAsRead();
+        return back()->with('success', 'Notificación marcada como leida');
     }
 }

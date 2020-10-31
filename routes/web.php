@@ -22,6 +22,8 @@ Route::get('/ingresos', 'IngresoController@index')->name('ingresos')->middleware
 Route::get('/entradas', 'EntradaController@index')->name('entradas')->middleware('auth');
 Route::get('/ventas', 'VentaController@index')->name('ventas')->middleware('auth');
 Route::get('/movimientos', 'MovimientoController@index')->name('movimientos')->middleware('auth');
+
+Route::patch('/notificacionesmarcarleida/{id}', 'NotificacionController@marcarNotificacionComoLeida')->name('marcarNotificacionComoLeida')->middleware('auth');
 Route::get('/notificaciones', 'NotificacionController@index')->name('notificaciones')->middleware('auth');
 
 /*
