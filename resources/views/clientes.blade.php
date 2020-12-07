@@ -31,7 +31,7 @@
                         <label class="col-md-4 col-form-label text-md-left">Documento de identidad:</label>
 
                         <div class="col-md-8">
-                            <input id="di" type="number"
+                            <input id="di"
                                    class="form-control"
                                    name="di">
                         </div>

@@ -7,6 +7,7 @@ use App\Proveedor;
 use Illuminate\Http\Request;
 use DB;
 use App\User;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 class ClienteController extends Controller
@@ -14,7 +15,7 @@ class ClienteController extends Controller
     public $validationRules = [
         'name' => 'required',
         'di' => 'nullable',
-        'cedula' => 'nullable|integer|min:0',
+        'cedula' => 'nullable',
         'celular' => 'nullable|integer|min:0',
         'fijo' => 'nullable|integer|min:0',
         'email' => 'nullable|email',

@@ -22,13 +22,7 @@
             columns: [
                 {data: 'id', name: 'users.id', title: 'Id', className: "text-center"},
                 {data: 'name', name: 'users.name', title: 'Nombre', className: "text-center"},
-                {
-                    data: 'di',
-                    name: 'users.di',
-                    title: 'Documento de identidad',
-                    render: $.fn.dataTable.render.number('.', '.', 0,),
-                    className: "text-center"
-                },
+                {data: 'di', name: 'users.di', title: 'Documento de identidad', className: "text-center"},
                 {data: 'celular', name: 'users.celular', title: 'Teléfono celular', className: "text-center"},
                 {data: 'fijo', name: 'users.fijo', title: 'Teléfono fijo', className: "text-center"},
                 {data: 'email', name: 'users.email', title: 'Correo electrónico', className: "text-center"},
