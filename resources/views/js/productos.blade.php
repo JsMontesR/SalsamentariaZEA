@@ -14,17 +14,17 @@
         function caracterizarFormulario(tipo) {
             if (tipo == undefined) {
                 document.getElementById('label_costo').innerText = "Costo por unidad/kg:";
-                document.getElementById('label_utilidad').innerText = "Utilidad por unidad/kg:";
+                document.getElementById('label_utilidad').innerText = "Utilidad (%) por unidad/kg:";
                 document.getElementById('label_precio').innerText = "Precio por unidad/kg:";
                 document.getElementById('label_stock').innerText = "Unidades/g en stock:";
             } else if (tipo == "Granel") {
                 document.getElementById('label_costo').innerText = "Costo por kilo (kg):";
-                document.getElementById('label_utilidad').innerText = "Utilidad por kilo (kg):";
+                document.getElementById('label_utilidad').innerText = "Utilidad (%) por kilo (kg):";
                 document.getElementById('label_precio').innerText = "Precio por kilo (kg):";
                 document.getElementById('label_stock').innerText = "Gramos en stock (g):"
             } else if (tipo == "Unitario") {
                 document.getElementById('label_costo').innerText = "Costo por unidad:";
-                document.getElementById('label_utilidad').innerText = "Utilidad por unidad:";
+                document.getElementById('label_utilidad').innerText = "Utilidad (%) por unidad:";
                 document.getElementById('label_precio').innerText = "Precio por unidad:";
                 document.getElementById('label_stock').innerText = "Unidades en stock:"
             }
@@ -175,6 +175,15 @@
             var utilidad = parseInt(document.getElementById('utilidad').value, 10);
             if (!isNaN(costo) && !isNaN(utilidad)) {
                 document.getElementById('precio').value = Math.round(costo * (1 + utilidad / 100));
+            }
+        });
+
+        $("#precio").keyup(function () {
+            var precio = parseInt(document.getElementById('precio').value, 10);
+            var costo = parseInt(document.getElementById('costo').value, 10);
+            var utilidad = parseInt(document.getElementById('utilidad').value, 10);
+            if (!isNaN(costo) && !isNaN(utilidad) && !isNaN(precio)) {
+                document.getElementById('utilidad').value = Math.round(((precio / costo) - 1) * 100);
             }
         });
     })

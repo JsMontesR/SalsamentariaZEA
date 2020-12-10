@@ -65,7 +65,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label id="label_utilidad" class="col-md-4 col-form-label text-md-left">Utilidad por
+                        <label id="label_utilidad" class="col-md-4 col-form-label text-md-left">Utilidad (%) por
                             unidad/kg:</label>
 
                         <div class="col-md-8">

@@ -17,6 +17,7 @@ class CreateProductosTable extends Migration
             $table->id();
             $table->string("nombre");
             $table->string("categoria");
+            $table->string("barcode")->nullable();
             $table->unsignedBigInteger("costo");
             $table->unsignedBigInteger("precio");
             $table->unsignedBigInteger("utilidad");
