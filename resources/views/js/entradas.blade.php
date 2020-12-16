@@ -326,6 +326,7 @@
                     className: "text-center"
                 },
                 {data: 'tipo.nombre', title: 'Tipo', className: "text-center"},
+                {data: 'barcode', title: 'Código de barras', className: "text-center"},
                 {data: 'created_at', title: 'Fecha de creación', className: "text-center"},
                 {data: 'updated_at', title: 'Fecha de actualización', className: "text-center"},
             ],

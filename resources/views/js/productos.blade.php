@@ -97,6 +97,7 @@
                     className: "text-center"
                 },
                 {data: 'tipo.nombre', name: 'tipo.nombre', title: 'Tipo de producto', className: "text-center"},
+                {data: 'barcode', name: 'productos.barcode', title: 'Código de barras', className: "text-center"},
                 {data: 'created_at', name: 'created_at', title: 'Fecha de creación', className: "text-center"},
                 {data: 'updated_at', name: 'updated_at', title: 'Fecha de actualización', className: "text-center"},
             ]
@@ -111,6 +112,7 @@
             document.getElementById('nombre').value = data['nombre'];
             document.getElementById('categoria').value = data['categoria'];
             document.getElementById('costo').value = data['costo'];
+            document.getElementById('barcode').value = data['barcode'];
             document.getElementById('utilidad').value = data['utilidad'];
             document.getElementById('precio').value = data['precio'];
             document.getElementById('stock').value = data['stock'];

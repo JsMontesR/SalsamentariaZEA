@@ -56,12 +56,20 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label id="label_barcode" class="col-md-4 col-form-label text-md-left">Código de barras:</label>
+
+                        <div class="col-md-8">
+                            <input id="barcode" class="form-control"
+                                  name="barcode" required autocomplete="barcode">
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label id="label_costo" class="col-md-4 col-form-label text-md-left">Costo por
                             unidad/kg:</label>
 
                         <div class="col-md-8">
                             <input id="costo" type="number" class="form-control"
-                                   value="{{old('costo')}}" name="costo" required autocomplete="costo">
+                                  name="costo" required autocomplete="costo">
                         </div>
                     </div>
                     <div class="form-group row">
