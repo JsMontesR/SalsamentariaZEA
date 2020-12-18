@@ -14,7 +14,7 @@ class ActualizarNotificacionesYAlertas implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    const DIASANTICIPACION = 7;
+    const DIASANTICIPACION = 4;
     const DIASDEVENCIMIENTO = 40;
 
     /*

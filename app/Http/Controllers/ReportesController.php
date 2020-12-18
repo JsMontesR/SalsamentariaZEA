@@ -246,7 +246,7 @@ class ReportesController extends Controller
                 $ingresosQ = $ingresosQ->whereDate('movimientos.created_at', '<=', $fechaFin);
                 $egresosQ = $egresosQ->whereDate('movimientos.created_at', '<=', $fechaFin);
             }
-
+            //Parte efectiva y crediticia - revisar
             $valorEnCaja = $ingresosQ->sum('parteEfectiva') - $egresosQ->sum('parteEfectiva');
 
             $ingresosOrdinarios = 0;
