@@ -58,6 +58,7 @@ class ProductoController extends Controller
         $producto->utilidad = $request->utilidad == null ? 0 : $request->utilidad;
         $producto->precio = $request->precio == null ? 0 : $request->precio;
         $producto->barcode = $request->barcode;
+        $producto->stock = 0;
         $producto->save();
         return response()->json([
             'msg' => '¡Producto registrado!',
