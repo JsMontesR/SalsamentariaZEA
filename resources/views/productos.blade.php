@@ -94,7 +94,7 @@
                         <label id="label_stock" class="col-md-4 col-form-label text-md-left">Unidades/g en
                             stock:</label>
                         <div class="col-md-8">
-                            <input id="stock" type="number" class="form-control"
+                            <input id="stock" type="number" readonly class="form-control"
                                    value="{{old('stock')}}" name="stock" required autocomplete="stock">
                         </div>
                     </div>
