@@ -144,15 +144,13 @@
                             <a class="nav-link" href="{{route('entradas')}}"><i class="fas fa-fw fa-truck"></i>Entradas
                                 a inventario</a>
                         </li>
-                        @if(auth()->user()->rol->id == 1)
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{route("productos")}}"><i class="fas fa-fw fa-cubes"></i>Productos</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{route('tiposproductos')}}"><i
-                                        class="fas fa-fw fa-info-circle"></i>Tipos de productos</a>
-                            </li>
-                        @endif
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route("productos")}}"><i class="fas fa-fw fa-cubes"></i>Productos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('tiposproductos')}}"><i
+                                    class="fas fa-fw fa-info-circle"></i>Tipos de productos</a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{route('clientes')}}"><i class="fas fa-fw fa-users"></i>Clientes</a>
                         </li>

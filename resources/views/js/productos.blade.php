@@ -1,15 +1,5 @@
 <script>
     $(document).ready(function () {
-        $.ajax({
-            url: 'api/productos/listar',
-            type: "get",
-            success: function (data) {
-                console.log(data);
-            },
-            error: function (err) {
-                console.warn(err);
-            }
-        });
 
         function caracterizarFormulario(tipo) {
             if (tipo == undefined) {

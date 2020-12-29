@@ -10,10 +10,10 @@ Route::get('/index', 'HomeController@index');
 Route::get('/home', 'HomeController@index');
 
 Route::get('/proveedores', 'ProveedorController@index')->name('proveedores')->middleware('auth');
-Route::get('/tiposproductos', 'ProductoTipoController@index')->name('tiposproductos')->middleware('auth')->middleware('onlyadmin');
+Route::get('/tiposproductos', 'ProductoTipoController@index')->name('tiposproductos')->middleware('auth');
 Route::get('/tiposservicios', 'TipoServicioController@index')->name('tiposservicios')->middleware('auth')->middleware('onlyadmin');
 Route::get('/servicios', 'ServicioController@index')->name('servicios')->middleware('auth')->middleware('onlyadmin');
-Route::get('/productos', 'ProductoController@index')->name('productos')->middleware('auth')->middleware('onlyadmin');
+Route::get('/productos', 'ProductoController@index')->name('productos')->middleware('auth');
 Route::get('/clientes', 'ClienteController@index')->name('clientes')->middleware('auth');
 Route::get('/empleados', 'EmpleadoController@index')->name('empleados')->middleware('auth')->middleware('onlyadmin');
 Route::get('/nominas', 'NominaController@index')->name('nominas')->middleware('auth')->middleware('onlyadmin');
@@ -81,18 +81,18 @@ Route::prefix('api')->group(function () {
 
     // CRUD Tipos de productos
     Route::prefix('tiposproductos')->group(function () {
-        Route::get('listar', 'ProductoTipoController@list')->middleware('auth');
-        Route::post('crear', 'ProductoTipoController@store')->middleware('auth')->middleware('onlyadmin');
-        Route::post('modificar', 'ProductoTipoController@update')->middleware('auth')->middleware('onlyadmin');
-        Route::post('borrar', 'ProductoTipoController@destroy')->middleware('auth')->middleware('onlyadmin');
+        Route::get('listar', 'ProductoTipoController@list');
+        Route::post('crear', 'ProductoTipoController@store');
+        Route::post('modificar', 'ProductoTipoController@update');
+        Route::post('borrar', 'ProductoTipoController@destroy');
     });
 
     // CRUD productos
     Route::prefix('productos')->group(function () {
         Route::get('listar', 'ProductoController@list')->middleware('auth');
-        Route::post('crear', 'ProductoController@store')->middleware('auth')->middleware('onlyadmin');
-        Route::post('modificar', 'ProductoController@update')->middleware('auth')->middleware('onlyadmin');
-        Route::post('borrar', 'ProductoController@destroy')->middleware('auth')->middleware('onlyadmin');
+        Route::post('crear', 'ProductoController@store')->middleware('auth');
+        Route::post('modificar', 'ProductoController@update')->middleware('auth');
+        Route::post('borrar', 'ProductoController@destroy')->middleware('auth');
     });
 
     // CRUD empleados

@@ -6,6 +6,7 @@ use App\Producto;
 use App\ProductoTipo;
 use Illuminate\Http\Request;
 use DB;
+use Illuminate\Support\Facades\Log;
 
 class ProductoController extends Controller
 {
@@ -49,6 +50,7 @@ class ProductoController extends Controller
      */
     public function store(Request $request)
     {
+        Log::info("HOLA");
         $request->validate($this->validationRules, $this->customMessages);
         $producto = new Producto();
         $producto->nombre = $request->nombre;
