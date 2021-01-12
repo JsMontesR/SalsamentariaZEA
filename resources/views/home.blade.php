@@ -238,28 +238,28 @@
                             </div>
                         </a>
                     </div>
-                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
-                        <a href="{{route('reportes')}}">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="d-inline-block ">
-                                        <h3 class="text-dark">Reportes</h3>
-                                    </div>
-                                    <div class="float-right icon-circle-medium icon-box-lg bg-primary mt-1">
-                                        <i class="fab fa-fw fa-wpforms fa-sm text-light"></i>
-                                    </div>
+                @endif
+                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <a href="{{route('reportes')}}">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-inline-block ">
+                                    <h3 class="text-dark">Reportes</h3>
                                 </div>
-                                <div class="card-footer text-light bg-primary clearfix small z-1"
-                                >
-                                    <span class="float-left">Ver movimientos</span>
-                                    <span class="float-right">
-                  <em class="fas fa-angle-right"></em>
-                </span>
+                                <div class="float-right icon-circle-medium icon-box-lg bg-primary mt-1">
+                                    <i class="fab fa-fw fa-wpforms fa-sm text-light"></i>
                                 </div>
                             </div>
-                        </a>
-                    </div>
-                @endif
+                            <div class="card-footer text-light bg-primary clearfix small z-1"
+                            >
+                                <span class="float-left">Ver movimientos</span>
+                                <span class="float-right">
+                  <em class="fas fa-angle-right"></em>
+                </span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

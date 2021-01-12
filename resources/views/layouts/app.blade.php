@@ -187,10 +187,10 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('movimientos') }}"><i class="fas fa-fw fa-cogs"></i>Movimientos</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('reportes') }}"><i class="fab fa-fw fa-wpforms"></i>Reportes</a>
-                            </li>
                         @endif
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('reportes') }}"><i class="fab fa-fw fa-wpforms"></i>Reportes</a>
+                        </li>
                     </ul>
                 </div>
             </nav>

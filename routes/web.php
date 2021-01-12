@@ -158,13 +158,13 @@ Route::prefix('api')->group(function () {
      */
 
     Route::prefix('reportes')->group(function () {
-        Route::get('/listarVentas', 'ReportesController@listarVentas')->name('listarventas')->middleware('auth')->middleware('onlyadmin');
-        Route::get('/listarPartesBalance', 'ReportesController@listarPartesBalance')->name('listarpartesbalance')->middleware('auth')->middleware('onlyadmin');
-        Route::get('/listarProductos', 'ReportesController@listarProductos')->name('listarproductos')->middleware('auth')->middleware('onlyadmin');
-        Route::get('/listarFacturasPorCobrar', 'ReportesController@listarFacturasPorCobrar')->name('listarfacturasporcobrar')->middleware('auth')->middleware('onlyadmin');
-        Route::get('/listarCuentasPorPagar', 'ReportesController@listarCuentasPorPagar')->name('listarcuentasporpagar')->middleware('auth')->middleware('onlyadmin');
-        Route::get('/listarClientesQueMasCompran', 'ReportesController@listarClientesQueMasCompran')->name('listarclientesquemascompran')->middleware('auth')->middleware('onlyadmin');
-        Route::get('/listarProductosMasVendidos', 'ReportesController@listarProductosMasVendidos')->name('listarproductosmasvendidos')->middleware('auth')->middleware('onlyadmin');
+        Route::get('/listarVentas', 'ReportesController@listarVentas')->name('listarventas')->middleware('auth');
+        Route::get('/listarPartesBalance', 'ReportesController@listarPartesBalance')->name('listarpartesbalance')->middleware('auth');
+        Route::get('/listarProductos', 'ReportesController@listarProductos')->name('listarproductos')->middleware('auth');
+        Route::get('/listarFacturasPorCobrar', 'ReportesController@listarFacturasPorCobrar')->name('listarfacturasporcobrar')->middleware('auth');
+        Route::get('/listarCuentasPorPagar', 'ReportesController@listarCuentasPorPagar')->name('listarcuentasporpagar')->middleware('auth');
+        Route::get('/listarClientesQueMasCompran', 'ReportesController@listarClientesQueMasCompran')->name('listarclientesquemascompran')->middleware('auth');
+        Route::get('/listarProductosMasVendidos', 'ReportesController@listarProductosMasVendidos')->name('listarproductosmasvendidos')->middleware('auth');
     });
 
     /*
@@ -172,7 +172,7 @@ Route::prefix('api')->group(function () {
      */
 
     Route::prefix('cierres')->group(function () {
-        Route::get('/listar', 'CierresController@list')->middleware('auth')->middleware('onlyadmin');
+        Route::get('/listar', 'CierresController@list')->middleware('auth');
         Route::get('/generarCierre', 'CierresController@generarCierre')->name('generarCierre')->middleware('auth');
     });
 });
@@ -181,12 +181,12 @@ Route::prefix('api')->group(function () {
  * REPORTES
  */
 Route::prefix('reportes')->group(function () {
-    Route::get('/', 'ReportesController@index')->name('reportes')->middleware('auth')->middleware('onlyadmin');
-    Route::get('/inventario', 'ReportesController@reporteInventario')->name('reporteInventario')->middleware('auth')->middleware('onlyadmin');
-    Route::get('/ventas', 'ReportesController@reporteVentas')->name('reporteVentas')->middleware('auth')->middleware('onlyadmin');
-    Route::get('/productosMasVendidos', 'ReportesController@productosMasVendidos')->name('reporteProductosMasVendidos')->middleware('auth')->middleware('onlyadmin');
-    Route::get('/clientesQueMasCompran', 'ReportesController@clientesQueMasCompran')->name('reporteClientesQueMasCompran')->middleware('auth')->middleware('onlyadmin');
-    Route::get('/balance', 'ReportesController@reporteBalance')->name('reporteBalance')->middleware('auth')->middleware('onlyadmin');
-    Route::get('/facturasPorCobrar', 'ReportesController@facturasPorCobrar')->name('reporteFacturasPorCobrar')->middleware('auth')->middleware('onlyadmin');
-    Route::get('/cuentasPorPagar', 'ReportesController@cuentasPorPagar')->name('reporteCuentasPorPagar')->middleware('auth')->middleware('onlyadmin');
+    Route::get('/', 'ReportesController@index')->name('reportes')->middleware('auth');
+    Route::get('/inventario', 'ReportesController@reporteInventario')->name('reporteInventario')->middleware('auth');
+    Route::get('/ventas', 'ReportesController@reporteVentas')->name('reporteVentas')->middleware('auth');
+    Route::get('/productosMasVendidos', 'ReportesController@productosMasVendidos')->name('reporteProductosMasVendidos');
+    Route::get('/clientesQueMasCompran', 'ReportesController@clientesQueMasCompran')->name('reporteClientesQueMasCompran');
+    Route::get('/balance', 'ReportesController@reporteBalance')->name('reporteBalance')->middleware('auth');
+    Route::get('/facturasPorCobrar', 'ReportesController@facturasPorCobrar')->name('reporteFacturasPorCobrar')->middleware('auth');
+    Route::get('/cuentasPorPagar', 'ReportesController@cuentasPorPagar')->name('reporteCuentasPorPagar')->middleware('auth');
 });
