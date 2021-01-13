@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="{{asset('vendor/invoices/style.css')}}" media="all"/>
 </head>
 <body>
-<header class="clearfix">
+<header>
     <div id="logo">
         <img src="{{asset('favicon.png')}}">
     </div>
@@ -34,9 +34,10 @@
         @if($lugarEntrega != null)
             <div><label class="bold">Lugar de entrega: </label><strong>{{ $lugarEntrega }}</strong></div>
         @endif
-        {{--        <div><label class="bold">Le atendió: </label>{{ $tituloEmpleado }}</div>--}}
     </div>
 </header>
+<br>
+<br>
 <h3>Detalle de productos:</h3>
 <table>
     <thead>
@@ -70,7 +71,7 @@
 <div>
     <label> Saldo pendiente: <strong>{{$saldo}}</strong> </label>
 </div>
-<br>
+
 <div id="notices">
     <div align="center" class="notice">Salsamentaria ZEA</div>
     <div align="center" class="notice">
