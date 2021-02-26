@@ -97,8 +97,8 @@
 
             return $.extend({
                 'btnEliminar': "<input " + activated + " name='btn_eliminar_productos_entrada_table' type='button' value='Eliminar' class='btn btn-warning container-fluid'/>",
-                'cantidad': "<div class='input-group mb-1'><div class='input-group-prepend'><span class='input-group-text'>" + gadget + "</span></div><input " + cantidad + " id='cantidad_producto_entrada" + data['id'] + "' class='money form-control' type='number' placeholder='" + tipoDeCantidad + "'/></div>",
-                'costoTotal': "<div class='input-group mb-1'><div class='input-group-prepend'><span class='input-group-text'>💵</span></div><input " + costo + " id='precio_producto_entrada" + data['id'] + "' class='money form-control' type='number' placeholder='Costo total'/></div>"
+                'cantidad': "<div class='input-group mb-1'><div class='input-group-prepend'><span class='input-group-text'>" + gadget + "</span></div><input " + cantidad + " id='cantidad_producto_entrada" + data['id'] + "' class='money form-control' type='text' placeholder='" + tipoDeCantidad + "'/></div>",
+                'costoTotal': "<div class='input-group mb-1'><div class='input-group-prepend'><span class='input-group-text'>💵</span></div><input " + costo + " id='precio_producto_entrada" + data['id'] + "' class='money form-control' type='text' placeholder='Costo total'/></div>"
             }, data)
         }
 
