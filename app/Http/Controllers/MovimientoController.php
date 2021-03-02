@@ -197,7 +197,8 @@ class MovimientoController extends Controller
         $telefonoEmpresa = "CEL 3112300293";
         $emailEmpresa = "salsamentariazea@mail.com";
         $razonSocial = "SALSAMENTARÍA ZEA";
-        $NIT = "NIT 1856151593-8";
+        $NIT = "NIT 18561593-8";
+        $detalle = "Libre de IVA";
         $personaNatural = "JOSE WILMAR GUEVARA ZEA";
         // Datos de la venta
         $registros = array();
@@ -228,7 +229,7 @@ class MovimientoController extends Controller
         $pdf = \PDF::loadView("print.pos", compact('concepto', 'descripcion', 'fecha', 'fechaActual', 'tituloParticipante',
             'nombreParticipante', 'nombreEmpresa', 'direccionParticipante', 'telefonoParticipante', 'tituloEmpleado', 'emailParticipante',
             'direccionEmpresa', 'telefonoEmpresa', 'emailEmpresa', 'total', 'registros', 'razonSocial', 'NIT', 'personaNatural', 'efectivoRecibido',
-            'cambio', 'parteEfectiva', 'parteCrediticia', 'saldo', 'lugarEntrega'));
+            'cambio', 'parteEfectiva', 'parteCrediticia', 'saldo', 'lugarEntrega', 'detalle'));
         return $pdf->stream("pos.pdf");
     }
 

@@ -15,6 +15,7 @@
         <div>{{$nombreEmpresa}}</div>
         <div>{{$personaNatural}}</div>
         <div>{{$NIT}}</div>
+        <div>{{$detalle}}</div>
         <div>{{$direccionEmpresa}}</div>
         <div>{{$telefonoEmpresa}}</div>
         <div>{{$emailEmpresa}}</div>

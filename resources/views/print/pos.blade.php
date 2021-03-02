@@ -34,6 +34,7 @@
 <div align="center" style="font-size:12px">{{$nombreEmpresa}}</div>
 <div align="center" style="font-size:12px">{{$personaNatural}}</div>
 <div align="center" style="font-size:12px">{{$NIT}}</div>
+<div align="center" style="font-size:12px">{{$detalle}}</div>
 <div align="center" style="font-size:12px">{{$direccionEmpresa}}</div>
 <div align="center" style="font-size:12px">{{$telefonoEmpresa}}</div>
 <div align="center" style="font-size:12px">{{$emailEmpresa}}</div>

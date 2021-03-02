@@ -192,7 +192,8 @@ class VentaController extends Controller
         $telefonoEmpresa = "CEL 3112300293";
         $emailEmpresa = "salsamentariazea@mail.com";
         $razonSocial = "SALSAMENTARÍA ZEA";
-        $NIT = "NIT 1856151593-8";
+        $NIT = "NIT 18561593-8";
+        $detalle = "Libre de IVA";
         $personaNatural = "JOSE WILMAR GUEVARA ZEA";
         $registros = array();
         $count = 1;
@@ -219,7 +220,7 @@ class VentaController extends Controller
         $pdf = \PDF::loadView("print.factura", compact('descripcion', 'fecha', 'fechaActual', 'tituloParticipante',
             'nombreParticipante', 'nombreEmpresa', 'direccionParticipante', 'telefonoParticipante', 'tituloEmpleado', 'emailParticipante',
             'direccionEmpresa', 'telefonoEmpresa', 'emailEmpresa', 'total', 'registros', 'fechaLimitePago', 'fechaDePago', 'razonSocial',
-            'NIT', 'personaNatural', 'saldo', 'dineroAbonado', 'lugarEntrega'));
+            'NIT', 'personaNatural', 'saldo', 'dineroAbonado', 'lugarEntrega', 'detalle'));
         return $pdf->stream('factura.pdf');
 
     }
